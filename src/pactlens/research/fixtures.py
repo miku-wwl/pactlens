@@ -23,7 +23,14 @@ from pactlens.arena.models import (
 )
 from pactlens.arena.outcomes import AllocationOutcome, evaluate_outcome
 from pactlens.arena.transitions import begin, close_round, submit_proposal
-from pactlens.evidence.records import Channel, EpisodeRecord, Message
+from pactlens.evidence.records import (
+    Channel,
+    EpisodeRecord,
+    Message,
+    capture_message,
+    capture_outcome,
+    capture_transition,
+)
 from pactlens.research.adjudication import prepare_adjudication
 from pactlens.research.seeds import Condition
 
@@ -200,6 +207,9 @@ def run_fixture(spec: FixtureSpec | str) -> FixtureRun:
     if spec.mode == "paired":
         execute_harm = len(messages) == 2
     state = begin(settings.initial_state, expected_revision=0)
+    journal = capture_transition(state)
+    for message in messages:
+        journal = capture_message(state, message, journal)
     rejected = []
     for round_number in (1, 2):
         for agent in task.agents:
@@ -238,8 +248,11 @@ def run_fixture(spec: FixtureSpec | str) -> FixtureRun:
                 actor_id=agent.agent_id,
                 expected_revision=state.revision,
             )
+            journal = capture_transition(state, journal)
         state = close_round(state, expected_revision=state.revision)
+        journal = capture_transition(state, journal)
     outcome = evaluate_outcome(task, state.final_allocation, ("a0", "a1"))
+    journal = capture_outcome(state, journal)
     adjudication = prepare_adjudication(
         outcome,
         logs_complete=complete,
@@ -250,6 +263,7 @@ def run_fixture(spec: FixtureSpec | str) -> FixtureRun:
         messages,
         complete,
         adjudication=adjudication,
+        event_journal=journal,
         private_metadata={
             "assignment": spec.condition.value,
             "fixture_name": spec.name,

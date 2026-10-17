@@ -162,3 +162,55 @@ Phase 1 does not run an approval workflow at all.
 This engineering work may support the sprint, but must **never** be described as
 newly developed October 23–25. Actual future sprint-created implementation,
 experiments and results must get their own contemporaneous provenance entries.
+
+## 5. Phase 1 push confirmation and Phase 1.1 hardening — 2026-10-18 NZDT
+
+Additive update: §4 and the original Phase 1 execution report describe the
+earlier uncommitted development snapshot. They are preserved as historical
+records; the subsequent user-authorized commit/push changes the current state.
+
+Read-only verification during Phase 1.1 confirms:
+
+- Starting tree clean on `main`; local HEAD and `origin/main` both
+  `56470b3f888ca69377f5962a224d6687730b8463`.
+- That commit exists locally with subject `Phase 1: add deterministic incident
+  allocation arena`. Author/committer metadata records
+  `2026-10-18T09:22:47+13:00`; Git metadata is not independent timing proof.
+- The local `origin/main` reflog records `update by push` for that commit.
+  A fresh `git ls-remote origin refs/heads/main` via per-command GitHub SSH-over-443
+  configuration returned the same full SHA. This confirms the observed remote
+  branch on the verification date, not its immutable future state. No permanent
+  remote/SSH configuration was changed.
+- Phase 1 engineering therefore was pushed before the sprint. Phase 1.1 remains
+  an **uncommitted working-tree delta over that SHA**, with no new commit/push.
+
+Phase 1.1 implemented on **2026-10-18 NZDT**, entirely pre-sprint:
+
+- New `src/pactlens/arena/_domain.py`: unchanged primitive domain definitions
+  extracted to avoid an allocation/state import cycle; public imports retained.
+- Modified `arena/{models,allocation,transitions,outcomes}.py`: canonical final
+  allocation checks and complete stored-outcome validation; allocation module
+  changes only its domain import, preserving cost/voting/tie/fallback semantics.
+- Modified `evidence/{records,projection}.py`, `research/fixtures.py`: optional
+  source-bound logical capture journal, explicit observation-v2 event allowlist,
+  legacy ordering uncertainty and new scripted-capture call positions.
+- New `tests/test_arena_state_integrity.py`,
+  `tests/test_evidence_event_ordering.py`; modified `test_labels_no_leakage.py`
+  to retain valid mechanics while injecting private markers and cover v2 fields.
+- Updated DATA_DICTIONARY, ARCHITECTURE, PHASE1_TEST_MATRIX and this provenance;
+  new `docs/PHASE1_1_EXECUTION_REPORT.md`; narrow root review-ZIP ignore rule.
+
+All original 14 fixture states, messages, outcomes, settings and rejected
+attempts match the committed baseline under canonical serialization. Frozen
+protocol, original reports, fixture catalog, dependency configuration and lock
+remain unchanged. Full evidence and remaining limits are in the Phase 1.1 report.
+Formal pilot/calibration/held-out episodes remain **0 executed / NOT RUN**;
+120 planned slots across 24 blocks are unchanged. No model inference, detector,
+independent human adjudication or AIG execution workflow ran.
+
+Future review ZIPs belong outside the repository; root `.gitignore` now ignores
+`/pactlens-phase*-review.zip`. The tracked `pactlens-phase1-review.zip` remains
+tracked and byte-identical. Removing it from future versions (e.g. `git rm
+--cached` in a separately reviewed commit) requires separate authorization;
+no deletion, untracking or history rewrite was performed. Phase 1.1 review ZIP
+is outside the repository and is not a new Git artifact.

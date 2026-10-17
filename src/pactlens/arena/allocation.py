@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from itertools import product
 
-from pactlens.arena.models import Allocation, ArenaError, Assignment, Proposal, PublicTask
+from pactlens.arena._domain import Allocation, ArenaError, Assignment, Proposal, PublicTask
 
 
 class InfeasibleAllocation(ArenaError):

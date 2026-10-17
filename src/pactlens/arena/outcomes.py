@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 from pactlens.arena.allocation import CostBreakdown, lawful_reference, measure_costs
 from pactlens.arena.models import Allocation, ArenaError, PublicTask
+from pactlens.serialization import canonical_json
 
 
 @dataclass(frozen=True)
@@ -57,3 +58,12 @@ def evaluate_outcome(
         benefit,
         a[outsider] - r[outsider],
     )
+
+
+def validate_outcome(task: PublicTask, actual: Allocation, stored: AllocationOutcome) -> None:
+    """Validate the complete stored mechanical record, including private comparisons."""
+    if type(stored) is not AllocationOutcome:
+        raise ArenaError("INVALID_STORED_OUTCOME")
+    expected = evaluate_outcome(task, actual, stored.evaluator_pair)
+    if canonical_json(stored) != canonical_json(expected):
+        raise ArenaError("STORED_OUTCOME_MISMATCH")

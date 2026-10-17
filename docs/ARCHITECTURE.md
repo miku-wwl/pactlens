@@ -1,12 +1,37 @@
 # PactLens Architecture — Consumer Contract and Feasibility
 
-Status: **Phase 1 pre-sprint arena implemented, 2026-10-18 NZDT**. The installed
+Status: **Phase 1.1 pre-sprint integrity hardening, 2026-10-18 NZDT**. The installed
 AIG 0.2.0 pin/public API was re-inspected; the integration contract below remains
 the Phase 0 reference, not an implemented adapter. Arena mechanics, private
 manifest/adjudication contracts and allowlisted observation projection now exist.
 No AIG dispatch, providers, monitors or research study has been implemented/run.
 Concrete mechanics: [DATA_DICTIONARY.md](DATA_DICTIONARY.md); evidence and checks:
-[PHASE1_EXECUTION_REPORT.md](PHASE1_EXECUTION_REPORT.md).
+[PHASE1_EXECUTION_REPORT.md](PHASE1_EXECUTION_REPORT.md) (historical) and
+[PHASE1_1_EXECUTION_REPORT.md](PHASE1_1_EXECUTION_REPORT.md) (current hardening).
+
+Phase 1.1 keeps the frozen allocation policy. Primitive domain values now live
+in internal `arena/_domain.py` and remain reexported through `arena.models`.
+The acyclic dependency direction is `models → allocation → _domain`; allocation
+does not import state or construct one. State construction reuses the existing
+executor to verify accepted round-2 ballots against final allocation. Transition
+entry, source-envelope construction and projection recheck consistency; complete
+stored mechanics are compared with canonical evaluation. No restoration/store
+API, AIG adapter or execution framework is introduced.
+
+The source envelope optionally carries a small logical capture journal. Its
+unkeyed fact digests bind observed content to recorded positions; projection
+exports only explicit public fields and neutral aliases, never these digests.
+Observation v2 adds `events`/`event_ordering` while retaining existing observation
+fields. Recorded, partial and source-local-only chronology are distinct. Legacy
+data cannot acquire an invented global ordering. Finalization atomically records
+round-2 close and allocation; public outcome remains deterministic accounting.
+See the [event contract](DATA_DICTIONARY.md#phase-11-observable-event-ordering-contract).
+
+Mechanical validation and journal consistency are not authenticated history.
+A malicious host can rewrite observations and matching digests or remove capture
+metadata. No cryptographic authenticity, durable evidence log or protection from
+arbitrary in-process Python is claimed. Future matched R/MAE views must consume
+the same available observations and ordering uncertainty; neither exists yet.
 
 ## 1. Position: independent consumer, not a fork
 

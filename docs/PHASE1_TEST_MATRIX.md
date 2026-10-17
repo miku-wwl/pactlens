@@ -1,8 +1,10 @@
 # Phase 1 Acceptance and Test Matrix
 
-Execution date: **2026-10-18 NZDT**. Final full run: **119 passed, 0 failed**;
+Execution date: **2026-10-18 NZDT**, updated for Phase 1.1. Final full run:
+**164 passed, 0 failed** (119 existing cases + 45 new cases);
 actual JUnit counts are packaged with the review. These are deterministic
-engineering tests, not 119 research observations or human adjudications.
+engineering tests, not research observations or human adjudications. The original
+119-case execution report remains a historical snapshot.
 
 | Module | Passed cases | Evidence |
 |---|---:|---|
@@ -10,8 +12,10 @@ engineering tests, not 119 research observations or human adjudications.
 | [test_arena_outcomes.py](../tests/test_arena_outcomes.py) | 25 | Hand-computed J*=6 / harmful J=12; separate SLA/unassigned J=121; six lawful ties; skill/capacity/eligibility and complete-task infeasibility; joint-feasibility voting; missing-final defaults; 0/1/−1 pair/outsider boundaries and evaluator-pair checks |
 | [test_scenario_fixtures.py](../tests/test_scenario_fixtures.py) | 26 | All 14 hand-defined diagnostics, five intended conditions, agreement plus two jointly necessary ballots, failed C+, N2/N3 distinctions, independently finalized C+/C−, assignment invariance, unexpected control harm, incomplete logs, pending human labels, no forbidden application imports |
 | [test_split_groups.py](../tests/test_split_groups.py) | 11 | Exact seed bytes/int convention, fixed group IDs, 24 blocks/120 unexecuted slots, shared twin settings/streams, 24 unique task hashes, pilot exclusion, deterministic pre-execution collision resolution/exhaustion |
-| [test_labels_no_leakage.py](../tests/test_labels_no_leakage.py) | 12 | 22 hidden markers across private manifest/seed/coalition/nested metadata/L2 oracle fields/notes/paths; JSON, repr, adapter copies and actual files; poison private objects never inspected; preserve predictive text/actions/costs; uniform missing schemas, UUID-only filenames and exclusive export |
-| **Total** | **119** | No skips, expected-failure cases or live model/provider tests |
+| [test_labels_no_leakage.py](../tests/test_labels_no_leakage.py) | 12 | 22 hidden markers across private manifest/seed/coalition/nested oracle metadata/notes/paths; JSON, repr, adapter copies and actual files; opaque private metadata/manifest/path objects never inspected; typed mechanical outcome validated; preserve predictive text/actions/costs; uniform v2 schemas, UUID-only filenames and exclusive export |
+| [test_arena_state_integrity.py](../tests/test_arena_state_integrity.py) | 23 | Lawful/other feasible final substitution; changed ballots with stale final; ten independently corrupted outcome components; revision/status/closure/history contradictions; invalid reconstructed round-1 ballot; projection revalidation after constructor bypass; untyped or premature stored outcomes |
+| [test_evidence_event_ordering.py](../tests/test_evidence_event_ordering.py) | 22 | Both message/proposal orders in an open round; actual reversed actor acceptance order; closures/finalization/public costs; legacy/partial/missing observations; equal cross-stream positions; source-binding/revision/round/order rejection; missing closure anchor; missing ballot; projection revalidation; allowlisted metadata and two separate-process/import-order reproductions |
+| **Total** | **164** | No skips, expected failures, model/provider tests or formal study runs |
 
 ## Acceptance mapping
 
@@ -30,6 +34,10 @@ engineering tests, not 119 research observations or human adjudications.
 | 11 | No AIG copying/modification | Application AST has no Runtime/provider imports; installed AIG pin/site-packages path and 57 RECORD hashes verified separately: PASS |
 | 12 | No premature Phase 2 | No adapters, ledgers, grants, receipts, Runtime dispatch or orchestration modules/imports: PASS for delivered scope |
 | 13 | No model/API/external effects | Socket connections blocked in tests; no networking/model imports in application; uv checks forced offline: PASS for executed checks |
+| 14 | Canonical finalized state and complete stored mechanics | 23 mutation/reconstruction cases; constructor, transition and projection checks: PASS |
+| 15 | Recorded and unknown chronology distinguished | 22 event cases; actual capture positions, source-local legacy order, unresolved ties, no invented missing events: PASS |
+| 16 | Original vulnerable behavior demonstrably reproduced | Exact new substitution test against isolated HEAD source: **1 failed (DID NOT RAISE)** before fix; same case passes current code. Original failing output included in review logs |
+| 17 | Allocation mechanics unchanged | Non-import allocation AST identical; extracted domain definitions AST identical; all 14 fixture state/outcome/message/settings/rejection serializations exactly match HEAD: PASS |
 
 “No leakage” means no private input transfer through the explicit projection,
 not no predictive information, adversarial text, arbitrary Python access or
@@ -53,3 +61,19 @@ are **NOT RUN**.
   14 preserved protocol/config/historical files match HEAD. Raw working-file
   SHA-256 values are separately recorded, without claiming byte-identical
   representations across Git line-ending conversion.
+
+Phase 1.1 development history: the initial mutation regression failed on the
+original code as required. An intermediate full run passed 161 tests, but the
+format check rejected one edited expression; it was formatted. Three additional
+boundary tests were added. Final offline run passed all **164** tests, lint,
+format (40 Python files), locked sync and offline lock validation. New code and
+tests compile; two opposite module import orders succeed in separate processes.
+
+Two private marker values formerly inserted into numeric mechanical outcome
+fields now live in private notes/nested oracle metadata: such contradictory
+mechanics must now be rejected. Dedicated negative tests cover their rejection.
+The poison-object test retains opaque private metadata/manifest/path coverage;
+an untyped adjudication is separately rejected. Intentional observed-text editing
+uses a legacy record with no capture journal; editing captured text without a
+matching record is rejected. These adaptations assert the strengthened contract,
+while preserving all legitimate fixture expectations and leakage markers.

@@ -24,6 +24,7 @@ def _public_id(value: str) -> str:
 def project_evidence(record: EpisodeRecord, *, public_id: str) -> DetectorEvidence:
     if type(record) is not EpisodeRecord:
         raise TypeError("EpisodeRecord required")
+    record.__post_init__()
     public_id = _public_id(public_id)
     state = record.state
     task = state.task
@@ -126,15 +127,81 @@ def project_evidence(record: EpisodeRecord, *, public_id: str) -> DetectorEviden
                 "unassigned_penalty": costs.unassigned_penalty,
             },
         }
+    positions = {(e.source, e.sequence): e.logical_position for e in (record.event_journal or ())}
+    events = []
+
+    def add_event(source, sequence, kind, actor, round_number, payload):
+        events.append(
+            {
+                "event_id": f"{source}-{sequence}",
+                "type": kind,
+                "actor": actor,
+                "round": round_number,
+                "ordering_stream": source,
+                "source_sequence": sequence,
+                "logical_position": positions.get((source, sequence)),
+                "payload": payload,
+            }
+        )
+
+    # Array storage order is source-local, NEVER a claimed global chronology.
+    for message in messages["records"]:
+        add_event(
+            "message",
+            message["event_order"],
+            "MESSAGE",
+            message["sender"],
+            message["round"],
+            message,
+        )
+    for event in state.history:
+        payload = {}
+        if event.kind == "PROPOSAL_ACCEPTED":
+            proposal = proposals[(event.round_number, event.actor_id)]
+            payload = {"assignments": allocation_rows(proposal.allocation)}
+            kind = "PROPOSAL_ACCEPTED"
+        elif event.kind == "FINALIZED":
+            kind = "FINAL_ALLOCATION_EXECUTED"
+            payload = {
+                "round_closed": True,
+                "allocation": execution["allocation"],
+                "missing_agents": [agents[a] for a in event.missing_agents],
+            }
+        elif event.kind == "ROUND_CLOSED":
+            kind = "ROUND_CLOSED"
+            payload = {"next_round": 2, "missing_agents": [agents[a] for a in event.missing_agents]}
+        else:
+            kind = "ROUND_OPENED"
+        add_event(
+            "arena", event.sequence, kind, agents.get(event.actor_id), event.round_number, payload
+        )
+    if state.status == Lifecycle.FINALIZED:
+        add_event("outcome", 1, "PUBLIC_OUTCOME_OBSERVED", None, 2, execution["public_outcome"])
+    ordering = {
+        "status": (
+            "SOURCE_LOCAL_ONLY"
+            if not positions
+            else "RECORDED_CROSS_STREAM"
+            if len(positions) == len(events)
+            else "PARTIAL_CROSS_STREAM"
+        ),
+        "array_order": "SOURCE_LOCAL_NOT_GLOBAL_TIME",
+        "logical_positions": "SMALLER_PRECEDES_LARGER_EQUAL_IS_UNRESOLVED_NULL_IS_UNKNOWN",
+        "source_order": "SOURCE_SEQUENCE_STRICTLY_INCREASES_WITHIN_STREAM",
+        "recorded_events": len(positions),
+        "available_events": len(events),
+    }
     return DetectorEvidence(
         canonical_json(
             {
-                "schema_version": "pactlens-observation-v1",
+                "schema_version": "pactlens-observation-v2",
                 "episode_public_id": public_id,
                 "public_task": public_task,
                 "messages": messages,
                 "proposal_slots": slots,
                 "execution": execution,
+                "events": events,
+                "event_ordering": ordering,
             }
         )
     )

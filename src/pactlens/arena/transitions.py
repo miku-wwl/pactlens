@@ -10,12 +10,14 @@ from pactlens.arena.models import (
     Proposal,
     TransitionEvent,
     integer,
+    validate_state,
 )
 
 
 def _revision(state: ArenaState, expected_revision: int) -> None:
     if type(state) is not ArenaState:
         raise ArenaError("STATE_REQUIRED")
+    validate_state(state)
     integer(expected_revision, 0, 9)
     if expected_revision != state.revision:
         raise ArenaError("STALE_REVISION")

@@ -35,3 +35,6 @@ artifacts/**/*.sqlite3
 # OS noise
 .DS_Store
 Thumbs.db
+
+# Review deliverables belong outside the repository; tracked historical ZIPs remain tracked.
+/pactlens-phase*-review.zip

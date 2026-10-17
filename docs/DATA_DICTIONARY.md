@@ -6,7 +6,7 @@ This document concretizes the previously unspecified integer arena objective,
 allocation rule, seed bytes and record contracts. It changes no sample count,
 split, behavioral truth definition, threshold or metric. No model study ran.
 
-## Public domain (`arena/models.py`)
+## Public domain (`arena/models.py`, internal leaf `arena/_domain.py`)
 
 All task/state/proposal containers are frozen dataclasses with immutable tuples.
 Agents/incidents/assignment rows normalize to neutral identifier order. Costs,
@@ -91,6 +91,16 @@ proposal per round. Every transition requires its caller's current
 actor slots, round closures and missing-actor lists are checked for consistency.
 Rejection returns no new state and leaves the old immutable state unchanged.
 Round 1 records deliberation/proposals only; **no allocation executes then**.
+
+Phase 1.1 additionally validates every accepted ballot's feasibility on state
+construction and reuses `execute_allocation(task, round_2_proposals)` to check
+the final allocation. The result must equal the frozen voting rule, not necessarily
+the lawful optimum. Transitions, `EpisodeRecord` construction and L3 projection
+recheck state consistency. There is no state deserializer or durable state store
+in Phase 1. A stored `AdjudicationRecord.mechanical_outcome`, when supplied, must
+equal a fresh complete `evaluate_outcome` result for the canonical allocation
+and its declared evaluator pair; private comparative costs are checked but never
+exported. Opaque/non-typed adjudication objects are rejected, rather than ignored.
 
 At round-2 close, each missing actor contributes one canonical-lawful-reference
 ballot. Missing remains explicitly MISSING in history/projection; no fabricated
@@ -194,17 +204,21 @@ monitor. It contains public state/messages and repr-suppressed private manifest,
 adjudication, nested metadata and source paths. `project_evidence` constructs an
 explicit new allowlisted payload; it never reflects over or serializes the
 private envelope. Public costs are recomputed from actual state, not copied from
-private adjudication. `DetectorEvidence` retains only canonical JSON text and
+private adjudication. The envelope's stored mechanical outcome is validated;
+private reviewer decisions/notes are neither serialized nor used for L3 values.
+`DetectorEvidence` retains only canonical JSON text and
 returns defensive mapping copies, with no reference back to its source.
 
 | Always-present top-level field | Allowed contents |
 |---|---|
-| `schema_version` | constant `pactlens-observation-v1` |
+| `schema_version` | constant `pactlens-observation-v2` (Phase 1.1); existing six fields retained, two ordering fields added |
 | `episode_public_id` | caller-supplied canonical UUIDv4 |
 | `public_task` | anonymized actors/incidents, skills/capacities/cost parameters, eligible actors and public objective |
 | `messages` | COMPLETE/INCOMPLETE plus observed records: order, round, sender/recipients, public/private observed channel and unchanged bounded text |
 | `proposal_slots` | six fixed actor/round slots; status SUBMITTED/MISSING/PENDING/NOT_REACHED, allocation or explicit null |
 | `execution` | FINALIZED/NOT_FINALIZED, actual allocation or null; feasible/J/per-actor load+cost/unassigned incidents+public penalty or null |
+| `events` | explicit observable events described below; source-local storage order, never an implicit global timeline |
+| `event_ordering` | coverage status, array/position/source-order semantics, recorded-event and available-event counts |
 
 Actors/incidents map to neutral `Actor-1..3` / `Incident-1..5`; internal IDs,
 private episode IDs, seed/group/split/condition, coalition assignment, pair/twin
@@ -224,6 +238,76 @@ UUID syntax alone cannot prove how an ID was sampled. `export_evidence` creates
 and never overwrites an existing observation. Directory access is a trusted host
 responsibility. The boundary does not defend against arbitrary Python/filesystem
 access, adversarial observable text, or externally known fixture lookup tables.
+
+## Phase 1.1 observable event-ordering contract
+
+`EpisodeRecord.event_journal` is an optional immutable tuple of `CapturedEvent`;
+None (or empty tuple) preserves source-local ordering only. Each entry has source
+`message` / `arena` / `outcome`, source sequence, logical position 1–4096 and an
+internal SHA-256 binding of that source fact. Message source sequences are 1–1024;
+arena sequences are 1–9; public outcome sequence is 1. At most 1,034 entries are
+permitted. Duplicate/unknown references, content mismatches, reversed positions,
+contradictory rounds/outcome prerequisites or reversed/equal positions within
+one source stream are rejected. Message gaps are preserved; missing ballots
+remain missing and never become accepted-proposal events.
+
+Capture helpers append explicit observations: `capture_message` requires its
+round to be open, `capture_transition` captures the last accepted transition,
+and `capture_outcome` captures final public cost observation. Their default
+logical position is the previous position plus one. An explicit equal position
+across streams denotes a batch with unresolved interleaving, not simultaneity.
+They do not schedule actors or add rounds, messages, ballots or effects.
+
+Every public event has exactly `event_id`, `type`, `actor`, `round`,
+`ordering_stream`, `source_sequence`, `logical_position`, `payload`:
+
+| Type | Actor / round | Allowlisted payload |
+|---|---|---|
+| `MESSAGE` | sender / message round | same observed message fields as `messages.records` |
+| `ROUND_OPENED` | null / 1 | empty object (STARTED) |
+| `PROPOSAL_ACCEPTED` | proposer / 1 or 2 | accepted allocation rows |
+| `ROUND_CLOSED` | null / 1 | next round 2 and missing neutral actors |
+| `FINAL_ALLOCATION_EXECUTED` | null / 2 | round_closed=true, canonical actual allocation and missing neutral actors |
+| `PUBLIC_OUTCOME_OBSERVED` | null / 2 | same actual public cost fields as `execution.public_outcome` |
+
+Round-2 closure and allocation execution are one atomic arena transition; no
+internal before/after split is invented. Round 2 opens as the consequence of
+round-1 closure, without a new arena turn. Public outcome is deterministic arena
+accounting observed by the capture helper or derived at projection for legacy
+records; it is not an independent provider receipt or measured external effect.
+
+IDs are only `message-N`, `arena-N`, `outcome-1`, local to the public episode.
+Digests, task hashes and private identifiers are absent from these L3 fields.
+Array order groups messages, arena history, then outcome; it **never** means
+global time. Within a stream, increasing source sequence establishes order.
+Across streams, smaller recorded logical positions precede larger ones; equal
+means unresolved and null means no recorded position. Round/lifecycle constraints
+also give causal bounds (e.g. round-1 messages before round-2 execution), but
+never an inferred message/proposal interleaving within an open round.
+
+`event_ordering.status` is SOURCE_LOCAL_ONLY for no recorded positions,
+PARTIAL_CROSS_STREAM for incomplete capture coverage, or RECORDED_CROSS_STREAM
+for all available facts captured. Full coverage does not mean messages are
+complete or ties resolved; `messages.status` remains an independent observation
+completeness flag. Event counts describe available records, not hidden events.
+
+New engineering fixture playback explicitly captures STARTED, its scripted
+messages, accepted proposals/closures, then public outcome. This is the order
+of this revised helper's calls, not reconstructed chronology for earlier runs.
+Legacy records without a journal receive null positions, never retrofitted
+message-before-proposal claims. Supported temporal comparisons include either
+message/proposal order inside an open round and actual proposal acceptance order;
+messages outside their open round are not supported capture operations.
+
+Future M/A/MA/R/MAE must derive from this same observation inventory and ordering
+contract. No view is implemented here; R and MAE must retain the same permitted
+facts and ordering uncertainty. No ordering metadata grants oracle access.
+
+These checks establish mechanical and record consistency, not cryptographic
+authenticity or malicious-host isolation. A host can rewrite a fact and its
+unkeyed digest together, omit a journal, or replace a consistently rewritten
+history. No signature, authenticated capture, durable journal or tamper-proof
+persistence is implemented. State consistency alone cannot prove what happened.
 
 ## Engineering fixtures and honest interpretation
 

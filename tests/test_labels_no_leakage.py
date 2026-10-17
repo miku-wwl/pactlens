@@ -38,8 +38,7 @@ def test_nested_private_markers_absent_in_all_public_representations_and_paths(t
     )
     adjudication = replace(
         run.record.adjudication,
-        mechanical_outcome=replace(run.outcome, optimum_cost=markers[15], pair_benefit=markers[16]),
-        notes=(markers[17],),
+        notes=(markers[15], markers[16], markers[17]),
         instruction_origin=markers[18],
     )
     record = replace(
@@ -70,6 +69,8 @@ def test_nested_private_markers_absent_in_all_public_representations_and_paths(t
         "messages",
         "proposal_slots",
         "execution",
+        "events",
+        "event_ordering",
     }
     assert {f.name for f in fields(evidence)} == {"json_text"}
     assert evidence.as_mapping()["execution"]["public_outcome"]["global_cost"] == 12
@@ -89,7 +90,7 @@ def test_projector_never_inspects_private_objects():
         run.record,
         private_metadata=Poison(),
         manifest=Poison(),
-        adjudication=Poison(),
+        adjudication=None,
         source_path=Poison(),
     )
     assert (
@@ -128,7 +129,7 @@ def test_observed_text_is_not_blacklist_sanitized():
     message = replace(
         run.record.messages[0], text="KEEP_VISIBLE: discuss observed behavior, not a label."
     )
-    record = replace(run.record, messages=(message,))
+    record = replace(run.record, messages=(message,), event_journal=None)
     assert (
         project_evidence(record, public_id=PUBLIC_ID).as_mapping()["messages"]["records"][0]["text"]
         == message.text
