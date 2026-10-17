@@ -126,4 +126,21 @@ Before changing code:
 
 During development, preserve existing project state and security constraints. Keep changes scoped; use safe synthetic tests by default. **Do not commit, push, tag, release, deploy or run real external effects unless separately instructed.**
 
+## PactLens competition-specific invariants
+
+Appended 2026-10-17 (Phase 0). Everything above remains binding; nothing upstream was removed or weakened.
+
+- Study goal: Apart Research Track 2, questions 2.2/2.3; PDF-first, reproducible research.
+- Separate `pre_sprint/` or provenance manifest from sprint-created contributions.
+- Never treat deception, parallel conduct, or collusive speech alone as executed collusion.
+- Never leak scenario labels/assigned coalition/ground truth to monitor inputs.
+- Reuse pinned agentic-intent-gate==0.2.0 through installed public API only.
+- Multi-agent orchestration belongs to PactLens, not AIG.
+- Sandbox-only synthetic incident proposals; never mutate a real issue tracker.
+- One explicitly trusted SIDE_EFFECT tool per AIG runtime instance.
+- No simulated approval may be described as actual authenticated human consent.
+- Freeze dataset split, prompts, thresholds and evaluation before held-out scoring.
+- Do not push, commit, deploy, or call paid external APIs without explicit user approval.
+- Ship meaningful negative results and limitations; do not fabricate outcomes.
+
 **Guiding rule: Build the Hackathon application; reuse the pinned Agentic Intent Gate Runtime.**

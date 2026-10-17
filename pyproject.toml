@@ -1,0 +1,37 @@
+[project]
+name = "pactlens"
+version = "0.0.0"
+description = "PactLens: Evidence-Based Multi-Agent Collusion Detection (Apart Research AI Collusion Research Sprint, Track 2)"
+readme = "README.md"
+requires-python = ">=3.13"
+license = { file = "LICENSE" }
+dependencies = [
+  # Agentic Intent Gate v0.2.0, pinned to the immutable release commit
+  # (annotated tag v0.2.0 peels to 7261fdd2f47d2b15fabe8faac527eeee37338eb1).
+  # Verified 2026-10-17 via: git ls-remote ... refs/tags/v0.2.0 'refs/tags/v0.2.0^{}'
+  "agentic-intent-gate @ git+https://github.com/miku-wwl/agentic-intent-gate.git@7261fdd2f47d2b15fabe8faac527eeee37338eb1",
+]
+
+[dependency-groups]
+dev = [
+  "ruff>=0.8",
+  "pytest>=8",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+# Required because the pinned agentic-intent-gate dependency is a direct Git reference.
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pactlens"]
+
+[tool.ruff]
+src = ["src"]
+line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
