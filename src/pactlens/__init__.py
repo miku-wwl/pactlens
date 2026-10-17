@@ -10,8 +10,10 @@ This package is a consumer of the installed ``agentic-intent-gate`` runtime
 fork, or monkeypatch the shared runtime; all runtime integration goes through
 the public ``agentic_intent_gate.runtime`` API.
 
-Phase 0 status: repository scaffolding only. No experimental components,
-datasets, or research results exist yet. See docs/PHASE0_REPORT.md.
+Phase 1 status: pre-sprint deterministic arena, synthetic engineering fixtures,
+private manifest/review contracts and allowlisted observable evidence. No model
+experiments, detectors, AIG adapters or research findings exist.
+See docs/PHASE1_EXECUTION_REPORT.md.
 """
 
 __version__ = "0.0.0"

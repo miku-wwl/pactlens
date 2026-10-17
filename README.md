@@ -15,21 +15,25 @@ PactLens consumes the installed
 does not fork, reimplement, or bypass the shared runtime. All orchestration,
 experiments, detectors, and evaluation live in this repository (consumer side).
 
-## Status: Phase 0.6 complete — exploratory protocol, no implementation yet
+## Status: Phase 1 — deterministic offline arena (pre-sprint engineering)
 
 The authoritative protocol is [docs/EXPERIMENT_PLAN.md](docs/EXPERIMENT_PLAN.md):
 4 pilot + 10 calibration + 10 held-out blocks, five episodes per block,
 120 planned episodes / 24 independent blocks. This is **exploratory**, not
 confirmatory. MAE vs MA is the primary descriptive comparison; mandatory R
 contains MAE's same facts in raw form to separate information from structure.
-See [Phase 0.6 review](docs/PHASE0_6_REVIEW.md) for gates, checks and the
-planning-only Phase 1 scope. No experiments were run.
+The Phase 0.6 protocol is preserved. Phase 1 implements only deterministic
+arena mechanics, 14 hand-scripted engineering fixtures, private manifest/review
+records and an allowlisted observation projection. No model research episodes
+have been run; constructing 120 planned slots does not execute the study.
+See [Phase 1 report](docs/PHASE1_EXECUTION_REPORT.md),
+[data dictionary](docs/DATA_DICTIONARY.md) and
+[test matrix](docs/PHASE1_TEST_MATRIX.md).
 
-**Not yet implemented** (planned, not built): the incident-allocation arena,
-research experiment driver, agent runners, AIG consumer adapter, evidence
-collector, monitors M/A/MA/R/MAE, evaluation pipeline, dashboard. There are no
-experimental results in this repository. `src/pactlens/__init__.py` is a
-package marker only.
+**Not implemented:** research experiment driver, agent runners, AIG consumer
+adapter/receipt collector, monitors M/A/MA/R/MAE, detection scoring, statistical
+evaluation pipeline or dashboard. Fixtures establish mechanics, not emergent
+collusion or independently human-adjudicated truth.
 
 ## Intended architecture (three planes)
 
@@ -54,6 +58,8 @@ See `docs/ARCHITECTURE.md` for the verified API contract and constraints.
 uv sync --locked          # installs from the reproducible uv.lock (31 packages)
 uv lock --check --offline # verifies the lockfile is current and offline-usable
 uv run ruff check .       # lint
+uv run ruff format --check .
+uv run pytest -q          # offline engineering tests, no model/API calls
 ```
 
 - The runtime dependency is pinned to the immutable AIG release commit; the
@@ -67,6 +73,21 @@ uv run ruff check .       # lint
 - Secrets: none in the repo. Copy `.env.example` to `.env` (gitignored) if
   provider credentials are ever needed for the optional LLM pilot.
 
+For fully offline checks, set `UV_OFFLINE=1` in the calling environment.
+Inspect a **scripted unit fixture**, without providers or Runtime dispatch:
+
+```powershell
+uv run python -c "from pactlens.research.fixtures import run_fixture; f=run_fixture('c_plus'); print(f.outcome.global_cost, f.outcome.regret, f.record.adjudication.behavior_class)"
+# 12 6 None: hand-specified mechanics, human behavioral label still pending
+uv run python -c "from pactlens.research.manifest import build_manifest; m=build_manifest(); print(len(m.groups), len(m.episodes), m.observations_executed)"
+# 24 120 0: planned slots, no research executions
+```
+
+The `research/fixtures.py` helper loads `datasets/fixtures/arena_cases.json`
+from this source checkout; a standalone wheel does not bundle the fixture catalog.
+Public projection requires an independent canonical UUIDv4 and returns only
+observed data. Never pass private source records/manifests to a future monitor.
+
 ## Repository layout
 
 ```text
@@ -74,7 +95,13 @@ AGENTS.md                          agent instructions (upstream AIG rules + Pact
 PACTLENS_HACKATHON_DESIGN.md      preserved original pre-sprint blueprint
 LICENSE, .python-version, pyproject.toml, uv.lock
 .env.example, .gitignore
-src/pactlens/                     package marker only — no logic yet
+src/pactlens/
+  arena/                         immutable two-round mechanics and exhaustive reference
+  evidence/                      observed records and explicit L3 allowlist
+  research/                      private seeds/manifests, pending reviews, unit fixtures
+  serialization.py               canonical UTF-8 JSON and SHA-256
+datasets/fixtures/arena_cases.json 14 hand-specified engineering cases, not study data
+tests/                           offline determinism, outcomes, fixtures, split and leakage tests
 docs/
   HACKATHON_DESIGN.md            maintained blueprint with Phase 0.6 corrections
   ARCHITECTURE.md                consumer contract, verified API surface, constraints
@@ -84,6 +111,9 @@ docs/
   PHASE0_REPORT.md               Phase 0 validation (GO / PARTIAL)
   PHASE0_5_REVIEW.md             Phase 0.5 corrective review
   PHASE0_6_REVIEW.md             protocol hardening, validation, Phase 1 plan
+  DATA_DICTIONARY.md             concrete objective, transitions, records and seed bytes
+  PHASE1_TEST_MATRIX.md          acceptance-to-test mapping
+  PHASE1_EXECUTION_REPORT.md     actual verification and next-phase limits
 ```
 
 ## Competition constraints honored

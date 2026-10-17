@@ -45,6 +45,9 @@ monkeypatching, or private-API dependency exists in this repository.
   allocation, truth/adjudication rules, abstention and information controls,
   official-rule conflicts, validation and Phase 1 plan. These are additional
   **pre-sprint preparation**, not sprint implementation or measured research.
+- Phase 1 deterministic engineering on **2026-10-18 NZDT**, detailed in §4:
+  arena source, synthetic test fixtures, manifest/review/projection contracts
+  and automated tests. These also predate the official sprint.
 
 As inspected in Phase 0.6, no arena, experimental dataset, measured findings or
 detector implementation exists; `src/pactlens/__init__.py` remains marker-only.
@@ -54,10 +57,12 @@ this observation must not be projected forward as a fabricated history.
 
 ## 2. Planned new work during the sprint (2026-10-23 onwards)
 
-1. Synthetic Incident Allocation Arena (seeded generator, payoff function,
-   capacity constraints, deterministic allocator, outcome evaluator).
-2. Experimental conditions C+/N1/N2/N3/C−, episode manifests, and the
-   evaluation dataset.
+1. Arena engineering is now pre-sprint work (Phase 1, §4), not a future
+   sprint-created contribution. Any genuinely new sprint extensions must be
+   recorded separately.
+2. Model-driven C+/N1/N2/N3/C− observations and evaluation dataset remain
+   unimplemented/unrun. Engineering fixtures and planned-slot construction
+   already exist before the sprint and are not that dataset.
 3. Collusion detection monitors M / A / MA / R / MAE; additional ablations
    only under a prospective protocol amendment.
 4. Thin AIG consumer adapter and evidence collector (Plan → Approval →
@@ -83,10 +88,11 @@ claim was independently checked):
 - Phase 0.5 pre-sprint correction commit / starting HEAD:
   `7b710fe2f4f8c305897d6ff59820c6f1d3997f02`. It also records 2026-10-17 +1300.
   Thus Phase 0 commit is not the last pre-sprint preparation state.
-- Phase 0.6 is an **uncommitted documentation delta** over that HEAD.
-  Preserve `34d3857` as the named original baseline; disclose all later
-  preparation separately. The review ZIP carries SHA-256 file manifests to
-  identify this uncommitted snapshot. It does not create a new Git baseline.
+- At the Phase 0.6 review, the delta was uncommitted over that HEAD; the user
+  subsequently authorized its commit/push. Phase 1 locally confirms the resulting
+  commit `45b86712edc75c9803a1f36f5d926fe62fba6a0e` as starting/current HEAD.
+  Preserve `34d3857` as the original baseline and disclose later preparation
+  separately. The earlier review ZIP identifies its then-uncommitted snapshot.
 
 Future baseline procedure; recording read-only hashes needs no new permission,
 but commit/tag/push still require explicit authorization:
@@ -106,3 +112,53 @@ Reproduction rule: all manifests carry
 `provenance = pre_sprint | created_during_sprint`, and pre-sprint scaffolding
 is never presented as sprint results. Sprint deliverables derive only from the
 frozen study protocol in `docs/EXPERIMENT_PLAN.md`.
+
+## 4. Phase 1 pre-sprint engineering — 2026-10-18 NZDT
+
+The user explicitly authorized the deterministic Arena on this date, before the
+October 23 sprint. Starting tree: **clean**, branch `main`, HEAD
+`45b86712edc75c9803a1f36f5d926fe62fba6a0e`. HEAD remains unchanged; this phase's
+source/tests/docs are an **uncommitted delta**, not contained in that commit.
+No commit, push, tag, release, deployment, registration or submission occurred.
+Git metadata is not independent proof of wall-clock development time.
+
+Files created:
+
+- `src/pactlens/arena/{__init__,models,generator,transitions,allocation,outcomes}.py`:
+  strict immutable two-round mechanics, integer costs and exhaustive reference.
+- `src/pactlens/research/{__init__,seeds,manifest,adjudication,fixtures}.py`:
+  frozen groups/seeds, 120 **unexecuted** slots, private pending reviews and
+  bounded hand-scripted diagnostic fixtures.
+- `src/pactlens/evidence/{__init__,records,projection}.py`,
+  `src/pactlens/serialization.py`: explicit L3 allowlist and canonical JSON/hashes.
+- `datasets/fixtures/{arena_cases.json,README.md}`: 14 related synthetic
+  engineering cases, **not** independent research observations or model traces.
+- `tests/conftest.py`, `tests/test_arena_determinism.py`,
+  `tests/test_arena_outcomes.py`, `tests/test_scenario_fixtures.py`,
+  `tests/test_split_groups.py`, `tests/test_labels_no_leakage.py`.
+- `docs/DATA_DICTIONARY.md`, `docs/PHASE1_TEST_MATRIX.md`,
+  `docs/PHASE1_EXECUTION_REPORT.md`.
+
+Updated: this file, README, architecture status, package docstring. Frozen
+EXPERIMENT_PLAN, Phase 0/0.5/0.6 reports, original/maintained design blueprints,
+competition requirements, AGENTS, dependency config and lockfile are preserved
+against Git-filtered HEAD blob identities. AIG remains installed 0.2.0 at
+`7261fdd2f47d2b15fabe8faac527eeee37338eb1`; all 57 distribution RECORD hashes
+match. No source was copied from or modified in the shared Runtime.
+
+Executed with `UV_OFFLINE=1`: `uv sync --locked`,
+`uv run pytest -q --junitxml=.runtime/phase1-validation/pytest.xml` (**119 passed**),
+`uv run ruff check .`, `uv run ruff format --check .`,
+`uv lock --check --offline`. The test matrix records the corrected development
+test/lint failures. The review ZIP includes actual logs, source/config and a
+SHA-256 file manifest; hashes identify this working-tree snapshot without a tag.
+
+Still absent: agent orchestration, model/provider integration, AIG consumer
+approval/execution/receipt adapters, M/A/MA/R/MAE detectors, scoring, formal
+pilot/calibration/held-out runs, independent human adjudication, research
+findings and frontend. No synthetic approval is represented as human consent;
+Phase 1 does not run an approval workflow at all.
+
+This engineering work may support the sprint, but must **never** be described as
+newly developed October 23–25. Actual future sprint-created implementation,
+experiments and results must get their own contemporaneous provenance entries.

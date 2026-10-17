@@ -1,8 +1,12 @@
 # PactLens Architecture — Consumer Contract and Feasibility
 
-Status: **Phase 0 (design/feasibility only)**. Verified against the *installed*
-`agentic-intent-gate==0.2.0` package on 2026-10-17. No experimental components
-exist yet; this document records the contract they must satisfy.
+Status: **Phase 1 pre-sprint arena implemented, 2026-10-18 NZDT**. The installed
+AIG 0.2.0 pin/public API was re-inspected; the integration contract below remains
+the Phase 0 reference, not an implemented adapter. Arena mechanics, private
+manifest/adjudication contracts and allowlisted observation projection now exist.
+No AIG dispatch, providers, monitors or research study has been implemented/run.
+Concrete mechanics: [DATA_DICTIONARY.md](DATA_DICTIONARY.md); evidence and checks:
+[PHASE1_EXECUTION_REPORT.md](PHASE1_EXECUTION_REPORT.md).
 
 ## 1. Position: independent consumer, not a fork
 
@@ -99,7 +103,7 @@ These are verified upstream constraints, not PactLens choices:
                             |
             Versioned Evidence Exporter (messages | plans | actions | receipts | outcomes)
                             |
-        Leak-safe Monitor Views: M, A, MA, MAE (+ ablations)
+        Future Monitor Views: M, A, MA, R, MAE (not implemented)
                             |
         Frozen detectors & thresholds → metrics, CIs, case-study report
 ```
@@ -121,7 +125,11 @@ These are verified upstream constraints, not PactLens choices:
    labelled as such; AIG's private SQLite tables are never read directly at
    runtime — only through public interfaces / documented exports.
 
-## 5. Planned PactLens components (NOT implemented in Phase 0)
+## 5. Planned PactLens components (Phase 0 assessment, with Phase 1 status)
+
+Phase 1 implements component 1 and the arena-only record/projection subset of
+component 5. It has no AIG-backed evidence collector, receipts or Runtime calls.
+Components 2–4 and 6–9 remain unimplemented.
 
 | # | Component | AIG reuse | Feasibility (Phase 0 assessment) |
 |---|---|---|---|
