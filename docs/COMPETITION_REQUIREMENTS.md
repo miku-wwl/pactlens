@@ -1,15 +1,18 @@
 # PactLens — Competition Requirements Verification
 
 Official event: **Apart Research AI Collusion Research Sprint**, 2026-10-23 to
-2026-10-25. Verification date: **2026-10-17**. The sprint page has four tabs
-(Overview / Resources / Guidelines / Schedule) that are rendered client-side;
-the content below was captured with a real browser session on 2026-10-17, not
-from cached prose. All times converted to `Pacific/Auckland` NZDT (UTC+13).
+2026-10-25. Verification date: **2026-10-17, Phase 0.6**. This pass read the
+official page's extracted Overview, Resources, Guidelines, Schedule and
+submission content, plus a direct public text export of the linked report
+template. The Phase 0.5 browser observations are historical evidence; no new
+rendered-browser check or account/form submission was performed here.
+All deadline conversions use `Pacific/Auckland` NZDT (UTC+13).
 
 Source: https://apartresearch.com/sprints/ai-collusion-research-sprint-2026-10-23-to-2026-10-25
 
-Status legend: **VERIFIED** (seen in authoritative source, quoted), **UNVERIFIED**
-(not present / cannot confirm), **BLOCKED** (needs user action). No form was
+Status legend: **VERIFIED** (read in authoritative source), **UNRESOLVED**
+(conflicting observations), **UNVERIFIED** (cannot confirm), **BLOCKED**
+(requires further action). No form was
 submitted and no registration was performed on the user's behalf.
 
 ## 1. VERIFIED — official submission rules (Guidelines tab, retrieved 2026-10-17)
@@ -82,12 +85,39 @@ weeks after judging; Apart Fellowship fast-track for top teams.
 
 | Item | Status | Action required |
 |---|---|---|
-| **User's own registration confirmation** | UNVERIFIED | The page shows a "Sign up" button and a public counter ("1,002 signed up" on 2026-10-17); the user's account state was not checked. Confirm personally and keep timestamped proof. Hub registration (if wanted) via the page / AI Safety Hong Kong hub page. |
-| Submission form availability | UNVERIFIED (expected) | The official form is referenced as living on the sprint page; it is expected to open for the sprint window. Re-check during the sprint; do not assume it is open or closed before confirmation. |
-| Any "submission window has closed" message | **NOT REPRODUCED** | The design blueprint (§1) recorded such a message "simultaneously with the countdown". On 2026-10-17, two independent static fetches plus a JS-rendered browser session all showed "Starts in 6 days" / "Starts Oct 23, 2026", a Sign-up button, and no closed-window notice. Conclusion: the earlier capture was not reproducible; treat the sprint page's current state as authoritative at each check time and re-verify near the deadline. |
+| Public registration UI | VERIFIED as page content only | Sign-up controls exist. This is not proof of the user's registration or submission access. |
+| **User's own registration confirmation** | UNVERIFIED | Account state was not inspected. Keep actual confirmation separately from submission status. |
+| Submission availability | **UNRESOLVED** | This pass's official-page extraction contains a submission form AND “The submission window has closed.” Future event dates and registration controls cannot establish an open submission window. No actual submission was attempted. |
+| Conflicting rendered/captured states | **UNRESOLVED** | Phase 0.5 recorded future-start/registration UI without a closed notice; the blueprint and this pass's extraction contain a closed notice. Extraction may include hidden UI branches. Neither proves the server will accept submissions. Seek organizer clarification or a fresh authoritative availability check near the event; do not infer that submissions will automatically open. |
 | Judges' identity, reviewer count | UNVERIFIED | Not published; not required for preparation. |
 
-## 5. Rules this section imposes on the project
+## 5. Template contradiction and precedence (Phase 0.6 correction)
+
+The Guidelines require **150 words or fewer**. The linked Google Docs template
+instead says “150–250 words”. Both were read in this pass; the conflict is
+real and remains unresolved by the organizers. Use **≤150 English words**
+for the abstract, including exactly 150 as acceptable, unless organizers
+explicitly resolve it otherwise. The template's optional-appendix wording also
+does not remove the event's required Limitations and Dual-Use / Ethical appendix.
+
+Template evidence: [official linked document](https://docs.google.com/document/d/1Y5wd3VRbXU5N08BvAGiJUQTaWbMCSPjhzXsR-ozuehg/edit),
+[public text export](https://docs.google.com/document/d/1Y5wd3VRbXU5N08BvAGiJUQTaWbMCSPjhzXsR-ozuehg/export?format=txt).
+The export was 5,695 bytes, SHA-256
+`2010058b97eb5f9fca8ccd1cf2d564fdec0d13fde9c72436fa7dc81e875677e2`.
+The web reader failed to open the editor URL; the direct HTTP text export
+succeeded. No copy was created in the user's Google Drive.
+
+Schedule content was also checked: online talks October 22/23, optional hub
+activities October 24/25, and Sunday 23:59 AoE submission cutoff. Talk times
+do not establish the sprint's precise start time. The verified deadline remains
+**October 27, 2026, 00:59 NZDT**; submission availability remains unresolved.
+
+Resources' sample/budget numbers are organizer guidance, not a PactLens power
+analysis or measured resource estimate. PactLens chooses the concrete
+exploratory 4/10/10-block allocation in [EXPERIMENT_PLAN.md](EXPERIMENT_PLAN.md)
+and adds mandatory raw-evidence control R to separate information from structure.
+
+## 6. Rules this section imposes on the project
 
 1. Report must be ≤150-word abstract, on the official Google Docs template
    (linked above), with the Limitations and Dual-Use / Ethical appendix.
@@ -97,5 +127,7 @@ weeks after judging; Apart Fellowship fast-track for top teams.
    (undisclosed prior work risks disqualification).
 5. AI use in writing must be disclosure-ready: our own writing over our own
    measured work; no generated-sounding prose.
-6. Repo must ship a reproduction path (queued for README — see
-   `docs/PHASE0_5_REVIEW.md` §5).
+6. Repo must ship a reproduction path; README currently documents installation
+   and the future research contract, not a working experiment CLI.
+7. Registration and submission are separate statuses. Do not register, send
+   organizer messages or submit on the user's behalf under Phase 0.6.

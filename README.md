@@ -15,11 +15,19 @@ PactLens consumes the installed
 does not fork, reimplement, or bypass the shared runtime. All orchestration,
 experiments, detectors, and evaluation live in this repository (consumer side).
 
-## Status: Phase 0.5 complete — no implementation yet
+## Status: Phase 0.6 complete — exploratory protocol, no implementation yet
+
+The authoritative protocol is [docs/EXPERIMENT_PLAN.md](docs/EXPERIMENT_PLAN.md):
+4 pilot + 10 calibration + 10 held-out blocks, five episodes per block,
+120 planned episodes / 24 independent blocks. This is **exploratory**, not
+confirmatory. MAE vs MA is the primary descriptive comparison; mandatory R
+contains MAE's same facts in raw form to separate information from structure.
+See [Phase 0.6 review](docs/PHASE0_6_REVIEW.md) for gates, checks and the
+planning-only Phase 1 scope. No experiments were run.
 
 **Not yet implemented** (planned, not built): the incident-allocation arena,
 research experiment driver, agent runners, AIG consumer adapter, evidence
-collector, monitors M/A/MA/MAE, evaluation pipeline, dashboard. There are no
+collector, monitors M/A/MA/R/MAE, evaluation pipeline, dashboard. There are no
 experimental results in this repository. `src/pactlens/__init__.py` is a
 package marker only.
 
@@ -35,7 +43,7 @@ package marker only.
 3. **Audit plane**: a versioned `EvidenceRecord` schema merges
    research-owned message logs with AIG's verifiable action records
    (approval, terminal state, payload digest, receipt) into leak-safe detector
-   views (M / A / MA / MAE + ablations).
+   views (M / A / MA / R / MAE; extra ablations deferred).
 
 See `docs/ARCHITECTURE.md` for the verified API contract and constraints.
 
@@ -63,18 +71,19 @@ uv run ruff check .       # lint
 
 ```text
 AGENTS.md                          agent instructions (upstream AIG rules + PactLens invariants)
-PACTLENS_HACKATHON_DESIGN.md      research blueprint (design freeze 2026-10-17)
+PACTLENS_HACKATHON_DESIGN.md      preserved original pre-sprint blueprint
 LICENSE, .python-version, pyproject.toml, uv.lock
 .env.example, .gitignore
 src/pactlens/                     package marker only — no logic yet
 docs/
-  HACKATHON_DESIGN.md            mirror of the blueprint (content preserved)
+  HACKATHON_DESIGN.md            maintained blueprint with Phase 0.6 corrections
   ARCHITECTURE.md                consumer contract, verified API surface, constraints
   EXPERIMENT_PLAN.md             pre-registration: hypotheses, conditions, metrics, failure paths
   PROVENANCE.md                  pre-sprint vs sprint work; baseline procedure
   COMPETITION_REQUIREMENTS.md    official sprint requirements (verified 2026-10-17)
   PHASE0_REPORT.md               Phase 0 validation (GO / PARTIAL)
   PHASE0_5_REVIEW.md             Phase 0.5 corrective review
+  PHASE0_6_REVIEW.md             protocol hardening, validation, Phase 1 plan
 ```
 
 ## Competition constraints honored
@@ -84,6 +93,10 @@ affiliations, a required "Limitations and Dual-Use / Ethical Considerations"
 appendix, disclosure of prior work and AI assistance, and the submission
 deadline 2026-10-25 23:59 AoE = 2026-10-27 00:59 NZDT
 (`docs/COMPETITION_REQUIREMENTS.md`).
+
+The linked template's 150–250-word advice conflicts with Guidelines: use
+≤150 words. Submission availability is **UNRESOLVED**; registration controls
+do not prove an open submission window. No registration/submission was performed.
 
 ## Boundaries
 

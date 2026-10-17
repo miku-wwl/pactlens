@@ -1,6 +1,6 @@
 # PactLens Provenance — Pre-Sprint Work vs. Sprint Contributions
 
-Recorded 2026-10-17 (Phase 0; reviewed in Phase 0.5). Purpose: disclose, as
+Recorded 2026-10-17 (Phase 0; reviewed in Phases 0.5 and 0.6). Purpose: disclose, as
 required by the competition's prior-work rules ("you must clearly identify
 what is new work done during the sprint. Undisclosed prior work can lead to
 disqualification." — official Guidelines tab, 2026-10-17), exactly what existed
@@ -28,9 +28,9 @@ monkeypatching, or private-API dependency exists in this repository.
 
 ### 1.2 PactLens scaffolding and design completed before the sprint
 
-- Root design blueprint (`PACTLENS_HACKATHON_DESIGN.md`, mirrored to
-  `docs/HACKATHON_DESIGN.md`): research framing, hypotheses, arena concept,
-  monitor taxonomy, evaluation plan.
+- Root design blueprint (`PACTLENS_HACKATHON_DESIGN.md`): preserved original
+  proposal. `docs/HACKATHON_DESIGN.md` is the maintained copy with explicit
+  Phase 0.6 corrections; it is no longer an exact mirror.
 - Root `AGENTS.md`: upstream consumer instructions + PactLens-specific
   addendum (appended 2026-10-17, upstream text preserved).
 - Phase 0 scaffolding: `pyproject.toml` with the pinned Git dependency,
@@ -41,10 +41,16 @@ monkeypatching, or private-API dependency exists in this repository.
   `docs/EXPERIMENT_PLAN.md`, `docs/PROVENANCE.md` (this file),
   `docs/COMPETITION_REQUIREMENTS.md`, `docs/PHASE0_REPORT.md`,
   `docs/PHASE0_5_REVIEW.md`.
+- Phase 0.6 protocol hardening and `docs/PHASE0_6_REVIEW.md`: exploratory
+  allocation, truth/adjudication rules, abstention and information controls,
+  official-rule conflicts, validation and Phase 1 plan. These are additional
+  **pre-sprint preparation**, not sprint implementation or measured research.
 
-No experiments, datasets, measured results, or detector implementations
-existed before the sprint. Phase 0 and 0.5 executed only environment,
-dependency, API-surface, and official-requirements checks.
+As inspected in Phase 0.6, no arena, experimental dataset, measured findings or
+detector implementation exists; `src/pactlens/__init__.py` remains marker-only.
+Phase 0/0.5/0.6 checks and documentation are preparation. Future pre-sprint
+implementation, if separately authorized, must also be disclosed as pre-sprint;
+this observation must not be projected forward as a fabricated history.
 
 ## 2. Planned new work during the sprint (2026-10-23 onwards)
 
@@ -52,7 +58,8 @@ dependency, API-surface, and official-requirements checks.
    capacity constraints, deterministic allocator, outcome evaluator).
 2. Experimental conditions C+/N1/N2/N3/C−, episode manifests, and the
    evaluation dataset.
-3. Collusion detection monitors M / A / MA / MAE and ablations.
+3. Collusion detection monitors M / A / MA / R / MAE; additional ablations
+   only under a prospective protocol amendment.
 4. Thin AIG consumer adapter and evidence collector (Plan → Approval →
    Admission → Authorization → Execution → Receipt end-to-end), with
    synthetic-consent labelling for offline runs.
@@ -60,31 +67,36 @@ dependency, API-surface, and official-requirements checks.
 6. Statistical analysis (metrics, intervals, case studies).
 7. Research conclusions, figures, report writing, and submission.
 
-This section is a **plan**, not a record of completed work. Everything
-actually built must be checked off here with a timestamp as it lands.
+This section is a **plan**, not completed work. Record actual dates and tree
+identities as work lands; never backdate. No newly implemented sprint work is
+claimed as of this review.
 
 ## 3. Verifiable pre-sprint baseline — how to establish it without silent commits/tags
 
-The pre-sprint state is already externally verifiable without creating any tag:
+Local Git verification in Phase 0.6 (no remote PactLens reachability or push
+claim was independently checked):
 
-- Commit `34d3857` ("Phase 0: repository bootstrap, AIG v0.2.0 integration
-  preflight, docs", 2026-10-17, pushed to `github.com:miku-wwl/pactlens`) is
-  the last commit containing **no sprint-created code** — only scaffolding and
-  pre-sprint docs. It is the natural `PRE_SPRINT_BASELINE` reference.
-- Any Phase 0.5 documentation corrections made before the sprint are a second
-  commit dated before 2026-10-23; both together define the baseline. Record the
-  exact commit SHA(s) in the report's prior-work section.
+- **VERIFIED locally:** `git rev-parse '34d3857^{commit}'` resolves to
+  `34d38578ec36f7d69639c4f8c4ea572dd4b9e4d4`, the original Phase 0 baseline.
+  It is an ancestor of HEAD. The commit object records 2026-10-17 +1300;
+  this is Git metadata, not independent proof of development time.
+- Phase 0.5 pre-sprint correction commit / starting HEAD:
+  `7b710fe2f4f8c305897d6ff59820c6f1d3997f02`. It also records 2026-10-17 +1300.
+  Thus Phase 0 commit is not the last pre-sprint preparation state.
+- Phase 0.6 is an **uncommitted documentation delta** over that HEAD.
+  Preserve `34d3857` as the named original baseline; disclose all later
+  preparation separately. The review ZIP carries SHA-256 file manifests to
+  identify this uncommitted snapshot. It does not create a new Git baseline.
 
-Baseline procedure (to be executed only after user authorization — no commit,
-tag, or push has been or will be performed without explicit approval):
+Future baseline procedure; recording read-only hashes needs no new permission,
+but commit/tag/push still require explicit authorization:
 
-1. Commit the Phase 0.5 review changes as a dated commit before the sprint
-   starts; do not amend earlier commits (history stays auditable).
-2. Create the baseline record as a **plain-text manifest** (not a tag):
+1. Phase 0.5 is already committed locally. Record later preparation without
+   amending earlier history; only commit if separately requested.
+2. Create a **plain-text manifest** (not a tag):
    `git rev-parse HEAD`, file inventory with SHA-256 hashes, and the date —
-   stored in `docs/` and committed.
-3. Only if the user explicitly requests it: create an annotated lightweight
-   marker (e.g. `git tag -a PRE_SPRINT_BASELINE`) and push it — never silently.
+   retained with the review artifacts; committing it is a separate action.
+3. Only if explicitly requested: create an annotated tag and push it.
 4. At sprint start (official date Friday 2026-10-23; no official start *time*
    is published), record the tree state at that point and list the first
    sprint-created files; from then on log every substantive change with date

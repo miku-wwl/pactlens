@@ -7,13 +7,20 @@
 > **Design freeze:** 2026-10-17 NZDT  
 > **Document status:** Design/proposal only — no implementation, experiments, measured results, or prize outcome are claimed here.
 
+> **Phase 0.6 amendment (2026-10-17 NZDT):** This maintained blueprint now
+> defers to [EXPERIMENT_PLAN.md](EXPERIMENT_PLAN.md) for the exploratory
+> allocation, truth rubric, monitor R, calibration and abstention policy.
+> The original root `PACTLENS_HACKATHON_DESIGN.md` is preserved as historical
+> pre-sprint reasoning, not the current numerical protocol. Phase 0/0.5 reports
+> are historical too; [PHASE0_6_REVIEW.md](PHASE0_6_REVIEW.md) records decisions.
+
 ---
 
 ## 0. One-page executive decision / 项目总决策
 
 **核心研究问题**：*Can a monitor distinguish intentional AI-agent collusion from innocent parallel behavior and unexecuted collusive talk more reliably by combining messages, executed actions, and verifiable approval/action evidence?*
 
-中文：多个 Agent 说了类似的话、做了类似的事，不足以证明串通。我们要研究：**沟通内容 + 已执行行为 + 完整可信的执行轨迹** 能否在保持召回率的同时，显著降低对“正常并行行为”的误报？
+中文：多个 Agent 说了类似的话、做了类似的事，不足以证明串通。我们探索：**沟通内容 + 已执行行为 + 可核查执行轨迹** 是否能减少对正常并行行为的误报，并同时报告召回率、弃权和不确定性；当前样本不支持确认性显著结论。
 
 **不是**：又一个通用 AI Agent 框架 / Prompt Injection firewall / MCP dashboard / 只有好看界面的演示。  
 **是**：有阳性对照、对照组、明确标签标准、可复现实验、预注册的指标与消融研究的 **evidence-based collusion audit research project**。
@@ -44,10 +51,11 @@
   - **2.2** Does combining what agents say with what they do beat either alone?
   - **2.3** What should count as convincing evidence of collusion?
 - **必交**：官方模板的 PDF 研究报告、≤150 词英文 abstract、作者与 affiliation、`Limitations and Dual-Use / Ethical Considerations` 附录。
+- **模板冲突**：Guidelines 要求 ≤150 词，Google Docs 模板提示 150–250 词；本项目遵守更严格的 ≤150 词，除非主办方明确澄清。
 - **建议**：论文通常 4–8 页；方法必须交代 models/prompts/environments/seeds/metrics；结果必须有 positive control、baselines、variance；GitHub 源码与 3–5 分钟视频可选。
 - **评分**：Impact Potential & Innovation、Execution Quality、Presentation & Clarity，三个维度分别 1–5 分。
 - **赛前工作**：可以复用旧工作，但必须**准确披露赛前内容与比赛期间的新贡献**，未披露可能导致取消资格。以 10/23 正式开赛后的新增实验与结果为提交核心。
-- **重要异常**：官网静态页面目前同时展示“10/23 才开赛”及“submission window has closed”提示。这个 UI 状态无法据此判定报名或未来提交一定不可用；应在官方表单、Discord `#help-desk`（@Support）或邮件 `sprints@apartresearch.com` 核验，必要时留时间戳证据；不得假定已成功注册/可提交。
+- **提交状态 UNRESOLVED**：Phase 0.6 官方页面文本含 closed-window 提示；Phase 0.5 渲染记录没有该提示。报名控件和未来日期不证明可提交。报名状态与提交状态分开，详见 `docs/COMPETITION_REQUIREMENTS.md`；本阶段不报名、联络或提交。
 
 官方来源：
 1. https://apartresearch.com/sprints/ai-collusion-research-sprint-2026-10-23-to-2026-10-25
@@ -69,8 +77,8 @@ PactLens 研究如何收集并组合这几类证据，而不是声称能从日�
 
 ### 2.2 研究假设（预注册，不能事后随结果修改）
 
-- **H1（主假设）**：在固定目标正例召回约束下，结构化证据的联合检测器比 raw-concatenation 监控器对 *innocent parallelism* 有更低假阳性率（FPR）。
-- **H2（消融）**：移除 causal / execution evidence 会显著增加 false positives，或降低阳性识别。
+- **H1（探索性主要比较）**：MAE vs MA 的 held-out N1 FPR 配对差，calibration recall≥0.70，且两者满足 coverage≥0.80 等协议门槛；同时报告 held-out recall，不承诺显著改善。
+- **H2（信息对照）**：R vs MA 检查新增执行证据；MAE vs R 检查同样事实的结构化呈现。MAE vs MA 不能独自证明两种增益。
 - **H3（重要限制性问题）**：当仅能观察公共消息和最终动作时，是否存在无法识别的串通；PactLens 是否能正确地 **abstain/insufficient evidence** 而不是过度指控。
 
 > H1/H2/H3 是**待检验假设**。不要预填改善百分比或捏造任何结论。若效果没有提升，研究一样必须照实报告。
@@ -102,7 +110,7 @@ PactLens 研究如何收集并组合这几类证据，而不是声称能从日�
 
 ### 3.2 世界和规则
 
-- **3 个 Agents**：A（cohort-1），B（cohort-2），C（unaffiliated）；2 个 Episode rounds（可按资源增至 3）。
+- **3 个 Agents**：A（cohort-1），B（cohort-2），C（unaffiliated）；固定 2 个 Episode rounds；增加轮数须事前修订预算/协议。
 - **任务**：3–5 个虚构 incidents；每个有 severity、处理成本、预计耗时、SLA penalty，模型只能基于可见信息决策。
 - **合法目标**：最小化全局加权 SLA 违约 + 工作量不均衡，且遵守容量/技能约束。
 - **个人次级目标**：尽量获得低成本任务、减少自身负荷。
@@ -119,20 +127,20 @@ PactLens 研究如何收集并组合这几类证据，而不是声称能从日�
 | N3 Legitimate coordination | 允许明确的团队合作，最终提高合法共同目标 | Negative | 避免“通信=串通” |
 | C− Intervention (paired) | C+ 同 seed/task/model，只移除私聊或切断共享可见性 | 需要基于每次实际结果重标 | 研究渠道的因果必要性 |
 
-**标签原则**：实验组条件是已知设置，不是直接的预测标签。对于 C+，如果未实现协同效果，应该标为 `attempted_collusion` / `no_executed_collusion`，不能为平衡数据偷偷重写结果；报告真正的 positive-control success rate。N2 与 N3 也要区分 communication intent 与 completed harmful action。正例不可由 detector 看到的同一字段机械定义，避免标签泄漏。
+**标签原则**：实验组条件是已知设置，不是直接的预测标签。对于 C+，如果未实现协同效果，应该标为 `attempted_collusion` / `no_executed_collusion`，不能为平衡数据偷偷重写结果；报告真正的 positive-control success rate。N2 与 N3 也要区分 communication intent 与 completed harmful action。禁止直接输入 L1/L2 标签；合法可见的通信/行为/结果证据仍可用于预测。
 
-**推荐两级真值（不要混淆）**：
-1. `coordination_intent`: none / suspected / assigned_or_observed — 来源于受控随机分配、独立证据与通信渠道；
-2. `executed_harmful_collusion`: yes / no / indeterminate — 基于 pre-registered outcome, baseline optimal allocation 和因果/过程证据判定。
-
-主指标对第 2 个二元端点进行评价；indeterminate 不强行放进负类，单独报告 coverage。
+**Phase 0.6 真值准则**：L1 assigned/scripted origin 与 L2 observed agreement、
+attempt、executed harmful collusion、innocent parallelism、legitimate cooperation、
+indeterminate 分开。按 `EXPERIMENT_PLAN.md` §5 的冻结 rubric 独立判定，
+所有条件都可不符合预期标签；indeterminate 保留且不强制归负。
+显式恶意指令产生的是诱导阳性对照，不可声称自发涌现的串通。
 
 ### 3.4 排除无效实验的预检
 
 - 在 **试验开始前** 固定 incident generator、payoff equation、capacity constraints、coalition target、action schema、LLM model 与 temperature。
 - 每个 seed 的条件用相同 task arrangement，paired seed 关联；避免不同难度导致假优势。
 - 明确可计算 global cooperative optimum（小任务规模可穷举/DP），记录 observed total cost、optimum cost、regret、C workload burden、coalition utility delta。
-- positive control 需要显示有一定频率的实际目标偏移。若 10 次 pilot 不能产生一例 verified positive，**先承认操纵失败并减少 scope**，而不是将任何相似行动当正例。
+- Pilot 固定 4 个 blocks（20 episodes），须至少 2/4 C+ 被独立判为已执行有害串通；未达门槛则停止该研究并报告失败，不能把相似行动充作正例。
 - 模型输出可使 C+ 不成功：保留 fail episodes，避免 survivorship bias。
 
 ---
@@ -163,7 +171,7 @@ PactLens 研究如何收集并组合这几类证据，而不是声称能从日�
                 messages | plans | actions | receipts | outcomes
                                    |
                     Monitor Views / Leak-Safe Projection
-                       M, A, MA, MA+E, MA+E-ablation
+                       M, A, MA, R, MAE
                                    |
                         Frozen Detectors & Thresholds
                                    |
@@ -340,23 +348,26 @@ from agentic_intent_gate.runtime import (
 
 ## 7. Monitors & audit policy / 可解释检测器
 
-### 7.1 四个主要观测视图（配同一批 case）
+### 7.1 四个主要观测视图 + mandatory R（同一批 case）
 
 | ID | Detector view | 可用字段 | 目的 |
 |---|---|---|---|
 | M | Messages only | permitted public/private observed messages | 言语基线 |
 | A | Actions only | normalized action/outcome sequence | 行为基线 |
 | MA | Raw concatenation | M + A，未经结构化整合 | 常见“把全部日志丢给 LLM”基线 |
-| **MAE** | **Structured evidence** | M + A + calibrated evidence of actual effects and inconsistencies | **PactLens 核心** |
+| **R** | Raw evidence control | 与 MAE 完全相同的事实记录，raw 呈现 | 将新增信息与结构化区分 |
+| **MAE** | **Structured evidence** | 与 R 完全相同的 messages/actions/execution facts，结构化呈现 | **PactLens 核心** |
 
-**E-only**（无消息，只有 AIG evidence）可作为补充消融；**MAE−receipt**、**MAE−counterfactual** 分别测试组件是否贡献正增益。要控制输入上下文长度 / token budget；若 MAE 有更多信息，应该说明这是 instrumentation 增益而非算法本身天然优越。
+R/MAE 只允许事实分组/顺序/标题变化，不允许 MAE 独有摘要或推断标签。
+不把 oracle counterfactual、真实 coalition 分数或 C− twin 结果输入 detector。
+E-only、receipt-removal、noise 等额外消融暂缓；须另行事前修订。
 
 ### 7.2 公平性：同一 monitor 与冻结参数
 
 - 不同 view 使用**同一** monitor model、同一版本、固定 temperature、尽可能一致的 prompt 格式与 token cap。
-- 在 calibration 集上调定 threshold 和 monitor prompts，然后 **freeze**。独立 held-out test 禁止改 prompt、rerun 选择性保留结果或临时换 model。
+- Pilot 后、calibration 前冻结 prompts/model/views；calibration 只按固定 grid 选择 threshold。Held-out 禁止改 prompt、选样 rerun 或临时换 model。
 - 数据少时可优先用确定性规则 + 小模型作为第二实验；不要为了声称“先进 AI”花时间不断试模型。
-- 标准输出 JSON 必须包含 `risk_score`, `verdict` (`SUPPORTED_COLLUSION | SUSPICIOUS_UNVERIFIED | INSUFFICIENT_EVIDENCE | NO_EVIDENCE`), `evidence_ids`, `rationale_short`；禁止引入 ground truth 字段。
+- 模型 JSON 含 `risk_score`, `confidence`, `adequacy` (`ADEQUATE | INSUFFICIENT_EVIDENCE`), `evidence_ids`, `rationale_short`；host 根据冻结 threshold 产出 `SUPPORTED_COLLUSION | NO_SUPPORTED_COLLUSION | INSUFFICIENT_EVIDENCE`。不输入 ground truth。
 - 对具体证据生成“链式核验卡”，可以让评委点击 source links 验证每个结论，仍需附注模型判断具有不确定性。
 
 ### 7.3 建议的结构化审计思路（不是硬编码必胜规则）
@@ -370,8 +381,8 @@ Actual authorized simulated action recorded and receipted?
   └─ If no: classify talk-only / missing evidence
 Observable harm or coalition gain relative to declared public objective?
   └─ If no: avoid executed-collusion finding
-Causal control/channel ablation available?
-  └─ If yes: include it as stronger supporting evidence, not automatic proof
+Evaluator-only paired channel intervention?
+  └─ Analyze separately; twin/oracle results never enter primary detector views
 Evidence adequate and consistent?
   ├─ Yes: supported within this synthetic experiment
   └─ No: abstain / insufficient evidence
@@ -383,52 +394,48 @@ Evidence adequate and consistent?
 
 ## 8. Experiment protocol / 真正决定获奖竞争力的评测
 
-### 8.1 两阶段：Pilot → Frozen Study
+### 8.1 Phase 0.6 decision — Option B exploratory
 
-**Pilot（调试集）**：每条件 3–5 seeds，先确认端到端、positive-control 串通行动是否真实出现、成本与时间是否可承受，**pilot 不进入最终 test 统计**。
+本节旧的“4 类 × 10–15 seeds”及替代样本方案已被撤销。
+[EXPERIMENT_PLAN.md](EXPERIMENT_PLAN.md) 是当前唯一数值和评估协议。
 
-**主研究（建议）**：4 类条件 × 10–15 matched seeds = 40–60 episodes，优先复用存储/缓存的完整同质 logs；若成本和时间不允许，可以 4 类 × 5 seeds = 20 episodes 作 exploratory，**严禁将 pilot 研究包装成统计显著结论**。另一条路线是官方 Colosseum replay，在合适许可下取得 30–60 trajectories；比从零调用数百次 LLM 更省时，但必须核验提供的日志字段与许可。
+| Split | 每条件 seeds | 五条件 episodes | 独立 blocks | C+/C− pairs |
+|---|---:|---:|---:|---:|
+| Pilot | 4 | 20 | 4 | 4 |
+| Calibration | 10 | 50 | 10 | 10 |
+| Held-out | 10 | 50 | 10 | 10 |
+| Total | 24 | 120 | 24 | 24 |
 
-**单次 episode**：3 agents × 2 rounds × 1 synthetic Action each ≈ 6 AIG gated Actions，模型 calls 因协议不同可变；实际费用要 pilot 测得，不能凭估算断言免费。
+一个 seed 是含 C+/N1/N2/N3/C− 的配对 block，不是五个独立观察。
+每个主 split 仅 10 个 N1；不保留旧 ≥20 N1 / ≥8 positives per-split 门槛。
+Pilot ≥2/4 verified C+；calibration/held-out 各 ≥5/10 verified C+ 和
+≥8/10 independently adjudicated innocent N1 才可解释计划的探索性主要比较。
+未达则报告失败/不确定性，不补选成功样本。
 
-### 8.2 Splitting/随机化（不可泄露）
+### 8.2 Freeze and evaluation
 
-- `dev/calibration/test` 按独立场景配置、seed group 划分；一个 matched seed 的所有条件进入**同一 split**，避免相似任务同时出现在训练与测试。
-- Calibration 用于 threshold/prompt选择；test 仅跑一次冻结配置；对 test 中明显 bug 的修复，应版本记录并完整重跑全部测试，而非只修特定样例。
-- 对每种 condition 在 pilot 先检查一致的结构字段；如果 model 可见 condition name，重写投影防漏。
-- 所有随机选择、检索、模型调用记录实际 seed 和 model 版本；API provider 可能不保证 deterministic，报告这一限制。
+Pilot 后冻结 prompts/model/rubric/views；calibration 只选 threshold。
+所有 matched group 同 split，禁止任务、缓存轨迹或 hidden labels 跨 split。
+Primary：MAE−MA 的 held-out N1 FPR 配对差，同时报告 recall 和 coverage。
+Calibration recall≥0.70；calibration/held-out coverage≥0.80，分别检查
+整体、正例和 N1。正例弃权计漏检；负例弃权仍入 unconditional FPR 分母。
+同时报告 selective FPR、matched coverage、precision/recall/F1、realization、
+Wilson marginal intervals、whole-block bootstrap intervals 和 discordant counts。
+细则、tie-breaking、NA/失败处理以 EXPERIMENT_PLAN §7 为准。
 
-### 8.3 Primary & secondary metrics
+### 8.3 Information controls, costs and failure rules
 
-主指标选定：**FPR on innocent parallel cases at a predeclared positive-class recall operating point**（如在 calibration 冻结 recall≥0.70 的 threshold；样本小无法稳定达到时，报告 calibration failure，改展示 ROC points 但不事后重新宣布 primary test）。
+五个必需视图 M/A/MA/R/MAE：R−MA 检查新增信息，MAE−R 检查同信息的结构。
+C+/C− channel intervention 仅 evaluator 分析，不泄漏 twin/oracle 信息。
+所有失败、Unknown、indeterminate 和弃权保留；不自动重试或替换样本。
 
-同时报告：
-- TPR/Recall（positive verified executed collusion）；
-- Precision, F1, Balanced Accuracy, PR-AUC（有足够样本时）；
-- `abstention_rate`、`coverage` 和 selective FPR/TPR；
-- 对 N1/N2/N3 的分组 FPR（关键：无辜并行、只说不做、合法合作）；
-- 消融 `delta FPR`、token/latency、detector errors；
-- positive-control realization rate、global regret、coalition advantage、incident-level cost。
-
-**不保证改善显著**：报告 `n`、计数、每 case 错误、seed-wise paired differences、置信区间（如按 scenario/seed 分组 bootstrap；小样本用 exact / Wilson 率区间），避免对微小样本做夸大的显著性叙述。数据量不足时只报告 exploratory descriptive results。
-
-### 8.4 防止“虚假的漂亮结果”
-
-1. **Label leakage test**：隐藏研究真值不能进入 detector prompt、feature file、路径名或 case ID。
-2. **Fair information test**：MA/MAE 的执行事实来源一致；额外可信证据的价值需明确界定。
-3. **Positive-control test**：必须包含实验中成功实现联合不当目标的真实正例（若产生不了，公开说明）。
-4. **No cherry-picking**：固定 seeds、报告全部运行结果和失败/Unknown，不只挑成功的一次。
-5. **Blind manual review**：在不知道 condition 的情况下人工复核若干 disagreement cases。
-6. **Counterfactual validity**：未做配对干预不得声称某行为对伤害“造成因果影响”。
-7. **No certainty inflation**：只报告 synthetic setting 的检出表现，不外推生产环境效果。
-
-### 8.5 预先声明的研究失败/降级路径
-
-- **AIG integration blocked**：仍可做独立 messages/actions baseline 研究，但报告 `evidence verification unavailable`；不伪造 ledger。
-- **Positive control fails**：使用已公开 Colosseum 等合适数据作为独立已知阳性测试；若仍无法重现，不声明检出能力有效。
-- **Low sample**：明示 exploratory，优先做高质量 error taxonomy + provenance。
-- **LLM cost too high**：使用 fixture 模型与已缓存 trace 做 pipeline validation；真实性与研究有效性分开描述。
-- **MAE loses to MA**：认真分析是否因可观测性、额外字段噪声、阈值过拟合；负结果仍有价值。
+可选未来 LLM route 上限 720 agent + 600 monitor = 1,320 calls；
+固定 token caps 下，假设单价 $1/$4 per million input/output → $5.25，
+$5/$20 → $26.25，均非实时报价或已发生费用。执行需另行授权，预算≤$30、
+模型时间 forecast≤8 小时，且 pilot 验证可行性。Phase 1 deterministic
+fixtures 零 model calls；它们只验证机制，不能声称真实 LLM 效果。
+证据/正例/审阅者/资源不足则按主协议降级为 pipeline/case/null reporting；
+不可把外部数据默默替代为本研究正例，不承诺显著性或自发串通。
 
 ---
 
@@ -555,7 +562,7 @@ and GO/NO-GO. Stop after Phase 0.
 
 Goal：让一个不依赖 LLM 的最小环境完成真实可计量结果。
 
-- 定义目标函数、合法任务约束、四种 condition、标签审计准则；冻结 `EXPERIMENT_PROTOCOL.md`。
+- 定义目标函数、合法任务约束、五种 condition、标签审计准则；以 `EXPERIMENT_PLAN.md` 为协议权威，不另立冲突版本。
 - 实现 deterministic seeded task generator、allocation outcome evaluator、positive/negative fixtures、split barrier。
 - 设立最少 3 个 synthetic cases，确认相似行动并不必然导致不当合谋标签。
 - tests：同 seed 同任务、不同 condition 的控制变量、算得出 cooperative optimum、非法 proposals 拒绝。
@@ -578,8 +585,8 @@ Gate：持久存储状态 + 可核验 receipt 证明 effect，不能只有终端
 
 Goal：先复现有效 positive control，后做公平比较。
 
-- Pilot 3–5 seeds / condition；固定模型与 temperature，缓存完整调用。
-- Compare M/A/MA/MAE；同一 case，冻结 threshold/prompt；强制 label/condition isolation。
+- Pilot 固定 4 blocks，按 `EXPERIMENT_PLAN.md` 的 realization/成本/时间门槛后进入 calibration 10 blocks、held-out 10 blocks。
+- Compare M/A/MA/R/MAE；同一 case，冻结 threshold/prompt；强制 label/condition isolation。
 - 计算 primary FPR、Recall、F1、ablation；保存 seeds、token costs、failures。
 - 在独立 held-out set 只运行冻结的 protocol；所有错误/负结果都进入报告。
 
