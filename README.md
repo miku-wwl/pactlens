@@ -15,7 +15,7 @@ PactLens consumes the installed
 does not fork, reimplement, or bypass the shared runtime. All orchestration,
 experiments, detectors, and evaluation live in this repository (consumer side).
 
-## Status: Phase 1 — deterministic offline arena (pre-sprint engineering)
+## Status: Phase 2 — local AIG consumer integration (pre-sprint engineering)
 
 The authoritative protocol is [docs/EXPERIMENT_PLAN.md](docs/EXPERIMENT_PLAN.md):
 4 pilot + 10 calibration + 10 held-out blocks, five episodes per block,
@@ -30,8 +30,20 @@ See [Phase 1 report](docs/PHASE1_EXECUTION_REPORT.md),
 [data dictionary](docs/DATA_DICTIONARY.md) and
 [test matrix](docs/PHASE1_TEST_MATRIX.md).
 
-**Not implemented:** research experiment driver, agent runners, AIG consumer
-adapter/receipt collector, monitors M/A/MA/R/MAE, detection scoring, statistical
+Phase 1.1 integrity hardening and Phase 2 now add a real installed-AIG path:
+frozen synthetic proposal → validated Plan/Run → separate scripted test Approval
+and Authorization → durable Gateway claim → SQLite proposal/receipt → verified
+Arena reconstruction. Three isolated compositions each register one fixed tool,
+retain their identity across restarts and use the default five-second budget.
+Lost acknowledgments/interrupted execution remain Unknown without automatic retry.
+This is local engineering with **synthetic consent**, not authenticated human
+approval or an LLM collusion observation. See the
+[integration contract](docs/PHASE2_INTEGRATION_CONTRACT.md),
+[execution report](docs/PHASE2_EXECUTION_REPORT.md) and
+[test matrix](docs/PHASE2_TEST_MATRIX.md).
+
+**Not implemented:** research experiment driver, model-driven agent runners,
+monitors M/A/MA/R/MAE, detection scoring, statistical
 evaluation pipeline or dashboard. Fixtures establish mechanics, not emergent
 collusion or independently human-adjudicated truth.
 
@@ -97,6 +109,8 @@ LICENSE, .python-version, pyproject.toml, uv.lock
 .env.example, .gitignore
 src/pactlens/
   arena/                         immutable two-round mechanics and exhaustive reference
+  aig/                           fixed consumer, frozen proposal registry, SQLite effects, six-action test harness
+  integration/                   verified durable-proposal to Arena replay
   evidence/                      observed records and explicit L3 allowlist
   research/                      private seeds/manifests, pending reviews, unit fixtures
   serialization.py               canonical UTF-8 JSON and SHA-256
@@ -114,6 +128,10 @@ docs/
   DATA_DICTIONARY.md             concrete objective, transitions, records and seed bytes
   PHASE1_TEST_MATRIX.md          acceptance-to-test mapping
   PHASE1_EXECUTION_REPORT.md     actual verification and next-phase limits
+  PHASE1_1_EXECUTION_REPORT.md   state/evidence integrity hardening (historical)
+  PHASE2_INTEGRATION_CONTRACT.md binding, schema, durability and evidence boundaries
+  PHASE2_TEST_MATRIX.md          real lifecycle/fault/restart acceptance mapping
+  PHASE2_EXECUTION_REPORT.md     actual Phase 2 results and limitations
 ```
 
 ## Competition constraints honored

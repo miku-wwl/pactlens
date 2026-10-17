@@ -168,4 +168,15 @@ def test_application_has_no_runtime_provider_network_or_orchestration_imports():
                 if isinstance(node, ast.ImportFrom)
                 else []
             )
-            assert not {name.split(".")[0] for name in names} & forbidden, path
+            if path.is_relative_to(root / "aig"):
+                # Phase 2 explicitly permits the installed public runtime only
+                # in its narrow consumer package; all other bans remain.
+                assert all(
+                    name == "agentic_intent_gate.runtime"
+                    for name in names
+                    if name.split(".")[0] == "agentic_intent_gate"
+                ), path
+                blocked = forbidden - {"agentic_intent_gate"}
+            else:
+                blocked = forbidden
+            assert not {name.split(".")[0] for name in names} & blocked, path

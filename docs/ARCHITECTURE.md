@@ -1,10 +1,13 @@
 # PactLens Architecture — Consumer Contract and Feasibility
 
-Status: **Phase 1.1 pre-sprint integrity hardening, 2026-10-18 NZDT**. The installed
-AIG 0.2.0 pin/public API was re-inspected; the integration contract below remains
-the Phase 0 reference, not an implemented adapter. Arena mechanics, private
-manifest/adjudication contracts and allowlisted observation projection now exist.
-No AIG dispatch, providers, monitors or research study has been implemented/run.
+Status: **Phase 2 pre-sprint local AIG integration, 2026-10-18 NZDT**. The installed
+AIG 0.2.0 pin/public API was re-inspected. The fixed synthetic-proposal consumer,
+durable local effects/receipts, real Run/Approval/Authorization/Gateway path,
+three isolated compositions, Arena replay and AIG evidence adapter now exist.
+Planning and consent are deterministic engineering stand-ins. No model inference,
+formal study, detector, production login or interactive approval UI exists.
+Current contract: [PHASE2_INTEGRATION_CONTRACT.md](PHASE2_INTEGRATION_CONTRACT.md);
+actual results: [PHASE2_EXECUTION_REPORT.md](PHASE2_EXECUTION_REPORT.md).
 Concrete mechanics: [DATA_DICTIONARY.md](DATA_DICTIONARY.md); evidence and checks:
 [PHASE1_EXECUTION_REPORT.md](PHASE1_EXECUTION_REPORT.md) (historical) and
 [PHASE1_1_EXECUTION_REPORT.md](PHASE1_1_EXECUTION_REPORT.md) (current hardening).
@@ -150,11 +153,15 @@ These are verified upstream constraints, not PactLens choices:
    labelled as such; AIG's private SQLite tables are never read directly at
    runtime — only through public interfaces / documented exports.
 
-## 5. Planned PactLens components (Phase 0 assessment, with Phase 1 status)
+## 5. Planned PactLens components (Phase 0 assessment, with Phase 2 status)
 
-Phase 1 implements component 1 and the arena-only record/projection subset of
-component 5. It has no AIG-backed evidence collector, receipts or Runtime calls.
-Components 2–4 and 6–9 remain unimplemented.
+Phase 1 implements component 1. Phase 2 implements the fixed consumer adapter in
+component 4 and bounded receipt/evidence subset of component 5. Three isolated
+runtime compositions are exercised by a six-submission engineering harness;
+this is not component 2's research driver or component 3's model-driven runners.
+Components 2–3 and 6–9 remain unimplemented. Gate transactions and consumer
+proposal transactions remain separate. Conflicting cross-store Arena base
+revisions stop reconstruction; there is no distributed Arena serialization.
 
 | # | Component | AIG reuse | Feasibility (Phase 0 assessment) |
 |---|---|---|---|

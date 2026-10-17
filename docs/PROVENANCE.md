@@ -214,3 +214,47 @@ tracked and byte-identical. Removing it from future versions (e.g. `git rm
 --cached` in a separately reviewed commit) requires separate authorization;
 no deletion, untracking or history rewrite was performed. Phase 1.1 review ZIP
 is outside the repository and is not a new Git artifact.
+
+## 6. Phase 1.1 pushed baseline and Phase 2 integration — 2026-10-18 NZDT
+
+Additive current-state entry; prior reports/§5 retain their original development
+snapshot statements. Before Phase 2 modifications, tree was clean on `main`.
+Local HEAD, `origin/main` and a fresh HTTPS `ls-remote` confirmed
+`6a879bb3fb19d47332ae2aa7376ead4d12b57d90`, subject `Phase 1.1: harden state
+integrity and observable event ordering`. Phase 1.1's user-authorized HTTPS
+push is thus confirmed; this SHA is the Phase 2 starting baseline.
+
+Phase 2 implementation on **2026-10-18 NZDT** is pre-sprint engineering:
+
+- New `src/pactlens/aig/{__init__,contract,effect_store,executor,consumer,workflow}.py`:
+  reviewed fixed binding, deterministic provider, persisted proposal snapshots,
+  independent SQLite effects/receipts, real installed-AIG composition and a fixed
+  six-submission synthetic-consent engineering harness.
+- New `src/pactlens/integration/{__init__,arena_bridge}.py` and
+  `src/pactlens/evidence/aig_adapter.py`: verified effect replay through existing
+  Arena transitions, plus the explicit Observation-v2 execution extension.
+- Seven `tests/test_aig_*.py` modules and `tests/aig_helpers.py`. Existing conftest
+  permits only stdlib socketpair IPC needed by Windows asyncio while blocking
+  application connections; its new fixture provisions isolated synthetic stores.
+  The existing source-import guard permits only public AIG imports inside the
+  new consumer package, retaining network/model/orchestrator prohibitions.
+- New Phase 2 integration contract, execution report and test matrix; updated
+  README, ARCHITECTURE, DATA_DICTIONARY and this additive provenance entry.
+
+All Arena mechanics and Phase 1.1 evidence source files remain byte-identical.
+No research split, prompt, threshold, statistical rule or fixture catalog changed.
+AIG remains installed 0.2.0 at the immutable 7261fdd2 pin; dependency config and
+lock remain unchanged. Upstream references were inspected, never copied into
+PactLens or modified. Core Run/approval/claim/recovery logic is reused, not owned
+by this consumer. Test-only direct executor calls qualify the consumer port;
+application/harness dispatch always goes through the actual Gateway.
+
+These are genuine local SQLite/AIG lifecycle tests with deterministic planning
+and **synthetic consent**, not LLM observations, human authentication or harmful
+collusion findings. Formal pilot/calibration/held-out observations remain
+**0 executed / NOT RUN**, with 120 planned slots across 24 blocks unchanged.
+Phase 3 harness, model-driven agents, monitors, scoring and dashboard remain
+unimplemented. No commit, push, tag, release, deployment or competition action
+occurred during Phase 2; HEAD remains the starting baseline and the new work is
+an uncommitted delta. Review archive is outside the repository; historical
+tracked ZIP is preserved.

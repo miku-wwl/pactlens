@@ -223,8 +223,10 @@ returns defensive mapping copies, with no reference back to its source.
 Actors/incidents map to neutral `Actor-1..3` / `Incident-1..5`; internal IDs,
 private episode IDs, seed/group/split/condition, coalition assignment, pair/twin
 references, source paths, notes, J*/regret/pair benefit/reference are not copied.
-There are no AIG receipt/approval fields because no AIG adapter exists. This is
-one allowed observable source contract, **not M/A/MA/R/MAE monitors or scoring**.
+The base projector retains this contract. Phase 2's separate AIG adapter adds
+the optional execution-evidence extension below; the original fields are
+unchanged. This is one allowed observable source contract,
+**not M/A/MA/R/MAE monitors or scoring**.
 
 Missing-record keys do not depend on condition; actual observed behavior and
 missingness may legitimately predict outcomes. Text is preserved, including
@@ -308,6 +310,53 @@ authenticity or malicious-host isolation. A host can rewrite a fact and its
 unkeyed digest together, omit a journal, or replace a consistently rewritten
 history. No signature, authenticated capture, durable journal or tamper-proof
 persistence is implemented. State consistency alone cannot prove what happened.
+
+## Phase 2 AIG execution extension
+
+`project_aig_evidence` first calls the unchanged base projector and then adds
+`aig_execution`, contract `pactlens-aig-observation-v1`. Base schema remains
+Observation v2; exact-key consumers opt into this explicit extension. Up to six
+detached `ObservedAction` snapshots are accepted, one per public actor/round.
+The collector reads only Runtime's public Gateway/Run services and verified
+consumer rows; AIG private tables/credentials are not inputs to projection.
+
+Each allowlisted record has `action_id` (canonical UUIDv4), neutral `actor`,
+`round`, `action_state`, `approval_state`, `authorized`, `payload_digest`,
+`proposal_digest`, `receipt_reference` (UUIDv4 or null), `receipt_status`,
+`synthetic_consent`, `ordering_stream`, `source_sequence`, `logical_position`.
+Action state/version/authorization combinations are checked. Receipt status is
+VERIFIED_COMMITTED or MISSING; a Succeeded Action must have the exact independently
+verified receipt. Failed cannot silently coexist with its committed receipt;
+Unknown may coexist with a verified local receipt without becoming Succeeded.
+Available Arena proposals must match the observed proposal content digest.
+
+COMPLETE means six snapshots present, not six successful effects. Other coverage
+is INCOMPLETE, including an empty list. Trust labels distinguish research-owned
+synthetic messages, AIG public API state under local demo capabilities, verified
+consumer SQLite commit and deterministic Arena accounting. A receipt establishes
+local effect persistence, not agreement, collusion, motive or authenticated human
+consent. All current harness records declare `synthetic_consent=true`.
+
+An Action's source stream is `aig-action-<UUID>` and source sequence is its actual
+durable version. This is a state snapshot, not an invented public audit-history
+export. Array index/actor ID does not order separate Actions. By default cross-
+source order is UNKNOWN, with null positions. Independent source clocks cannot
+be joined by merely retaining their numeric positions.
+
+Only explicit shared capture with all base Arena positions recorded can use
+RECORDED_SHARED_LOGICAL_CAPTURE. The fixed engineering harness captures the
+Action/receipt snapshot after real Gateway completion, then applies that durable
+proposal and captures its Arena transition. Action position must precede its
+matching application. Start, closures and final cost observation share that
+counter. These are capture/projection positions, not Gate/SQLite transaction
+timestamps. Legacy fixtures acquire no retroactive AIG events or chronology.
+
+No binding scope, subject/grant/capability, private path, store ID, raw Plan,
+private research identity, reference optimum, adjudication or ground truth is
+exported. Both existing 22-marker tests and new credential/metadata tests remain
+in force. Detached observations and shared capture are trusted host inputs,
+with consistency checks rather than signatures. Future R/MAE must use this same
+observation inventory, including all missingness and ordering uncertainty.
 
 ## Engineering fixtures and honest interpretation
 
