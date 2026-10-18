@@ -1,5 +1,24 @@
 # Phase 1 Arena and Data Contracts
 
+Current additive contract: Phase 3 (2026-10-18 pre-sprint) adds the objects below
+without changing the Phase 1/1.1/2 contracts described in this document.
+
+| Phase 3 object/module | Contract |
+|---|---|
+| `ActorContext`, `Turn` | Frozen actor-specific private brief and independent tuple history; only delivered inbox messages |
+| `ModelConfig`, `ModelRequest`, `ModelResponse` | Pinned name/revision, local/fake endpoint, decoding/token/timeout/one-attempt policy; full derived and mapped requested seeds; prompt revision/digests; bounded raw response, integer latency/optional usage |
+| `Decision`, `MessageIntent` | Closed 4 KiB model JSON; exact actor/task/round, one feasible proposal or decline, optional bounded message, end step |
+| `EpisodeConfig` | Engineering namespace/group only; five prospective conditions; role/order/request seed derivation separate from all official splits |
+| `Delivery` | Attempt sequence, round/sender/requested audience/actual audience/channel/text, DELIVERED/BLOCKED/FAILED, explicit attempt/delivery capture positions or unknown |
+| `HarnessRun` | Final/current state, separate contexts/stores/observed Actions/deliveries, trace path, COMPLETE/INCOMPLETE/STOPPED_UNKNOWN/STOPPED_CONFLICT/INTERRUPTED |
+| Research trace v1 | Exclusive append-only bounded canonical JSONL; sequence, explicit shared-host position, kind/layer/trust, correlated payload, previous hash/digest; private L1/L2 never directly exported |
+| `Replay` | Pure historical reconstruction, original public UUID and receipt references, zero new model/Gateway/effect calls; explicitly not another observation or new receipt |
+| `harness` L3 extension | Fixed version/provenance/policy, episode completeness, neutral observed delivery records and cross-source uncertainty; shared future observation inventory only |
+
+See [PHASE3_HARNESS_CONTRACT.md](PHASE3_HARNESS_CONTRACT.md) for exact fields,
+N2 admission blocking, seed mapping, timeout/retry boundaries and trust limits.
+`aig_execution` and all base Observation-v2 fields below remain unchanged.
+
 Implemented **2026-10-18 NZDT as pre-sprint engineering**. Authority for study
 allocation/truth/metrics remains [EXPERIMENT_PLAN.md](EXPERIMENT_PLAN.md).
 This document concretizes the previously unspecified integer arena objective,

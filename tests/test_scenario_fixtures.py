@@ -152,6 +152,7 @@ def test_application_has_no_runtime_provider_network_or_orchestration_imports():
         "requests",
         "socket",
         "urllib",
+        "http",
         "subprocess",
         "langchain",
         "crewai",
@@ -179,4 +180,12 @@ def test_application_has_no_runtime_provider_network_or_orchestration_imports():
                 blocked = forbidden - {"agentic_intent_gate"}
             else:
                 blocked = forbidden
+            if path == root / "agents" / "ollama_provider.py":
+                # Phase 3: one reviewed numeric-loopback-only stdlib transport.
+                assert all(
+                    name in ("http.client", "urllib.parse")
+                    for name in names
+                    if name.split(".")[0] in ("http", "urllib")
+                ), path
+                blocked = blocked - {"http", "urllib"}
             assert not {name.split(".")[0] for name in names} & blocked, path

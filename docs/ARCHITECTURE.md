@@ -1,5 +1,27 @@
 # PactLens Architecture — Consumer Contract and Feasibility
 
+Current additive status: **Phase 3 controlled harness, 2026-10-18 NZDT,
+pre-sprint engineering**. `agents/` owns independent immutable actor contexts,
+strict decisions, provider-neutral requests and a local-only Ollama adapter.
+`experiments/` owns engineering condition/seed contracts, controlled routing,
+sequential current-revision scheduling, append-only traces and pure replay.
+`aig/submission.py` composes the existing Phase 2 consumer public interfaces for
+each proposal; original AIG, executor/store, bridge and Arena mechanics are
+unchanged. `evidence/harness_adapter.py` extends the allowlisted Observation v2
+inventory with router delivery facts and completeness/order. No detector views
+or formal-study executor exists. See [current contract](PHASE3_HARNESS_CONTRACT.md),
+[execution report](PHASE3_EXECUTION_REPORT.md) and [tests](PHASE3_TEST_MATRIX.md).
+
+L1 request/response/assignment trace records and L2 comparative mechanics remain
+private; L3 exports are constructed separately and retain source-local or shared
+capture uncertainty. Pure replay validates historical facts and original pure
+Arena transitions with zero new model/Gateway/effect operations. Local generation
+and scripted synthetic consent do not establish human consent, collusion truth
+or reproducibility of fresh inference. All work is pre-existing for the sprint.
+
+The following Phase 2 description is retained as the historical baseline;
+its statements that the Phase 3 engineering runner is absent are superseded.
+
 Status: **Phase 2 pre-sprint local AIG integration, 2026-10-18 NZDT**. The installed
 AIG 0.2.0 pin/public API was re-inspected. The fixed synthetic-proposal consumer,
 durable local effects/receipts, real Run/Approval/Authorization/Gateway path,

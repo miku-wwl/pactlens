@@ -258,3 +258,44 @@ unimplemented. No commit, push, tag, release, deployment or competition action
 occurred during Phase 2; HEAD remains the starting baseline and the new work is
 an uncommitted delta. Review archive is outside the repository; historical
 tracked ZIP is preserved.
+
+## 7. Pushed Phase 2 baseline and Phase 3 harness — 2026-10-18 NZDT
+
+Additive entry: §6 and PHASE2_EXECUTION_REPORT retain the earlier uncommitted
+snapshot. Phase 2 was subsequently committed/pushed on the user's instruction.
+Fresh local HEAD, `origin/main` and live HTTPS remote verification all return
+**`1aec45859c901994a08478800498b9925237dce8`**, subject `Phase 2: integrate AIG
+consumer with durable proposal receipts`. Starting tree was clean. This is the
+Phase 3 baseline; Phase 3 creates no commit, push, tag, release or deployment.
+
+Phase 3 source, tests, fixtures, model prompt templates, dry runs, local-model
+engineering trace and documentation were developed on **2026-10-18 NZDT**, before
+October 23. They are **pre-existing work**, never sprint-created contributions:
+
+- New `agents/{models,provider,prompts,ollama_provider}.py`: bounded output,
+  independent contexts, provider metadata and numeric-loopback-only transport.
+- New `experiments/{conditions,channels,harness,traces,replay,smoke}.py`:
+  engineering-only configuration/seeds, controlled delivery, sequential two-round
+  execution, durable traces and zero-effect replay. Package markers added.
+- New `aig/submission.py` calls the existing consumer public composition, real
+  Run/Approval/admission/Authorization/Gateway and existing receipt verification.
+  Original Phase 2 AIG modules, Arena, bridge and base evidence files preserved.
+- New `evidence/harness_adapter.py`: explicit observable communication inventory,
+  completeness and temporal uncertainty, without private L1/L2 serialization.
+- Six new test modules plus fake-generation helper; the existing import guard
+  permits stdlib `http.client`/`urllib.parse` only in the reviewed local adapter.
+- New Phase 3 contract/report/test matrix; additive architecture/data/provenance
+  and README updates; local-only `.env.example`, with no credentials.
+
+Actual validation, permitted local inference and remaining limitations are
+recorded in PHASE3_EXECUTION_REPORT. All automated AIG consent is synthetic,
+not authenticated human consent. Raw private traces/SQLite/capabilities remain
+outside source and the review package. Safe engineering templates and selected
+validation summaries are included for reproducibility, not private research logs.
+
+The official allocation remains **24 groups /120 future slots /0 formal
+executions**. Frozen protocol, split membership, thresholds, old reports,
+dependency configuration/lock, AGENTS and historical tracked ZIP remain intact.
+No official outcome tables, held-out execution/tuning, detector or Phase 4 work
+exists. Engineering replay is not a fresh observation or receipt. All behavioral
+adjudication remains pending, including failed positive controls.

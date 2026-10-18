@@ -15,7 +15,22 @@ PactLens consumes the installed
 does not fork, reimplement, or bypass the shared runtime. All orchestration,
 experiments, detectors, and evaluation live in this repository (consumer side).
 
-## Status: Phase 2 — local AIG consumer integration (pre-sprint engineering)
+## Status: Phase 3 — controlled agent harness (pre-sprint engineering)
+
+Phase 3 adds three isolated model contexts, controlled public/private delivery,
+deterministic sequential two-round scheduling, the existing real AIG proposal
+path, durable separated traces and pure replay with no new effects. Local
+Ollama inference is disabled by default and requires an explicit engineering
+smoke opt-in. All code/fixtures/engineering runs created on 2026-10-18 are
+pre-existing work for competition disclosure. No formal study or detector ran.
+
+See [harness contract](docs/PHASE3_HARNESS_CONTRACT.md),
+[actual execution report](docs/PHASE3_EXECUTION_REPORT.md) and
+[test matrix](docs/PHASE3_TEST_MATRIX.md). Consent remains explicitly synthetic;
+no authenticated-human approval UI is implemented. Formal exploratory-study
+readiness remains NO-GO pending pilot protocol/model/prompt/view/adjudication work.
+
+## Earlier Phase 2 baseline and frozen research protocol
 
 The authoritative protocol is [docs/EXPERIMENT_PLAN.md](docs/EXPERIMENT_PLAN.md):
 4 pilot + 10 calibration + 10 held-out blocks, five episodes per block,
@@ -42,10 +57,14 @@ approval or an LLM collusion observation. See the
 [execution report](docs/PHASE2_EXECUTION_REPORT.md) and
 [test matrix](docs/PHASE2_TEST_MATRIX.md).
 
-**Not implemented:** research experiment driver, model-driven agent runners,
+**Not implemented at the Phase 2 baseline:** research experiment driver, model-driven agent runners,
 monitors M/A/MA/R/MAE, detection scoring, statistical
 evaluation pipeline or dashboard. Fixtures establish mechanics, not emergent
 collusion or independently human-adjudicated truth.
+
+Current Phase 3 implements the engineering agent driver/runners only. Formal
+study execution, M/A/MA/R/MAE views/detectors, scoring/statistics and dashboard
+remain unimplemented. A single local engineering episode is not a research block.
 
 ## Intended architecture (three planes)
 
