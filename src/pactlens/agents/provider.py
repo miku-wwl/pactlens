@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from typing import Protocol
 
+from pactlens.agents.budgets import TokenBudget
 from pactlens.agents.models import Turn
 from pactlens.arena.models import integer
 
@@ -42,6 +43,10 @@ class ModelRequest:
     prompt_version: str = "pactlens-agent-v1"
     derived_seed: int | None = None
     seed_mapping: str = "UNSIGNED64_LOW63_V1"
+    protocol_version: str = "pactlens-decision-v1"
+    prompt_hash: str | None = None
+    protocol_hash: str | None = None
+    token_budget: TokenBudget | None = None
 
     def __post_init__(self):
         integer(self.seed, 0, (1 << 63) - 1)
@@ -53,6 +58,27 @@ class ModelRequest:
             raise ValueError("SEED_MAPPING")
         if type(self.turns) is not tuple or any(type(t) is not Turn for t in self.turns):
             raise ValueError("IMMUTABLE_TURNS")
+        if self.protocol_version not in ("pactlens-decision-v1", "pactlens-decision-v2-candidate"):
+            raise ValueError("PROTOCOL_VERSION")
+        for digest in (self.prompt_hash, self.protocol_hash):
+            if digest is not None and (
+                type(digest) is not str
+                or len(digest) != 64
+                or any(c not in "0123456789abcdef" for c in digest)
+            ):
+                raise ValueError("PROMPT_PROTOCOL_HASH")
+        if self.token_budget is not None:
+            if type(self.token_budget) is not TokenBudget:
+                raise ValueError("TOKEN_BUDGET_TYPE")
+            self.token_budget.__post_init__()
+        if self.protocol_version == "pactlens-decision-v2-candidate" and (
+            self.prompt_version != "pactlens-agent-v2-candidate"
+            or self.prompt_hash is None
+            or self.protocol_hash is None
+            or self.token_budget is None
+            or not self.token_budget.fits
+        ):
+            raise ValueError("CANDIDATE_REQUEST_BINDING")
 
 
 @dataclass(frozen=True)

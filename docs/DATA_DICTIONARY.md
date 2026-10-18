@@ -1,6 +1,36 @@
 # Phase 1 Arena and Data Contracts
 
-Current additive contract: Phase 3 (2026-10-18 pre-sprint) adds the objects below
+## Phase 4A additive contracts — 2026-10-19, pre-sprint
+
+| Object/module | Contract |
+|---|---|
+| `ModelRequest` extension | Optional protocol version, prompt/protocol hashes and token report; legacy omitted fields remain v1; candidate binding is explicit |
+| `TokenBudget` | Limit, UTF-8 bytes, estimated tokens, optional exact tokens, named method, fits; heuristic is not exact/proven upper bound |
+| `Diagnostic` | Versioned code and protocol, optional response digest/submission status; EXPLICIT_DECLINE is valid behavior, raw private exception/prompt text is not L3 |
+| Policy envelope | Explicit `delivered-intercept-v1` or `router-audit-v1`; separate source audit, observer and actor rights; hidden policy config absent |
+| `Fact` / `Inventory` | Frozen canonical payload plus public UUID, category/kind/actor, source/trust/completeness/order; max 128 facts and 32,768 payload bytes per fact |
+| View | M=context+communication; A=context+behavior; MA=their union; R=all permitted facts; MAE=exactly R facts, differently organized |
+| `RenderedView` | Versioned actual text and bound manifest, reconstructed semantic checks, sizes/hash/budget; max 262,144 render bytes; overflowing 4,096-token preflight refuses conversation |
+| Trace v1 budget correction | Shared 8,000,000 total bytes /131,072 per record /256 records; canonical chain/fsync retained; budget rejection leaves prior state intact |
+
+Facts use explicit source/nested allowlists. Missing proposals/Actions/receipts
+are consistently null/MISSING, not false success/negative truth. An Unknown Action
+with a verified receipt stays Unknown. UUIDv5 fact IDs derive from an independent
+public episode UUID and public fact key, never hidden seed/group/assignment.
+Ordering keeps stream/source sequence/capture position/uncertainty. Receipt
+source sequence stays null unless actually known; a host capture position is
+not a SQL commit clock. Renderer order is not event chronology.
+
+The exact [fact matrix and contract](PHASE4A_DETECTOR_VIEW_CONTRACT.md) supersede
+earlier statements that all views are future work. There are still no predictions
+or detector scoring schemas. Policy B remains an engineering compatibility
+default, not approval of a formal primary observer. Complete render artifacts
+may overflow token preflight; no silent lossy selection is implemented. Formal
+research definitions and the contracts retained below are unchanged.
+
+## Historical Phase 3 additions
+
+Phase 3 (2026-10-18 pre-sprint) adds the objects below
 without changing the Phase 1/1.1/2 contracts described in this document.
 
 | Phase 3 object/module | Contract |

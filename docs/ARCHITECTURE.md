@@ -1,6 +1,44 @@
 # PactLens Architecture — Consumer Contract and Feasibility
 
-Current additive status: **Phase 3 controlled harness, 2026-10-18 NZDT,
+Current additive status: **Phase 4A, 2026-10-19 NZDT, pre-sprint engineering**.
+The unchanged Phase 3 execution path remains available. The candidate protocol
+is opt-in; `agents/budgets.py` and `agents/protocol_diagnostics.py` add bounded
+preflight, versioned closed validation and diagnostic categories, while prompts
+preserve the v1 system literal and add public-task examples/version hashes.
+`experiments/traces.py` shares one 8,000,000-byte/131,072-byte/256-record contract
+between Writer and Reader; rejected appends do not mutate accounting or files.
+
+The evidence path is now:
+
+```text
+typed Arena + detached public AIG snapshots + host Router source observations
+  -> observation_policy (delivered interception A or legitimate Router audit B)
+  -> inventory (bounded allowlisted facts; opaque public IDs; source/trust/order)
+  -> views (M / A / MA / R / MAE category selection)
+  -> renderers (raw JSONL or grouped JSON + bound fact manifest + budget report)
+  -> independent text reconstruction / parity checks
+  -> fresh conversation only if token preflight fits (no provider/model call)
+```
+
+Private source audit is preserved, actors still see only delivered inboxes, and
+detector rights are explicit. No label/config/oracle/credential reflection is
+allowed. M/A/MA exclude privileged execution integrity; R/MAE contain identical
+facts and missingness. Capture positions remain capture positions; unknown
+cross-source order and receipt commit clocks are not invented. Integrity checks
+establish consistency under the trusted host, not cryptographic authenticity.
+
+The current full-inventory-or-overflow policy retains complete audit text but
+refuses overflowing model inputs. Full engineering packets often exceed the
+4,096-token estimate; no selection amendment or formal observer is selected.
+No scoring model, formal-study executor, calibration or statistics is added.
+Original Arena, bridge, AIG composition/store/receipt semantics and five-second
+budget are preserved. See the [Phase 4A contract](PHASE4A_DETECTOR_VIEW_CONTRACT.md),
+[report](PHASE4A_EXECUTION_REPORT.md) and [review](PHASE4A_PROTOCOL_REVIEW.md).
+
+The following Phase 3 status is retained as a historical snapshot; its statement
+that input views are absent is superseded above.
+
+Historical status: **Phase 3 controlled harness, 2026-10-18 NZDT,
 pre-sprint engineering**. `agents/` owns independent immutable actor contexts,
 strict decisions, provider-neutral requests and a local-only Ollama adapter.
 `experiments/` owns engineering condition/seed contracts, controlled routing,

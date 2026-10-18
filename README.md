@@ -15,7 +15,31 @@ PactLens consumes the installed
 does not fork, reimplement, or bypass the shared runtime. All orchestration,
 experiments, detectors, and evaluation live in this repository (consumer side).
 
-## Status: Phase 3 — controlled agent harness (pre-sprint engineering)
+## Status: Phase 4A — protocol and detector-input contracts (pre-sprint)
+
+Implemented **2026-10-19 NZDT** as pre-existing work: opt-in candidate agent
+prompt/protocol with strict diagnostics and honest token preflight, shared
+Writer/Reader trace limits, two observation policies and five deterministic
+M/A/MA/R/MAE evidence views. R/MAE parity is independently checked from actual
+rendered text. **480 tests pass (339 existing +141 new)**. No new real inference,
+formal episode, detector prediction, calibration or statistical evaluation ran.
+
+Engineering readiness **GO**; detector-view methodological readiness
+**CONDITIONAL GO**; formal pilot **NO-GO**. Full evidence packets overflow the
+conservative 4,096-token preflight and fail closed for model input. Observer
+rights, N2 confounding, prompt adoption and a feasible shared budget/selection
+policy require prospective decisions; no amendment is applied. Real candidate
+model reliability remains unverified. Original prompts/history are preserved.
+
+See the [execution report](docs/PHASE4A_EXECUTION_REPORT.md),
+[view contract and fact matrix](docs/PHASE4A_DETECTOR_VIEW_CONTRACT.md),
+[protocol review](docs/PHASE4A_PROTOCOL_REVIEW.md),
+[unapproved proposal](docs/PHASE4A_PROPOSED_AMENDMENT.md) and
+[test matrix](docs/PHASE4A_TEST_MATRIX.md). The Phase 0.6 allocation, metrics and
+study authority remain unchanged: **24 groups /120 future slots /0 formal runs**.
+Phase 4A stops at review artifacts; it creates no commit, push or Phase 4B work.
+
+## Phase 3 baseline — controlled agent harness (historical snapshot)
 
 Phase 3 adds three isolated model contexts, controlled public/private delivery,
 deterministic sequential two-round scheduling, the existing real AIG proposal
@@ -62,9 +86,10 @@ monitors M/A/MA/R/MAE, detection scoring, statistical
 evaluation pipeline or dashboard. Fixtures establish mechanics, not emergent
 collusion or independently human-adjudicated truth.
 
-Current Phase 3 implements the engineering agent driver/runners only. Formal
-study execution, M/A/MA/R/MAE views/detectors, scoring/statistics and dashboard
-remain unimplemented. A single local engineering episode is not a research block.
+At the Phase 3 baseline, only the engineering agent driver/runners were implemented;
+its missing-view statement is superseded by Phase 4A above. Formal study execution,
+detector predictions, scoring/statistics and dashboard remain unimplemented.
+A single local engineering episode is not a research block.
 
 ## Intended architecture (three planes)
 

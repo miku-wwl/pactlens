@@ -299,3 +299,57 @@ dependency configuration/lock, AGENTS and historical tracked ZIP remain intact.
 No official outcome tables, held-out execution/tuning, detector or Phase 4 work
 exists. Engineering replay is not a fresh observation or receipt. All behavioral
 adjudication remains pending, including failed positive controls.
+
+## 8. Pushed Phase 3 baseline and Phase 4A — 2026-10-19 NZDT
+
+Additive current-state entry; all earlier reports/sections retain their original
+snapshot dates and results. Phase 3 was subsequently committed and pushed on
+the user's explicit instruction. Before Phase 4A, the working tree was clean;
+local HEAD, `origin/main` and live HTTPS remote all confirmed
+**`6bf93a996476e6433eedc3fa11784703bf61a31a`**, subject `Phase 3: add controlled
+agent harness and replay traces`. This is the actual Phase 4A starting baseline.
+
+Phase 4A work was developed on **2026-10-19 NZDT**, before October 23. It is
+**pre-sprint engineering / pre-existing work**, never sprint-created contribution:
+
+- New candidate public-task prompt/examples, protocol version/hash/diagnostics
+  and token preflight; original v1 system prompt and historical trace meaning
+  retained. Six existing agent/harness/replay/trace source files updated.
+- New `agents/{budgets,protocol_diagnostics}.py` and
+  `evidence/{observation_policy,inventory,views,renderers,parity}.py`; explicit
+  observer rights, bounded immutable fact inventory, five input views and
+  independently reconstructed R/MAE semantic parity. These are not detectors.
+- Safe `protocol_v2_cases.json`, nine new regression modules and one helper;
+  original tests unchanged. **339 existing +141 new =480 passing cases**.
+- Phase 4A execution report, view contract, protocol review, test matrix and a
+  **NOT APPROVED / NOT APPLIED** prospective-amendment proposal. Additive README,
+  architecture, dictionary and provenance updates. Actual validation logs and
+  safe synthetic exports packaged outside the repository.
+
+One additional fake-model, six-step engineering audit exercised the real local
+AIG proposal/receipt path and both view policies, with six verified local
+receipts. It is synthetic response generation with scripted consent, **zero
+actual LLM inference**, not a formal episode or authenticated human approval.
+Unit tests likewise use deterministic/fake planning. No private trace, SQLite
+store, capability or raw private model prompt enters the review archive.
+
+The separate **2026-10-18 Phase 3 actual local-model observation** remains one
+six-call Ollama engineering episode, one real proposal receipt, INCOMPLETE.
+Phase 4A only read/replayed that trace: original bytes, L3 and stored counts
+unchanged; no additional model/Gateway/effect call. No new actual inference was
+authorized or performed and no model-reliability gain is claimed.
+
+Formal pilot, calibration and held-out executions remain **0 / NOT RUN**, across
+the unchanged **24 groups /120 future slots**. No detector prediction, score,
+calibration, statistical evaluation or Phase 4B work exists. N2 blocking, C+/C−
+pairing, Arena/fallback/objective, truth, thresholds, splits and abstention rules
+remain unchanged. The frozen experiment plan, AIG consumer/store/receipt source,
+dependency pin/lock, AGENTS, original test files, earlier reports and old review
+archives are preserved. Installed AIG 0.2.0's 57 RECORD hashes were verified;
+its full immutable pin and five-second budget remain unchanged.
+
+Observer choice, candidate adoption, N2 alternatives and a feasible token/selection
+policy require future prospective decisions. No alternative condition or lossy
+selection is applied. Phase 4A remains uncommitted; no commit, push, tag, release,
+deploy or submission was performed. HEAD remains the pushed Phase 3 baseline.
+The external review ZIP and verification receipt describe this working snapshot.

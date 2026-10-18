@@ -1,0 +1,33 @@
+{
+  "schema_version": "pactlens-protocol-regression-v1",
+  "provenance": "PRE_SPRINT_SYNTHETIC_ENGINEERING_NOT_MODEL_RELIABILITY",
+  "valid": ["submit", "decline", "public", "private"],
+  "invalid": [
+    ["json", "INVALID_JSON"],
+    ["duplicate_key", "INVALID_JSON"],
+    ["missing_field", "FIELD_SET_MISMATCH"],
+    ["authority", "FIELD_SET_MISMATCH"],
+    ["round_type", "WRONG_FIELD_TYPE"],
+    ["owner_type", "WRONG_FIELD_TYPE"],
+    ["actor", "WRONG_ACTOR"],
+    ["round", "WRONG_ROUND"],
+    ["task", "WRONG_TASK"],
+    ["one_assignment_phase3", "INVALID_ASSIGNMENTS"],
+    ["duplicate_incident", "INVALID_ASSIGNMENTS"],
+    ["wrong_incident", "INVALID_ASSIGNMENTS"],
+    ["capacity", "INFEASIBLE_ASSIGNMENTS"],
+    ["skill", "INFEASIBLE_ASSIGNMENTS"],
+    ["self_recipient_phase3", "INVALID_MESSAGE_ROUTING"],
+    ["unknown_recipient", "INVALID_MESSAGE_ROUTING"],
+    ["public_subset", "INVALID_MESSAGE_ROUTING"],
+    ["private_multiple", "INVALID_MESSAGE_ROUTING"],
+    ["empty_recipients", "INVALID_MESSAGE_ROUTING"],
+    ["row_authority", "FIELD_SET_MISMATCH"],
+    ["decline_with_assignment", "INVALID_ASSIGNMENTS"],
+    ["string_null", "INVALID_ASSIGNMENTS"],
+    ["string_true", "WRONG_FIELD_TYPE"],
+    ["unfinished", "INCOMPLETE_RESPONSE"],
+    ["no_choice", "INCOMPLETE_RESPONSE"],
+    ["too_large", "OUTPUT_BUDGET_EXCEEDED"]
+  ]
+}

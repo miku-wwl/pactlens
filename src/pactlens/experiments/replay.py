@@ -7,7 +7,7 @@ An unkeyed chain checks consistency, not a hostile experimenter's authenticity.
 from dataclasses import dataclass
 from uuid import UUID
 
-from pactlens.agents.models import parse_decision
+from pactlens.agents.protocol_diagnostics import LEGACY_PROTOCOL, parse_versioned
 from pactlens.aig.contract import ObservedAction, restore_state
 from pactlens.arena.models import Lifecycle
 from pactlens.arena.outcomes import evaluate_outcome
@@ -83,7 +83,12 @@ def replay_trace(path):
             failure_observed = True
         elif kind == "MESSAGE_ATTEMPT":
             key = (payload["actor_id"], payload["round_number"])
-            decision = parse_decision(responses[key], state=state, actor_id=key[0])
+            decision = parse_versioned(
+                responses[key],
+                state=state,
+                actor_id=key[0],
+                protocol_version=requests[key].get("protocol_version", LEGACY_PROTOCOL),
+            )
             if (
                 canonical_json(decision.message) != canonical_json(payload["intent"])
                 or key in attempted_messages
@@ -119,7 +124,12 @@ def replay_trace(path):
                 journal = capture_message(state, message, journal, logical_position=position)
         elif kind == "PROPOSAL_ATTEMPT":
             key = (payload["actor_id"], payload["round_number"])
-            decision = parse_decision(responses[key], state=state, actor_id=key[0])
+            decision = parse_versioned(
+                responses[key],
+                state=state,
+                actor_id=key[0],
+                protocol_version=requests[key].get("protocol_version", LEGACY_PROTOCOL),
+            )
             if (
                 canonical_json(decision.proposal) != canonical_json(payload["proposal"])
                 or key in proposals

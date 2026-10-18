@@ -9,6 +9,9 @@ from pactlens.evidence.records import Channel
 
 
 def closed_json(raw, maximum=4096):
+    def no_nonfinite(value):
+        raise ValueError("NONFINITE_JSON")
+
     def unique(pairs):
         result = {}
         for key, value in pairs:
@@ -19,7 +22,7 @@ def closed_json(raw, maximum=4096):
 
     if type(raw) is not str or len(raw.encode("utf-8", errors="strict")) > maximum:
         raise ValueError("RESPONSE_BOUND")
-    return json.loads(raw, object_pairs_hook=unique)
+    return json.loads(raw, object_pairs_hook=unique, parse_constant=no_nonfinite)
 
 
 @dataclass(frozen=True)

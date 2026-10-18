@@ -5,8 +5,16 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from uuid import uuid4
 
-from pactlens.agents.models import ActorContext, Turn, parse_decision
-from pactlens.agents.prompts import make_request
+from pactlens.agents.models import ActorContext, Turn
+from pactlens.agents.prompts import CANDIDATE_PROMPT, LEGACY_PROMPT, make_request
+from pactlens.agents.protocol_diagnostics import (
+    CANDIDATE_PROTOCOL,
+    LEGACY_PROTOCOL,
+    Code,
+    Diagnostic,
+    exception_diagnostic,
+    parse_versioned,
+)
 from pactlens.aig.consumer import provision
 from pactlens.aig.executor import no_fault
 from pactlens.aig.submission import TestConsent, submit
@@ -59,6 +67,7 @@ async def run_episode(
     consent=None,
     failed_deliveries=(),
     checkpoint=no_fault,
+    prompt_version=LEGACY_PROMPT,
 ):
     if (
         type(config) is not EpisodeConfig
@@ -67,6 +76,9 @@ async def run_episode(
     ):
         raise ValueError("ENGINEERING_CONFIG_AND_SYNTHETIC_CONSENT_REQUIRED")
     config.__post_init__()
+    if prompt_version not in (LEGACY_PROMPT, CANDIDATE_PROMPT):
+        raise ValueError("UNREVIEWED_PROMPT_VERSION")
+    protocol_version = CANDIDATE_PROTOCOL if prompt_version == CANDIDATE_PROMPT else LEGACY_PROTOCOL
     provider.config.__post_init__()
     directory = Path(directory)
     directory.mkdir(parents=True, exist_ok=True)
@@ -87,11 +99,14 @@ async def run_episode(
     }
     stores = {}
     status, executor_calls = "COMPLETE", 0
+    submission_failures = ()
     trace.append(
         "CONFIG",
         {
             "config": config,
             "model": provider.config,
+            "prompt_version": prompt_version,
+            "protocol_version": protocol_version,
             "initial_state": state,
             "actor_order": order,
             "private_briefs": {a: c.private_instruction for a, c in contexts.items()},
@@ -128,6 +143,8 @@ async def run_episode(
                             if router.private_enabled and actor in order[:2]
                             else None,
                         },
+                        prompt_version=prompt_version,
+                        token_counter=getattr(provider, "count_input_tokens", None),
                     )
                     trace.append(
                         "MODEL_REQUEST",
@@ -157,7 +174,20 @@ async def run_episode(
                             Turn("assistant", response.text),
                         ),
                     )
-                    decision = parse_decision(response.text, state=state, actor_id=actor)
+                    if prompt_version == CANDIDATE_PROMPT:
+                        if response.input_tokens is not None and response.input_tokens > 2000:
+                            raise ValueError("ACTUAL_INPUT_BUDGET_EXCEEDED")
+                        if response.finish_reason == "length" or (
+                            response.output_tokens is not None
+                            and response.output_tokens > provider.config.max_output_tokens
+                        ):
+                            raise ValueError("OUTPUT_BUDGET_EXCEEDED")
+                    decision = parse_versioned(
+                        response.text,
+                        state=state,
+                        actor_id=actor,
+                        protocol_version=protocol_version,
+                    )
                 except (ValueError, TypeError, TimeoutError, OSError, RecursionError) as error:
                     status = "INCOMPLETE"
                     trace.append(
@@ -167,6 +197,10 @@ async def run_episode(
                             "round_number": round_number,
                             "classification": "GENERATION_OR_VALIDATION_FAILED_NO_RETRY",
                             "error_type": type(error).__name__,
+                            "diagnostic": exception_diagnostic(
+                                error, protocol_version=protocol_version
+                            ),
+                            "token_budget": getattr(error, "report", None),
                         },
                     )
                     trace.append(
@@ -176,7 +210,15 @@ async def run_episode(
                     continue
                 trace.append(
                     "VALIDATION",
-                    {"actor_id": actor, "round_number": round_number, "status": "VALID"},
+                    {
+                        "actor_id": actor,
+                        "round_number": round_number,
+                        "status": "VALID",
+                        "diagnostic": Diagnostic(
+                            Code.DECLINE if decision.proposal is None else Code.VALID,
+                            protocol_version,
+                        ),
+                    },
                 )
                 if decision.message is not None:
                     attempt = trace.append(
@@ -246,6 +288,15 @@ async def run_episode(
                     checkpoint=checkpoint,
                 )
                 executor_calls += result.executor_calls
+                if result.status != "Succeeded":
+                    submission_failures += (
+                        {
+                            "actor_id": actor,
+                            "round_number": round_number,
+                            "status": result.status,
+                            "diagnostic": Diagnostic(Code.AIG, protocol_version),
+                        },
+                    )
                 if result.observation is not None:
                     observations += (result.observation,)
                 contexts[actor] = replace(
@@ -296,6 +347,7 @@ async def run_episode(
                     "finalized": state.status == Lifecycle.FINALIZED,
                     "executor_calls": trace.executor_calls,
                     "formal_episodes_executed": 0,
+                    "submission_failures": submission_failures,
                 },
             )
         finally:

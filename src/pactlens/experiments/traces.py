@@ -12,6 +12,9 @@ from pactlens.evidence.projection import _public_id
 from pactlens.serialization import canonical_json, content_hash
 
 VERSION = "pactlens-research-trace-v1"
+MAX_TRACE_BYTES = 8_000_000
+MAX_RECORD_BYTES = 131_072
+MAX_RECORDS = 256
 KINDS = {
     "CONFIG": "L1",
     "MODEL_REQUEST": "L1",
@@ -43,14 +46,26 @@ class TraceWriter:
         self.previous = "0" * 64
         self.terminal = False
         self.executor_calls = 0
+        self.bytes_written = 0
 
     @property
     def next_position(self):
         return self.sequence + 1
 
     def append(self, kind, payload):
-        if kind not in KINDS or self.terminal or self.sequence >= 256:
+        if kind not in KINDS or self.terminal or self.sequence >= MAX_RECORDS:
             raise ValueError("TRACE_STATE")
+        if self.sequence == 0 and kind != "CONFIG":
+            raise ValueError("TRACE_HEADER")
+        calls = 0
+        if kind == "ACTION":
+            if (
+                type(payload) is not dict
+                or type(payload.get("executor_calls")) is not int
+                or not 0 <= payload["executor_calls"] <= 1
+            ):
+                raise ValueError("TRACE_EXECUTOR_ACCOUNTING")
+            calls = payload["executor_calls"]
         body = {
             "schema_version": VERSION,
             "episode_public_id": self.public_id,
@@ -65,16 +80,18 @@ class TraceWriter:
         }
         digest = content_hash(body)
         raw = (canonical_json({**body, "digest": digest}) + "\n").encode("utf-8")
-        if len(raw) > 131072:
+        if len(raw) > MAX_RECORD_BYTES:
             raise ValueError("TRACE_RECORD_BOUND")
+        if self.bytes_written + len(raw) > MAX_TRACE_BYTES:
+            raise ValueError("TRACE_TOTAL_BOUND")
         self.handle.write(raw)
         self.handle.flush()
         os.fsync(self.handle.fileno())
         self.sequence += 1
         self.previous = digest
+        self.bytes_written += len(raw)
         self.terminal = kind == "TERMINAL"
-        if kind == "ACTION":
-            self.executor_calls += payload["executor_calls"]
+        self.executor_calls += calls
         return body["logical_position"]
 
     def close(self):
@@ -86,11 +103,16 @@ def read_trace(path):
     previous = "0" * 64
     size = 0
     with Path(path).open("rb") as handle:
-        while raw := handle.readline(131073):
+        while raw := handle.readline(MAX_RECORD_BYTES + 1):
             size += len(raw)
-            if len(raw) > 131072 or not raw.endswith(b"\n") or size > 8_000_000 or len(rows) >= 256:
+            if (
+                len(raw) > MAX_RECORD_BYTES
+                or not raw.endswith(b"\n")
+                or size > MAX_TRACE_BYTES
+                or len(rows) >= MAX_RECORDS
+            ):
                 raise ValueError("TRUNCATED_OR_OVERSIZED_TRACE")
-            row = closed_json(raw.decode("utf-8"), 131072)
+            row = closed_json(raw.decode("utf-8"), MAX_RECORD_BYTES)
             if type(row) is not dict or set(row) != {
                 "schema_version",
                 "episode_public_id",
