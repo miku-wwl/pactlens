@@ -353,3 +353,65 @@ policy require future prospective decisions. No alternative condition or lossy
 selection is applied. Phase 4A remains uncommitted; no commit, push, tag, release,
 deploy or submission was performed. HEAD remains the pushed Phase 3 baseline.
 The external review ZIP and verification receipt describe this working snapshot.
+
+## 9. Pushed Phase 4A baseline and Phase 4B — 2026-10-19 NZDT
+
+Additive entry; earlier reports retain their historical scope, dates and
+uncommitted-snapshot statements. The user subsequently authorized the Phase 4A
+commit/HTTPS push. Before Phase 4B, tree was clean on main; local HEAD,
+origin/main and live HTTPS remote all confirmed
+**`27c22f338d357a0f18850e86cd6cf9a297d7eeb8`**, subject `Phase 4A: harden model
+protocol and detector evidence contracts`. This is the Phase 4B baseline.
+
+All Phase 4B work occurred **2026-10-19 NZDT**, before October 23, and is
+**pre-sprint engineering / pre-existing work**, not sprint-created contribution:
+
+- New public-only fact bundles, candidate shared selection and lossless budgeted
+  renderers; complete future detector-envelope/response validation, freeze
+  candidates, reviewer preparation and machine readiness. These are contracts
+  and input preparation, not a scoring/evaluation pipeline.
+- A new bounded local reliability wrapper and one optional harness budget-stop
+  flag. Original prompts, parser/provider/Router/condition/Arena/AIG/store/bridge
+  sources remain unchanged. Default ordinary harness behavior is preserved.
+- Eight new test modules, **127 new +480 existing =607 passing cases**; six
+  Phase 4B documents and additive README/architecture/dictionary/provenance.
+- Offline audit of 34 source/policy sets, 33 estimated fits/one preserved
+  mandatory overflow, 165 safe exports. The old six-receipt synthetic source was
+  replayed, not executed again. No detector calls, scores or predictions.
+
+The Phase 4B task explicitly authorized at most two local N3 engineering episodes
+and 12 generation calls. Exactly two fresh profiles were attempted using existing
+Ollama 0.35.1 /phi4-mini digest 78fad5d1...363753, common task/seeds/configuration,
+fresh contexts/scopes/stores and **synthetic consent**. There were **9 actual new
+generation calls**, not 12: v1 six (five valid, one invalid, two receipts), v2
+three valid first-round submissions/receipts, then its 2,000-input estimate failed
+at 2,838 before round 2. Both episodes remain INCOMPLETE. No replacement, repair,
+agent-prompt tuning, download, paid/cloud provider or unsafe retry followed.
+
+Original private traces and comparison summary are preserved. A separate read-only
+derived schema-measurement audit includes assignment/message structure and changes
+no response, actual host acceptance, effect, usage or call. Safe measurements and
+raw trace hashes are packaged, not private full prompts, SQLite or capabilities.
+Durable verification finds `[1,1,0]` and `[1,1,1]` receipts, same reconstructed
+Arena states, unchanged store bytes, zero new replay generation/Gateway/effects.
+The older Phase 3 actual six-call v1 observation remains separately historical;
+Phase 4A added no inference, and these Phase 4B calls are not formal observations.
+
+Observer A primary/B sensitivity, retained N2-A interpretation, common selection,
+model/prompt/rubric and detector contracts remain PROPOSED/PENDING. No researcher
+approval, independent human review or official freeze is invented. N2-B/C are not
+implemented. The older scripted N2 lawful-ballot diagnostic is distinct from the
+current harness block; both are preserved. All frozen splits/conditions/pairing,
+truth/abstention/threshold/evaluation rules and **24 groups /120 future slots /
+0 formal executions** remain unchanged.
+
+Installed AIG remains 0.2.0 at immutable
+`7261fdd2f47d2b15fabe8faac527eeee37338eb1`, five-second budget and unchanged public
+integration. All 57 RECORD hashes were reverified. Dependency config/lock, AGENTS,
+original test files, frozen plan, old reports and previous ZIPs are unchanged.
+
+Engineering readiness GO; model BLOCKED/REAL_MODEL_NOT_READY; detector input
+readiness CONDITIONAL GO; formal pilot NO-GO. Phase 4B makes no commit, push,
+tag, release, deployment, submission or Phase 4C work. HEAD remains the pushed
+Phase 4A baseline. The external review ZIP/receipt identify this uncommitted
+engineering snapshot, not a release or independently adjudicated study.

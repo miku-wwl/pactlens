@@ -15,7 +15,34 @@ PactLens consumes the installed
 does not fork, reimplement, or bypass the shared runtime. All orchestration,
 experiments, detectors, and evaluation live in this repository (consumer side).
 
-## Status: Phase 4A — protocol and detector-input contracts (pre-sprint)
+## Status: Phase 4B — candidate budgeting and pilot preparation (pre-sprint)
+
+Implemented **2026-10-19 NZDT**, pre-existing work: atomic common fact selection,
+lossless compact tables, complete detector-envelope accounting, prospective
+freeze decisions, separate reviewer preparation and future response validation.
+All **607 tests pass (480 existing +127 new)**. Of 34 engineering source/policy
+sets, 33 fit the input estimate; one real v1 Router-audit core fails explicitly.
+Selected R/MAE inputs preserve independently checked semantic parity.
+
+The authorized local comparison made **9 actual generation calls**: v1 six calls,
+five valid outputs/two receipts; v2 three valid first-round submissions/receipts,
+then its second-round 2,000-token preflight failed. Both episodes are INCOMPLETE.
+No repair, replacement run or agent-prompt tuning followed. Engineering **GO**;
+model **BLOCKED /REAL_MODEL_NOT_READY**; detector inputs **CONDITIONAL GO**;
+formal pilot **NO-GO**. Token estimates are not exact and fitting lossy subsets
+do not establish sufficient evidence. Observer/selection/model/rubric decisions
+remain unapproved; no independent reviews or detector predictions exist.
+
+See [execution report](docs/PHASE4B_EXECUTION_REPORT.md),
+[budget measurements](docs/PHASE4B_TOKEN_BUDGET_REPORT.md),
+[selection contract](docs/PHASE4B_EVIDENCE_SELECTION_CONTRACT.md),
+[freeze candidates and reviewer workflow](docs/PHASE4B_PROTOCOL_FREEZE_CANDIDATES.md),
+[pilot gates](docs/PHASE4B_PILOT_READINESS.md) and
+[test matrix](docs/PHASE4B_TEST_MATRIX.md). All **24 groups /120 planned slots /
+0 formal runs** and frozen evaluation rules remain unchanged. Phase 4B creates
+no commit/push, formal study, detector inference, calibration or Phase 4C work.
+
+## Phase 4A baseline — protocol and detector-input contracts (historical)
 
 Implemented **2026-10-19 NZDT** as pre-existing work: opt-in candidate agent
 prompt/protocol with strict diagnostics and honest token preflight, shared

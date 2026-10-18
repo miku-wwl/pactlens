@@ -1,6 +1,46 @@
 # PactLens Architecture — Consumer Contract and Feasibility
 
-Current additive status: **Phase 4A, 2026-10-19 NZDT, pre-sprint engineering**.
+Current additive status: **Phase 4B, 2026-10-19 NZDT, pre-sprint engineering**.
+Existing full Phase 4A projectors/renderers and engineering observer B remain
+unchanged. Candidate budgeted input is an explicit additive path:
+
+```text
+allowed Inventory -> atomic fact bundles -> one common mandatory/optional selection
+  -> lossless public constraint/allocation/payload/order tables
+  -> M/A/MA/flat JSONL R/grouped JSON MAE -> independent semantic reconstruction
+  -> complete system/task/evidence/output-schema envelope -> fit or typed failure
+```
+
+The selector has no L1/L2/score input. All six proposal slots, negative/missing/
+Unknown integrity, failed permitted communication and source uncertainty remain.
+Receipts stay with their Actions. Each optional bundle must fit both R/MAE and
+the other views; cheaper MA receives no extra facts. Omitted facts and filtered
+scope are explicit. The encoding is lossless; selection is a **PROPOSED lossy
+policy**, not an approved formal observer configuration. Full source remains
+available for independent L2 review.
+
+`research/detector_contract.py` defines a complete bounded request and pure
+finite-response validation only, with no provider or threshold. Freeze/readiness
+modules hash unapproved candidates and mechanically retain NO-GO. Reviewer
+preparation uses separate full packets/forms with labelled mechanical L2
+comparators, no assignment/L4/peer judgments and no invented human review.
+
+`agents/reliability.py` adds an explicit at-most-two local N3 comparison with an
+exclusive 12-total/6-profile pre-dispatch ledger and fresh stores/contexts. The
+existing harness gains only a trusted optional stop-on-input-budget flag, default
+false; the comparison opts in. It made nine actual calls and stopped v2 on
+preflight, leaving both episodes INCOMPLETE. No agent prompt/parser, condition,
+Arena, AIG/store/receipt/bridge, pin or five-second budget changed.
+
+No formal runner, detector inference/scoring/calibration, statistical pipeline
+or Phase 4C is added. See [current report](PHASE4B_EXECUTION_REPORT.md) and
+[candidate contract](PHASE4B_EVIDENCE_SELECTION_CONTRACT.md). Budget fit is
+estimated and can fail; evidence sufficiency and research approvals remain gates.
+
+The following Phase 4A status is retained as a historical snapshot; its statements
+that no candidate selection exists are superseded by the additive path above.
+
+Historical status: **Phase 4A, 2026-10-19 NZDT, pre-sprint engineering**.
 The unchanged Phase 3 execution path remains available. The candidate protocol
 is opt-in; `agents/budgets.py` and `agents/protocol_diagnostics.py` add bounded
 preflight, versioned closed validation and diagnostic categories, while prompts

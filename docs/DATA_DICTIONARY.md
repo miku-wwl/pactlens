@@ -1,5 +1,36 @@
 # Phase 1 Arena and Data Contracts
 
+## Phase 4B additive contracts — 2026-10-19, pre-sprint
+
+| Object/module | Candidate contract |
+|---|---|
+| `FactBundle` | Public atomic facts, mandatory flag, fixed priority/tie; Action+receipt correlation and repeated matching communications stay indivisible |
+| `SelectionResult` | One retained set for every view, mandatory/omitted IDs and bundles, explicit filtered scope, per-view budget diagnostics; no condition/oracle/score |
+| `BudgetedView` | Versioned text, bound complete semantic manifest and trusted envelope; flat/grouped actual-text reconstruction; R/MAE equality after selection |
+| Lossless tables | Public task columns, declared numeric allocation aliases, payload/order lookups and category/source/trust legend; source values/nulls/UUIDs exactly reconstructed |
+| `DetectorEnvelope` | Fresh system/task/evidence/output/schema turns, input ≤4,096, reserved output ≤256, optional provider context window; named estimate or trusted full-template count |
+| `PredictionRecord` | Opaque public episode/view/version/hash host binding; finite risk_score/confidence, observed evidence IDs, bounded rationale, adequacy/error; no threshold computation |
+| Freeze candidates | Actual local model/config/digest, unchanged v1/v2 hashes, seed/budget/retry limitations, safe trace hashes and PROPOSED/PENDING decisions |
+| Reviewer preparation | Separate full A/B L2 packets/forms, no L1/L4/peer first label, labelled mechanical comparator, seal/reconcile/indeterminate/label-lock procedure; zero completed humans |
+| Readiness | Independent engineering/model/input/pilot gates; any critical unapproved decision keeps pilot NO-GO; 24 groups/120 future slots/0 formal unchanged |
+
+Missing, failed, Unknown, pending and not-reached evidence remain distinct. A
+missing Action is not automatically a model decline; decline stays a valid private
+harness diagnostic. Unknown plus a verified receipt is never promoted to success.
+Omission metadata covers only each view's permitted categories. An originally
+complete source fact does not make a filtered packet complete.
+
+Future response JSON preserves Phase 0.6 fields `risk_score`, `confidence`,
+`evidence_ids`, `rationale_short`, `adequacy`. Adequacy is ADEQUATE or
+INSUFFICIENT_EVIDENCE. Invalid/error/missing/overflow means abstention. Adequate
+records remain PENDING_FROZEN_THRESHOLD; later authorized host evaluation owns
+the binary verdict. No score or threshold is produced here. Full details are in
+the [selection contract](PHASE4B_EVIDENCE_SELECTION_CONTRACT.md) and
+[freeze/reviewer package](PHASE4B_PROTOCOL_FREEZE_CANDIDATES.md).
+
+All Phase 4A full APIs and the old engineering default remain unchanged. The
+candidate path is not a formal observation-policy amendment or approval.
+
 ## Phase 4A additive contracts — 2026-10-19, pre-sprint
 
 | Object/module | Contract |

@@ -68,6 +68,7 @@ async def run_episode(
     failed_deliveries=(),
     checkpoint=no_fault,
     prompt_version=LEGACY_PROMPT,
+    stop_on_input_budget_failure=False,
 ):
     if (
         type(config) is not EpisodeConfig
@@ -78,6 +79,8 @@ async def run_episode(
     config.__post_init__()
     if prompt_version not in (LEGACY_PROMPT, CANDIDATE_PROMPT):
         raise ValueError("UNREVIEWED_PROMPT_VERSION")
+    if type(stop_on_input_budget_failure) is not bool:
+        raise ValueError("TRUSTED_BUDGET_STOP_FLAG")
     protocol_version = CANDIDATE_PROTOCOL if prompt_version == CANDIDATE_PROMPT else LEGACY_PROTOCOL
     provider.config.__post_init__()
     directory = Path(directory)
@@ -100,6 +103,7 @@ async def run_episode(
     stores = {}
     status, executor_calls = "COMPLETE", 0
     submission_failures = ()
+    budget_stopped = False
     trace.append(
         "CONFIG",
         {
@@ -207,6 +211,13 @@ async def run_episode(
                         "VALIDATION",
                         {"actor_id": actor, "round_number": round_number, "status": "REJECTED"},
                     )
+                    if (
+                        stop_on_input_budget_failure
+                        and exception_diagnostic(error, protocol_version=protocol_version).code
+                        == Code.INPUT
+                    ):
+                        budget_stopped = True
+                        break
                     continue
                 trace.append(
                     "VALIDATION",
@@ -314,7 +325,7 @@ async def run_episode(
                     continue
                 state = apply_committed(state, store, effect_key=result.effect_key)
                 arena_capture()
-            if status == "STOPPED_UNKNOWN":
+            if status == "STOPPED_UNKNOWN" or budget_stopped:
                 break
             state = close_round(state, expected_revision=state.revision)
             arena_capture()
