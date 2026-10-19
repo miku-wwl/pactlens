@@ -415,3 +415,63 @@ readiness CONDITIONAL GO; formal pilot NO-GO. Phase 4B makes no commit, push,
 tag, release, deployment, submission or Phase 4C work. HEAD remains the pushed
 Phase 4A baseline. The external review ZIP/receipt identify this uncommitted
 engineering snapshot, not a release or independently adjudicated study.
+
+## 10. Pushed Phase 4B baseline and Phase 4C — 2026-10-19/20 NZDT
+
+Additive entry; §9 and the Phase 4B reports keep their historical scope. The user
+subsequently authorized the Phase 4B commit/push. Before Phase 4C the working tree
+was clean on `main`; local HEAD, `origin/main` and a live HTTPS `ls-remote` all
+confirmed **`d26995ee91a2fa9dbaae59b97befacaf7e050e21`**, subject `Phase 4B: harden
+pilot readiness and evidence budgeting`. This is the Phase 4C baseline. The baseline
+suite reproduced **607 passed** before any edit.
+
+All Phase 4C work occurred on **2026-10-19/20 NZDT**, before October 23, and is
+**pre-sprint engineering / pre-existing work**, never a sprint-created contribution:
+
+- New `agents/context_v3.py` (opt-in `pactlens-agent-v3-candidate` compact context
+  and independent v2-turn reconstruction), `agents/context_attribution.py`
+  (byte/estimate attribution), `agents/context_qualification.py` (one bounded
+  local N3 episode behind an offline gate and six-call ledger),
+  `evidence/compact_views.py` (lossless tables v2), `evidence/sufficiency.py`
+  (complete-or-infeasible, Phase 4B rules on v2 tables, coverage assessment) and
+  `research/phase4c_candidates.py` (candidate record, separate readiness gates).
+- Additive edits only to `agents/prompts.py` (v3 dispatch), `agents/provider.py`
+  (v3 prompt bound to the unchanged v2 decision protocol) and
+  `experiments/harness.py` (accept v3; existing candidate usage checks). v1/v2
+  request bytes match pre-edit golden digests; v2 prompt, protocol and Phase 4B
+  selection hashes are unchanged.
+- Six new test modules and one helper (**117 new +607 existing =724 passing
+  cases**); six Phase 4C documents;
+  additive README, architecture, data-dictionary and provenance updates. All 54
+  existing test files, the frozen plan, AGENTS, dependency config/lock, Arena,
+  conditions, AIG consumer/store/receipt/bridge, Phase 4A/4B evidence modules and
+  the tracked Phase 1 ZIP are unchanged under git's normalized comparison
+  (pre-existing CRLF/mixed checkout line endings of 14 tracked files are not
+  content changes).
+
+Diagnosis and offline audits used zero model calls. The Phase 4B private traces were
+read only to verify reconstructed response digests and report historical usage;
+their hashes are unchanged. New fake-transcript episodes through real local AIG use
+explicitly synthetic consent and are engineering cases, not formal observations.
+
+The task authorized at most one N3 local engineering episode and six generation
+calls. After the offline gates passed, exactly one fresh episode ran on
+**2026-10-20** with the existing Ollama 0.35.1 / phi4-mini digest
+`78fad5d1…7363753`, numeric loopback, group `ENG-phase4c-context-v3`, fresh
+contexts/scopes/stores, v3 context and **synthetic consent**: **6 actual generation
+calls**, all within the input budget (provider-reported 660–871), but **0/6 valid
+outputs** (five duplicate-key JSON objects, one submit with null assignments). No
+Action, receipt or effect was created; the Arena finalized through the frozen
+lawful fallback; status INCOMPLETE. No repair, retry, rerun, prompt tuning,
+download, cloud or paid call followed. Raw prompts/responses stay in the private
+trace; only sanitized measurements and hashes are packaged.
+
+Formal pilot, calibration and held-out executions remain **0 / NOT RUN** across the
+unchanged **24 groups /120 future slots**. No detector inference, prediction, score,
+threshold, calibration or statistical evaluation exists. Observer A/B, N2-A, the
+v3 context, v2 tables and both evidence policies remain PROPOSED/PENDING; no
+researcher approval or independent human review is invented. Installed AIG remains
+0.2.0 at `7261fdd2f47d2b15fabe8faac527eeee37338eb1`, 57/57 RECORD hashes verified,
+five-second default unchanged. Phase 4C makes no commit, push, tag, release,
+deployment, submission or next-phase work; HEAD remains the pushed Phase 4B
+baseline, and the external review ZIP/receipt identify an uncommitted snapshot.

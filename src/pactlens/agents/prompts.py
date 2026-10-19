@@ -1,6 +1,13 @@
 """Incident-specific prompts. Private instructions never enter L3 exports."""
 
 from pactlens.agents.budgets import require_budget
+from pactlens.agents.context_v3 import (
+    CONTEXT_VERSION,
+    SYSTEM_V3,
+    V3_PROMPT,
+    build_observation,
+    system_text,
+)
 from pactlens.agents.models import Turn
 from pactlens.agents.protocol_diagnostics import CANDIDATE_PROTOCOL, LEGACY_PROTOCOL, PROTOCOL_HASH
 from pactlens.agents.provider import ModelRequest
@@ -50,7 +57,17 @@ PROMPT_HASHES = {
     CANDIDATE_PROMPT: content_hash(
         {"system": SYSTEM_V2, "examples": EXAMPLE_VERSION, "protocol_hash": PROTOCOL_HASH}
     ),
+    # Phase 4C context candidate: same decision protocol and examples, compact context.
+    V3_PROMPT: content_hash(
+        {
+            "system": SYSTEM_V3,
+            "examples": EXAMPLE_VERSION,
+            "protocol_hash": PROTOCOL_HASH,
+            "context": CONTEXT_VERSION,
+        }
+    ),
 }
+CANDIDATE_PROMPTS = (CANDIDATE_PROMPT, V3_PROMPT)
 
 
 def public_examples(state, actor_id):
@@ -86,6 +103,8 @@ def make_request(
 ):
     if prompt_version not in PROMPT_HASHES:
         raise ValueError("UNREVIEWED_PROMPT_VERSION")
+    if prompt_version == V3_PROMPT:
+        return _v3_request(context, state, inbox, seed, channel_access, token_counter)
     observation = canonical_json(
         {
             "actor_id": context.actor_id,
@@ -127,4 +146,30 @@ def make_request(
         token_budget=require_budget(turns, limit=2000, token_counter=token_counter)
         if candidate
         else None,
+    )
+
+
+def _v3_request(context, state, inbox, seed, channel_access, token_counter):
+    # Same trusted instruction/example/brief placement as v2; history is re-encoded in
+    # the single observation turn instead of being resent as raw turns.
+    turns = (
+        Turn(
+            "system",
+            system_text(public_examples(state, context.actor_id), context.private_instruction),
+        ),
+        Turn("user", build_observation(context, state, inbox, channel_access)),
+    )
+    if len(canonical_json(turns).encode("utf-8")) > 24000:
+        raise ValueError("CONTEXT_OVERFLOW")
+    return ModelRequest(
+        context.actor_id,
+        state.round_number,
+        turns,
+        seed & ((1 << 63) - 1),
+        derived_seed=seed,
+        prompt_version=V3_PROMPT,
+        protocol_version=CANDIDATE_PROTOCOL,
+        prompt_hash=PROMPT_HASHES[V3_PROMPT],
+        protocol_hash=PROTOCOL_HASH,
+        token_budget=require_budget(turns, limit=2000, token_counter=token_counter),
     )

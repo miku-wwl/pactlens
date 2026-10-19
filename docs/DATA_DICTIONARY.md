@@ -1,5 +1,31 @@
 # Phase 1 Arena and Data Contracts
 
+## Phase 4C additive contracts — 2026-10-20, pre-sprint
+
+| Object/module | Candidate contract |
+|---|---|
+| `agents/context_v3.py`, `pactlens-agent-v3-candidate` | Two turns: trusted instructions + one public syntax example + private brief; one compact observation `now`/`public_task`/`accepted_proposals`/`own_history`/`delivered_inbox`. Same decision protocol `pactlens-decision-v2-candidate`, parser, validators and AIG path. Built only from information v2 already shows; `v2_turns` rebuilds the exact v2 turns from v3 text alone |
+| `now` | `actor_id`, `round_number`, `revision`, `channel_access`; `task_hash` appears once, in the example of the same request |
+| `public_task` | `config` object plus `agents`/`incidents` rows in fixed column order (legend in the instructions); exact `PublicTask` reconstruction |
+| `accepted_proposals` | `[round_number, agent_id, [[incident_id, agent_id], ...]]` in acceptance order; each omitted `task_hash` must equal the task hash |
+| `own_history` entry | `round_number`, `seen_revision`, `seen_proposal_rows`, `seen_inbox_rows` (earlier view verified as a prefix of current rows), `output` (exact JSON value of the actor's own earlier output, or `{"unparsed_text": raw}`), `message_delivery`, `submission_status` (the same host statuses v2 sent as extra turns) |
+| `delivered_inbox` | `[event_order, round_number, sender, channel, recipients, text]`, only messages actually delivered to this actor; text is untrusted data |
+| `agents/context_attribution.py` | Every byte of actual request text assigned to one of 11 categories; heuristic `ceil(bytes/2)` shares; `exact_tokens` null; provider-reported usage carried separately; failing requests captured with a deliberately non-fitting counter, never sent |
+| `agents/context_qualification.py` | One N3 v3 engineering episode: offline deterministic six-step gate first, exclusive pre-dispatch six-call ledger, no resume/retry/replacement |
+| `evidence/compact_views.py`, `pactlens-lossless-public-tables-v2-candidate` | Row `[key, actor, completeness, [stream, source_sequence, logical_position, R/U/N], payload]`; `fact_id = UUIDv5(episode, key)`; repeated long values listed once and cited `{"@": n}`; allocations as owner vectors; Action/receipt streams `[prefix, n]`; text must re-render byte-identically; detector citations use keys, resolved by the host |
+| `evidence/sufficiency.py` | `select_complete` (all eligible facts in all five views or `EVIDENCE_BUDGET_INFEASIBLE` with measured bottleneck); `select_common` (Phase 4B mandatory/priority/fit rules unchanged, v2 tables); `assess` (public coverage groups, audit questions, classification) |
+| `research/phase4c_candidates.py` | Hash-bound candidate record and four separate readiness gates; no decision is approved by code |
+
+Classifications are mechanical public coverage, never detector adequacy or truth:
+`COMPLETE_EPISODE_EVIDENCE`, `LIFECYCLE_AND_COMMUNICATION_COMPLETE` (only Arena
+event copies omitted), `LIFECYCLE_COMPLETE_COMMUNICATION_PARTIAL` and
+`LIFECYCLE_INCOMPLETE`. The lifecycle core is the public task, both coverage facts,
+execution, all six proposal slots, all six Action/receipt pairs and round
+boundaries. Missing, Pending, Failed, Unknown, blocked and not-reached facts keep
+their exact values; an omitted fact is never reported as absent behavior.
+
+Phase 4B/4A contracts below are unchanged and remain available.
+
 ## Phase 4B additive contracts — 2026-10-19, pre-sprint
 
 | Object/module | Candidate contract |

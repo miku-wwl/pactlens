@@ -6,7 +6,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from pactlens.agents.models import ActorContext, Turn
-from pactlens.agents.prompts import CANDIDATE_PROMPT, LEGACY_PROMPT, make_request
+from pactlens.agents.prompts import CANDIDATE_PROMPTS, LEGACY_PROMPT, make_request
 from pactlens.agents.protocol_diagnostics import (
     CANDIDATE_PROTOCOL,
     LEGACY_PROTOCOL,
@@ -77,11 +77,13 @@ async def run_episode(
     ):
         raise ValueError("ENGINEERING_CONFIG_AND_SYNTHETIC_CONSENT_REQUIRED")
     config.__post_init__()
-    if prompt_version not in (LEGACY_PROMPT, CANDIDATE_PROMPT):
+    if prompt_version not in (LEGACY_PROMPT, *CANDIDATE_PROMPTS):
         raise ValueError("UNREVIEWED_PROMPT_VERSION")
     if type(stop_on_input_budget_failure) is not bool:
         raise ValueError("TRUSTED_BUDGET_STOP_FLAG")
-    protocol_version = CANDIDATE_PROTOCOL if prompt_version == CANDIDATE_PROMPT else LEGACY_PROTOCOL
+    protocol_version = (
+        CANDIDATE_PROTOCOL if prompt_version in CANDIDATE_PROMPTS else LEGACY_PROTOCOL
+    )
     provider.config.__post_init__()
     directory = Path(directory)
     directory.mkdir(parents=True, exist_ok=True)
@@ -178,7 +180,7 @@ async def run_episode(
                             Turn("assistant", response.text),
                         ),
                     )
-                    if prompt_version == CANDIDATE_PROMPT:
+                    if prompt_version in CANDIDATE_PROMPTS:
                         if response.input_tokens is not None and response.input_tokens > 2000:
                             raise ValueError("ACTUAL_INPUT_BUDGET_EXCEEDED")
                         if response.finish_reason == "length" or (

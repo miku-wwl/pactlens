@@ -1,6 +1,31 @@
 # PactLens Architecture — Consumer Contract and Feasibility
 
-Current additive status: **Phase 4B, 2026-10-19 NZDT, pre-sprint engineering**.
+Current additive status: **Phase 4C, 2026-10-20 NZDT, pre-sprint engineering**.
+Two candidate paths are added; every earlier path and default is unchanged:
+
+```text
+agent:    ActorContext (same raw history as v2) -> context_v3 compact observation
+            (task once, proposal rows, verified prefix counts, exact own JSON output,
+             same feedback statuses) -> v2 decision protocol/parser -> existing AIG path
+evidence: Inventory -> atomic bundles -> complete-or-EVIDENCE_BUDGET_INFEASIBLE
+            | Phase 4B common rules -> lossless tables v2 (keys, value refs, owner
+            vectors) -> independent text reconstruction + byte re-render -> R/MAE parity
+```
+
+`pactlens-agent-v3-candidate` is opt-in through `run_episode(prompt_version=...)`;
+v1/v2 request bytes are regression-locked to pre-edit golden digests. The harness
+only accepts the new version and applies the existing candidate usage checks. v3
+reuses the unchanged v2 decision protocol, parser, diagnostics, replay and AIG
+submission. `agents/context_attribution.py` measures actual request text;
+`agents/context_qualification.py` bounds one local N3 episode to six calls behind an
+offline gate. `evidence/compact_views.py` and `evidence/sufficiency.py` are new
+candidate modules; Phase 4A/4B renderers and selection remain byte-identical.
+No AIG, Arena, condition, N2 block, budget, heuristic or parser change is made.
+See the [Phase 4C report](PHASE4C_EXECUTION_REPORT.md).
+
+The following Phase 4B status is retained as a historical snapshot.
+
+Historical status: **Phase 4B, 2026-10-19 NZDT, pre-sprint engineering**.
 Existing full Phase 4A projectors/renderers and engineering observer B remain
 unchanged. Candidate budgeted input is an explicit additive path:
 

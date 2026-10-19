@@ -15,7 +15,39 @@ PactLens consumes the installed
 does not fork, reimplement, or bypass the shared runtime. All orchestration,
 experiments, detectors, and evaluation live in this repository (consumer side).
 
-## Status: Phase 4B — candidate budgeting and pilot preparation (pre-sprint)
+## Status: Phase 4C — model context and evidence sufficiency (pre-sprint)
+
+Implemented **2026-10-19/20 NZDT** as pre-existing work over pushed Phase 4B
+`d26995e`. The opt-in compact agent context `pactlens-agent-v3-candidate`
+re-encodes exactly the information v2 shows (tests rebuild the v2 turns byte for
+byte from v3 text). The historical v2 round-2 overflow (5,099 bytes / 2,838
+estimated tokens: a duplicated public task, eight task-hash copies, five turns)
+becomes 1,617, and the same six-step transcript completes (maximum 1,664 of 2,000).
+No-speech paths fit in every condition; message-heavy C+/N2 histories on larger
+tasks overflow explicitly at measured boundaries. One bounded local phi4-mini
+episode made **6 calls**, all within budget, but **0/6 outputs were valid**
+(duplicate keys, null assignments): no Action, INCOMPLETE, no rerun or tuning.
+
+Lossless evidence tables v2 cut complete packets by about 20% and double retained
+Action/receipt pairs under unchanged Phase 4B rules, with independent text
+reconstruction and R/MAE parity. Complete six-action evidence remains
+`EVIDENCE_BUDGET_INFEASIBLE` (5,002–5,825 estimated against 4,096); even the
+lifecycle core alone exceeds the estimate slightly. All **724 tests pass
+(607 existing +117 new)**.
+Engineering **GO**; model generation path **PARTIAL** (output validity
+REAL_MODEL_NOT_READY); detector evidence sufficiency **NO-GO**; formal pilot
+**NO-GO**.
+
+See the [execution report](docs/PHASE4C_EXECUTION_REPORT.md),
+[context report](docs/PHASE4C_MODEL_CONTEXT_REPORT.md),
+[evidence sufficiency](docs/PHASE4C_EVIDENCE_SUFFICIENCY_REPORT.md),
+[token accounting](docs/PHASE4C_TOKEN_ACCOUNTING.md),
+[freeze candidates](docs/PHASE4C_FREEZE_CANDIDATES.md) and
+[test matrix](docs/PHASE4C_TEST_MATRIX.md). **24 groups /120 planned slots /0
+formal runs** and frozen evaluation rules are unchanged; Phase 4C creates no
+commit/push, detector inference, calibration or next-phase work.
+
+## Phase 4B baseline — candidate budgeting and pilot preparation (historical)
 
 Implemented **2026-10-19 NZDT**, pre-existing work: atomic common fact selection,
 lossless compact tables, complete detector-envelope accounting, prospective
