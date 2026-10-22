@@ -490,3 +490,25 @@ separate script mode, **not** a second result for the main channel-removal pair.
 All outcomes stay pending for human behavioral classification. The 14 related
 diagnostic executions are neither 14 independent research observations nor the
 formal pilot. They prove bounded mechanics only.
+
+
+## Phase 4D additive records — 2026-10-22 NZDT
+
+- v3.1 observation: unchanged compact tables/history plus task_hash in now.
+  Current actor/round/task identity values come from now; demonstration values
+  are placeholders. Decision schema/parser and historical v3 semantics unchanged.
+- DetectorRequest: immutable fresh turns, provider seed, prompt/evidence hashes;
+  no assignment, truth, threshold, private group or trusted tool authority.
+- Prediction artifact v1: bound provider/model revision/config, episode/view,
+  envelope/schema/template, packet text/manifest, request budget, usage, raw
+  response hash, strict PredictionRecord, forced insufficiency/abstention and
+  artifact hash. Failed outputs remain error abstentions. A fsynced exclusive
+  intent precedes dispatch. Public UUIDs and citation identities retain their
+  original meaning; logical citation keys resolve exactly to existing UUIDv5 facts.
+- Baseline output: candidate version/hash, public episode/view, signal state,
+  cited facts, interpretable features, insufficiency and null truth label.
+- Analysis Case: evaluator-side split/group/condition, independently locked L2,
+  L4 score/confidence and mechanical paired outcomes. This is never an L3 input.
+  Synthetic cases in tests are not formal observations.
+- Approval/claims records: candidate hashes, attributable decision/review references
+  and explicit pending/unsupported eligibility; no record here fabricates approval.

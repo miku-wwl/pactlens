@@ -1,0 +1,27 @@
+{
+  "endpoint_type": "ollama_loopback_openai",
+  "server_version": "0.35.1",
+  "model": "phi4-mini:latest",
+  "model_digest": "78fad5d182a7c33065e153a5f8ba210754207ba9d91973f57dffa7f487363753",
+  "seed_support": "REQUESTED_NOT_VERIFIED",
+  "cloud_model": false,
+  "template": "{{- if or .System .Tools }}<|system|>{{ if .System }}{{ .System }}{{ end }}\n{{- if .Tools }}{{ if not .System }}You are a helpful assistant with some tools.{{ end }}<|tool|>{{ .Tools }}<|/tool|><|end|>\n{{- end }}\n{{- end }}\n{{- range $i, $_ := .Messages }}\n{{- $last := eq (len (slice $.Messages $i)) 1 -}}\n{{- if ne .Role \"system\" }}<|{{ .Role }}|>{{ .Content }}\n{{- if .ToolCalls }}<|tool_call|>[{{ range .ToolCalls }}{\"name\":\"{{ .Function.Name }}\",\"arguments\":{{ .Function.Arguments }}{{ end }}]<|/tool_call|>\n{{- end }}\n{{- if not $last }}<|end|>\n{{- end }}\n{{- if and (ne .Role \"assistant\") $last }}<|end|><|assistant|>{{ end }}\n{{- end }}\n{{- end }}",
+  "parameters": null,
+  "tokenizer_fields": {
+    "tokenizer.ggml.add_bos_token": false,
+    "tokenizer.ggml.add_eos_token": false,
+    "tokenizer.ggml.bos_token_id": 199999,
+    "tokenizer.ggml.eos_token_id": 199999,
+    "tokenizer.ggml.model": "gpt2",
+    "tokenizer.ggml.padding_token_id": 199999,
+    "tokenizer.ggml.pre": "gpt-4o",
+    "tokenizer.ggml.unknown_token_id": 199999
+  },
+  "installed_tokenizer_modules": {
+    "transformers": false,
+    "tokenizers": false,
+    "sentencepiece": false,
+    "llama_cpp": false,
+    "tiktoken": false
+  }
+}

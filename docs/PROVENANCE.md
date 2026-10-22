@@ -475,3 +475,48 @@ researcher approval or independent human review is invented. Installed AIG remai
 five-second default unchanged. Phase 4C makes no commit, push, tag, release,
 deployment, submission or next-phase work; HEAD remains the pushed Phase 4B
 baseline, and the external review ZIP/receipt identify an uncommitted snapshot.
+
+
+## 11. Pushed Phase 4C baseline and Phase 4D — 2026-10-22 NZDT
+
+Additive historical record. Initial main tree was clean; HEAD, origin/main and
+fresh HTTPS remote all verified af3146bd0b8dc4b7d106ce0d32fca38750e36626.
+No local Phase 4C.1 delta existed. The original 724 tests reproduced before
+implementation. All Phase 4D source/tests/docs/artifacts are pre-sprint engineering,
+not sprint-created research; all earlier reports and their failures are retained.
+
+Added versioned v3.1 context/presentation (strict parser unchanged), bounded
+engineering qualification, L3-to-provider-to-immutable-L4/replay, finite research
+JSON, prospective baselines/shortcuts/contribution matrix, pure matched-group
+analysis, engineering-only operations/freeze guards, reviewed-source export and
+claims validation. New tests exercise contracts and actual installed AIG.
+Existing prompts/provider only admit the opt-in candidate; PredictionRecord
+additively accepts the v2 compact evidence version. Core/Arena/bridge/conditions,
+frozen plan/splits, pin/lock, old prompts and old tests are preserved.
+
+Exactly six local agent calls yielded one valid decline/five invalid submits,
+zero Actions/receipts; C+ was skipped by the 5/6 gate. Exactly two additional local
+detector calls both yielded INVALID_OUTPUT abstentions. Total eight new actual
+generation calls; no retry/replacement/tuning rerun/download/cloud/paid API.
+Existing Ollama 0.35.1 and pinned phi4-mini digest were verified. Raw private traces
+and stores remain .runtime; sanitized summaries/hashes are in review/phase4d.
+
+Fake-agent/fake-detector integration and four matched engineering groups ran with
+real local AIG/SQLite and explicitly synthetic consent: these are not human
+authentication, formal episodes, independent adjudication or model accuracy.
+The deterministic Pilot-shaped dry run completed 20 engineering episodes, 120 fake
+requests and 108 verified receipts. Fault audits preserve terminal Unknown,
+including a committed effect without Arena application and no second effect.
+
+Formal study remains 24 matched groups /120 future slots /0 executions. No
+held-out outcome/prediction or L2 human review exists. Full six-action evidence
+remains infeasible under the unchanged estimate; no exact tokenizer qualified.
+All baseline/evidence/model/observer choices and Pilot approvals remain pending.
+The paper scaffold contains no invented research result. Current official template
+was read only; owner registration/submission access is unverified.
+
+Installed AIG remains 0.2.0 at 7261fdd2f47d2b15fabe8faac527eeee37338eb1,
+57 installed RECORD hashes verified and five-second default unchanged.
+Final actual commands/counts are in PHASE4D_TEST_MATRIX and review/phase4d logs.
+No commit, push, tag, release, deployment, submission or further phase occurred.
+The independently verified review ZIP lives outside the repository.

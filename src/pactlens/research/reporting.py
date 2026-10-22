@@ -1,0 +1,156 @@
+"""Validated, source-bound future analysis export. No invented result generation."""
+
+import csv
+import json
+import math
+from pathlib import Path
+
+from pactlens.agents.models import closed_json
+from pactlens.research.analysis import VERSION
+from pactlens.research.json_types import content_hash
+
+FIGURES = (
+    "episode-validity",
+    "positive-control-realization",
+    "five-view-coverage",
+    "paired-n1-fpr",
+    "execution-evidence-contribution",
+    "shortcut-missingness",
+)
+
+
+def verify_analysis_artifact(body, sources):
+    required = {
+        "analysis_version",
+        "provenance",
+        "split",
+        "source_hashes",
+        "configuration_hash",
+        "reviewer",
+        "review_record",
+        "tables",
+        "figures",
+        "artifact_hash",
+    }
+    if type(body) is not dict or set(body) != required:
+        raise ValueError("ANALYSIS_EXPORT_SCHEMA")
+    if (
+        body["analysis_version"] != VERSION
+        or body["provenance"] != "VERIFIED_FORMAL_ANALYSIS"
+        or body["split"] != "held_out"
+    ):
+        raise ValueError("NO_SYNTHETIC_OR_UNEXECUTED_MANUSCRIPT_RESULTS")
+    if not body["reviewer"] or not body["review_record"]:
+        raise ValueError("INDEPENDENT_REVIEW_REQUIRED")
+    hashes = body["source_hashes"]
+    if type(hashes) is not dict or set(hashes) != {
+        "locked_l2",
+        "immutable_l4",
+        "frozen_configuration",
+        "thresholds",
+    }:
+        raise ValueError("ANALYSIS_LINEAGE")
+    if set(sources) != set(hashes):
+        raise ValueError("SOURCE_FILES_REQUIRED")
+    import hashlib
+
+    if any(
+        hashlib.sha256(Path(sources[k]).read_bytes()).hexdigest() != v for k, v in hashes.items()
+    ):
+        raise ValueError("ANALYSIS_SOURCE_HASH_MISMATCH")
+    if body["configuration_hash"] != hashes["frozen_configuration"]:
+        raise ValueError("ANALYSIS_CONFIGURATION")
+    if body["artifact_hash"] != content_hash(
+        {k: v for k, v in body.items() if k != "artifact_hash"}
+    ):
+        raise ValueError("ANALYSIS_EXPORT_HASH")
+    if type(body["figures"]) is not dict or not set(body["figures"]) <= set(FIGURES):
+        raise ValueError("FIGURE_CONTRACT")
+    for name, rows in body["figures"].items():
+        if type(rows) is not list:
+            raise ValueError("FIGURE_ROWS")
+        for r in rows:
+            if set(r) != {"label", "value", "lower", "upper", "denominator"}:
+                raise ValueError("FIGURE_ROW")
+            if (
+                type(r["label"]) is not str
+                or type(r["denominator"]) is not int
+                or r["denominator"] < 0
+            ):
+                raise ValueError("FIGURE_DENOMINATOR")
+            for key in ("value", "lower", "upper"):
+                if r[key] is not None and (
+                    type(r[key]) not in (int, float) or not math.isfinite(r[key])
+                ):
+                    raise ValueError("FINITE_RESULT")
+            if (r["lower"] is None) != (r["upper"] is None) or (
+                r["lower"] is not None
+                and (r["value"] is None or not r["lower"] <= r["value"] <= r["upper"])
+            ):
+                raise ValueError("RESULT_INTERVAL")
+    for name, rows in body["tables"].items():
+        if not rows or any(type(r) is not dict or set(r) != set(rows[0]) for r in rows):
+            raise ValueError("RECTANGULAR_RESULTS_TABLE")
+        if not name.replace("-", "").isalnum():
+            raise ValueError("TABLE_NAME")
+    return True
+
+
+def export_results(artifact, sources, output, *, charts=False):
+    body = closed_json(Path(artifact).read_text(encoding="utf-8"), 2_000_000)
+    verify_analysis_artifact(body, sources)
+    output = Path(output)
+    output.mkdir(parents=True, exist_ok=False)
+    for name, rows in body["tables"].items():
+        with (output / (name + ".csv")).open("x", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=list(rows[0]))
+            writer.writeheader()
+            writer.writerows(rows)
+    if charts:
+        # Optional standard plotting tool, never installed or downloaded by this exporter.
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+
+        for name, rows in body["figures"].items():
+            valid = [r for r in rows if r["value"] is not None]
+            fig, ax = plt.subplots(figsize=(7, 4))
+            ax.bar([r["label"] for r in valid], [r["value"] for r in valid], color="#255d81")
+            for i, r in enumerate(valid):
+                if r["lower"] is not None:
+                    ax.errorbar(
+                        i,
+                        r["value"],
+                        yerr=[[r["value"] - r["lower"]], [r["upper"] - r["value"]]],
+                        fmt="none",
+                        color="black",
+                        capsize=4,
+                    )
+            ax.set_title(name.replace("-", " "))
+            ax.set_ylabel("Verified analysis value")
+            ax.tick_params(axis="x", labelrotation=20)
+            fig.text(
+                0.01,
+                0.01,
+                "Source "
+                + body["artifact_hash"][:16]
+                + "; undefined values omitted, never zero-filled",
+                fontsize=7,
+            )
+            fig.tight_layout(rect=(0, 0.04, 1, 1))
+            fig.savefig(output / (name + ".pdf"))
+            fig.savefig(output / (name + ".svg"))
+            plt.close(fig)
+    (output / "provenance.json").write_text(
+        json.dumps(
+            {
+                "source_analysis_hash": body["artifact_hash"],
+                "sources": body["source_hashes"],
+                "charts": charts,
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    return output

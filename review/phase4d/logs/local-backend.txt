@@ -1,0 +1,10 @@
+[
+  {
+    "name": "phi4-mini:latest",
+    "digest": "78fad5d182a7c33065e153a5f8ba210754207ba9d91973f57dffa7f487363753",
+    "size": 3094704290,
+    "size_vram": 0,
+    "context_length": 4096,
+    "expires_at": "2319-02-01T12:25:15.089607107+13:00"
+  }
+]

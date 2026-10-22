@@ -1,0 +1,40 @@
+Traceback (most recent call last):
+  File "D:\workshop\oct\pactlens\scripts\phase4d_audit.py", line 94, in <module>
+    a=p.parse_args();asyncio.run(main(a.output,a.private))
+                     ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "D:\workshop\oct\pactlens\scripts\phase4d_audit.py", line 53, in main
+    inv=build_inventory(record,observations,deliveries,public_id=pid,policy=policy,status=status,shared_capture=shared)
+  File "D:\workshop\oct\pactlens\src\pactlens\evidence\inventory.py", line 270, in build_inventory
+    data = project_observation(
+           ~~~~~~~~~~~~~~~~~~~^
+        record,
+        ^^^^^^^
+    ...<5 lines>...
+        shared_capture=shared_capture,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ).as_mapping()
+    ^
+  File "D:\workshop\oct\pactlens\src\pactlens\evidence\observation_policy.py", line 37, in project_observation
+    data = project_aig_evidence(
+           ~~~~~~~~~~~~~~~~~~~~^
+        record, observations, public_id=public_id, shared_capture=shared_capture
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ).as_mapping()
+    ^
+  File "D:\workshop\oct\pactlens\src\pactlens\evidence\aig_adapter.py", line 12, in project_aig_evidence
+    data = project_evidence(record, public_id=public_id).as_mapping()
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\workshop\oct\pactlens\src\pactlens\evidence\projection.py", line 28, in project_evidence
+    public_id = _public_id(public_id)
+  File "D:\workshop\oct\pactlens\src\pactlens\evidence\projection.py", line 20, in _public_id
+    raise ValueError("Canonical independent UUIDv4 required")
+ValueError: Canonical independent UUIDv4 required

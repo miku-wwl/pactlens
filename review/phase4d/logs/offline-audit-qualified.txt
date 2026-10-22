@@ -1,0 +1,29 @@
+Traceback (most recent call last):
+  File "D:\workshop\oct\pactlens\scripts\phase4d_audit.py", line 169, in <module>
+    asyncio.run(main(a.output, a.private))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "D:\workshop\oct\pactlens\scripts\phase4d_audit.py", line 149, in main
+    dry = await dry_run(private / "pilot-dry", DryRunConfig())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\workshop\oct\pactlens\src\pactlens\research\operations.py", line 204, in dry_run
+    run = await run_episode(
+          ^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "D:\workshop\oct\pactlens\src\pactlens\experiments\harness.py", line 164, in run_episode
+    response = await provider.generate(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\workshop\oct\pactlens\src\pactlens\research\operations.py", line 195, in generate
+    if charged >= study_config.groups * 30 or len(model.requests) >= 6:
+                  ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ModelConfig' object has no attribute 'groups'

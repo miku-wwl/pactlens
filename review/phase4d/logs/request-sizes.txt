@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "D:\workshop\oct\pactlens\scripts\extract_phase4d_request_sizes.py", line 79, in <module>
+    extract(args.pytest_directory, args.output)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\workshop\oct\pactlens\scripts\extract_phase4d_request_sizes.py", line 61, in extract
+    assert len(reports) == 30, len(reports)
+           ^^^^^^^^^^^^^^^^^^
+AssertionError: 0

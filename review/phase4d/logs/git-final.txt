@@ -1,0 +1,5 @@
+af3146bd0b8dc4b7d106ce0d32fca38750e36626 Add Phase 4C evidence sufficiency and context pipeline
+main
+af3146bd0b8dc4b7d106ce0d32fca38750e36626
+af3146bd0b8dc4b7d106ce0d32fca38750e36626	HEAD
+af3146bd0b8dc4b7d106ce0d32fca38750e36626	refs/heads/main

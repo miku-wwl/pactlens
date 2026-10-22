@@ -254,3 +254,19 @@ do not prove an open submission window. No registration/submission was performed
 Sandbox-only synthetic effects; no real issue trackers or payments; no
 third-party mutations; no external side effects; no commit/push/tag/deploy
 without explicit user authorization.
+
+
+## Phase 4D pre-sprint integration — 2026-10-22 NZDT
+
+Current result: **PARTIAL; formal Pilot NO-GO**. Opt-in v3.1, a bounded detector
+runner with immutable prediction replay, prospective L3 baselines, matched-group
+analysis functions, engineering-only dry-run operations and paper/claims scaffolds
+are implemented. The local N3 run produced 1/6 valid declines and zero receipts;
+C+ was skipped. Both detector smoke outputs were invalid. Complete six-action
+evidence still exceeds the binding estimate. These failures are preserved.
+
+All work through this phase is preexisting/pre-sprint. No formal research,
+independent human adjudication, commit, push or submission occurred in Phase 4D.
+See [execution report](docs/PHASE4D_EXECUTION_REPORT.md),
+[test matrix](docs/PHASE4D_TEST_MATRIX.md) and
+[manuscript scaffold](research/phase4d/manuscript.md).

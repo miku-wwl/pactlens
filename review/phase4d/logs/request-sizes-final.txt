@@ -1,0 +1,1 @@
+{"synthetic_scenarios": 30, "actual_generation_calls": 0, "source_traces_unchanged": true}

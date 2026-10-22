@@ -1,0 +1,5 @@
+COMMAND: uv sync --locked
+Resolved 31 packages in 2ms
+Checked 31 packages in 6ms
+
+EXIT_CODE: 0

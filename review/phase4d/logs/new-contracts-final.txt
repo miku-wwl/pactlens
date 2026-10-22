@@ -1,0 +1,27 @@
+..............F.............................................             [100%]
+================================== FAILURES ===================================
+___ test_fake_agent_real_aig_detector_persistence_replay_and_pure_analysis ____
+tests\test_phase4d_research.py:178: in test_fake_agent_real_aig_detector_persistence_replay_and_pure_analysis
+    result = asyncio.run(dry_run(tmp_path / "dry", DryRunConfig(groups=1)))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\runners.py:196: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\runners.py:119: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+src\pactlens\research\operations.py:204: in dry_run
+    run = await run_episode(
+src\pactlens\experiments\harness.py:164: in run_episode
+    response = await provider.generate(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\pactlens\research\operations.py:195: in generate
+    if charged >= study_config.groups * 30 or len(model.requests) >= 6:
+                  ^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'ModelConfig' object has no attribute 'groups'
+=========================== short test summary info ===========================
+FAILED tests/test_phase4d_research.py::test_fake_agent_real_aig_detector_persistence_replay_and_pure_analysis
+1 failed, 59 passed in 82.78s (0:01:22)

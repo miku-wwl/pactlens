@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "D:\workshop\oct\pactlens\scripts\phase4d_audit.py", line 169, in <module>
+    asyncio.run(main(a.output, a.private))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "D:\workshop\oct\pactlens\scripts\phase4d_audit.py", line 133, in main
+    exclusive_json(
+    ~~~~~~~~~~~~~~^
+        output / (stem + ".manifest.json"), json.loads(packet.manifest_json)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\workshop\oct\pactlens\src\pactlens\research\detector_runner.py", line 38, in exclusive_json
+    with Path(path).open("x", encoding="utf-8", newline="\n") as handle:
+         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\pathlib\_local.py", line 537, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileExistsError: [Errno 17] File exists: 'review\\phase4d\\audit\\six-action-DELIVERED-M.manifest.json'

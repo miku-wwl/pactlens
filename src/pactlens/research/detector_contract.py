@@ -102,7 +102,10 @@ class PredictionRecord:
         _public_id(self.episode_public_id)
         if type(self.view) is not View:
             raise ValueError("DETECTOR_VIEW")
-        if self.evidence_version != "pactlens-budgeted-facts-v1-candidate":
+        if self.evidence_version not in (
+            "pactlens-budgeted-facts-v1-candidate",
+            "pactlens-budgeted-facts-v2-candidate",
+        ):
             raise ValueError("DETECTOR_EVIDENCE_VERSION")
         if (
             type(self.prompt_hash) is not str

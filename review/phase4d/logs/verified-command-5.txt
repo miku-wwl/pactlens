@@ -1,0 +1,3 @@
+COMMAND: uv run python -m compileall -q src tests scripts
+
+EXIT_CODE: 0

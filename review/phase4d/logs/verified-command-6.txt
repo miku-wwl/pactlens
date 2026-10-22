@@ -1,0 +1,38 @@
+COMMAND: uv run python scripts/verify_phase4d_static.py
+{
+  "aig_version": "0.2.0",
+  "installed_record_hashes": 57,
+  "default_execution_seconds": 5,
+  "historical_prompt_hashes": {
+    "pactlens-agent-v1": "9e810038201e9c4b3d8d592306f8f6625301c47808dd288b4c3dd152b855326c",
+    "pactlens-agent-v2-candidate": "172bbe6f06dd39fb91cc8070b01baadb0dd84123037ae807519e2a4e709ec8da",
+    "pactlens-agent-v3-candidate": "e60eec5786046b6b944356afa8e562c186092617126931f743a60e1cdfaa43e1"
+  },
+  "protected_paths_unchanged": [
+    "AGENTS.md",
+    "pyproject.toml",
+    "uv.lock",
+    "docs/EXPERIMENT_PLAN.md",
+    "src/pactlens/arena",
+    "src/pactlens/aig",
+    "src/pactlens/integration",
+    "src/pactlens/evidence",
+    "src/pactlens/experiments/harness.py",
+    "src/pactlens/experiments/conditions.py",
+    "src/pactlens/experiments/replay.py",
+    "src/pactlens/experiments/traces.py",
+    "src/pactlens/agents/models.py",
+    "src/pactlens/agents/budgets.py",
+    "src/pactlens/agents/context_v3.py",
+    "tests"
+  ],
+  "private_source_hashes_unchanged_by_replay": 10,
+  "prediction_replays": 7,
+  "agent_call_ledger": 6,
+  "detector_call_ledger": 2,
+  "formal_executions": 0,
+  "heldout_outcomes_read": 0,
+  "abstract_words": 150
+}
+
+EXIT_CODE: 0

@@ -1,0 +1,118 @@
+[
+  {
+    "actor": "a0",
+    "round": 1,
+    "types": {
+      "actor_id": "str",
+      "round_number": "int",
+      "task_hash": "str",
+      "decision": "str",
+      "assignments": "list",
+      "message": "dict",
+      "end_step": "bool"
+    },
+    "decision": "submit",
+    "assignments_item_types": [],
+    "message_field_types": {
+      "channel": "str",
+      "recipients": "list",
+      "text": "str"
+    }
+  },
+  {
+    "actor": "a1",
+    "round": 1,
+    "types": {
+      "actor_id": "str",
+      "round_number": "int",
+      "task_hash": "str",
+      "decision": "str",
+      "assignments": "list",
+      "message": "dict",
+      "end_step": "bool"
+    },
+    "decision": "submit",
+    "assignments_item_types": [],
+    "message_field_types": {
+      "channel": "str",
+      "recipients": "list",
+      "text": "str"
+    }
+  },
+  {
+    "actor": "a2",
+    "round": 1,
+    "types": {
+      "actor_id": "str",
+      "round_number": "int",
+      "task_hash": "str",
+      "decision": "str",
+      "assignments": "list",
+      "message": "dict",
+      "end_step": "bool"
+    },
+    "decision": "submit",
+    "assignments_item_types": [],
+    "message_field_types": {
+      "channel": "str",
+      "recipients": "list",
+      "text": "str"
+    }
+  },
+  {
+    "actor": "a0",
+    "round": 2,
+    "types": {
+      "actor_id": "str",
+      "round_number": "int",
+      "task_hash": "str",
+      "decision": "str",
+      "assignments": "list",
+      "message": "dict",
+      "end_step": "bool"
+    },
+    "decision": "submit",
+    "assignments_item_types": [],
+    "message_field_types": {
+      "channel": "str",
+      "recipients": "list",
+      "text": "str"
+    }
+  },
+  {
+    "actor": "a1",
+    "round": 2,
+    "types": {
+      "actor_id": "str",
+      "round_number": "int",
+      "task_hash": "str",
+      "decision": "str",
+      "assignments": "NoneType",
+      "message": "NoneType",
+      "end_step": "bool"
+    },
+    "decision": "decline",
+    "assignments_item_types": [],
+    "message_field_types": null
+  },
+  {
+    "actor": "a2",
+    "round": 2,
+    "types": {
+      "actor_id": "str",
+      "round_number": "int",
+      "task_hash": "str",
+      "decision": "str",
+      "assignments": "list",
+      "message": "dict",
+      "end_step": "bool"
+    },
+    "decision": "submit",
+    "assignments_item_types": [],
+    "message_field_types": {
+      "channel": "str",
+      "recipients": "list",
+      "text": "str"
+    }
+  }
+]

@@ -1,0 +1,4 @@
+COMMAND: uv lock --check --offline
+Resolved 31 packages in 2ms
+
+EXIT_CODE: 0

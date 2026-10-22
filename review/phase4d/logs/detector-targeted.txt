@@ -1,0 +1,82 @@
+FFFFFF....F....F....F....F....F....F....F.......                         [100%]
+================================== FAILURES ===================================
+_______________ test_detector_contract_storage_replay[valid-M] ________________
+tests\test_phase4d_detector.py:62: in test_detector_contract_storage_replay
+    assert record["prediction"]["response"]["risk_score"] == 0.25
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+_______________ test_detector_contract_storage_replay[valid-A] ________________
+tests\test_phase4d_detector.py:62: in test_detector_contract_storage_replay
+    assert record["prediction"]["response"]["risk_score"] == 0.25
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+_______________ test_detector_contract_storage_replay[valid-MA] _______________
+tests\test_phase4d_detector.py:62: in test_detector_contract_storage_replay
+    assert record["prediction"]["response"]["risk_score"] == 0.25
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+_______________ test_detector_contract_storage_replay[valid-R] ________________
+tests\test_phase4d_detector.py:62: in test_detector_contract_storage_replay
+    assert record["prediction"]["response"]["risk_score"] == 0.25
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+______________ test_detector_contract_storage_replay[valid-MAE] _______________
+tests\test_phase4d_detector.py:62: in test_detector_contract_storage_replay
+    assert record["prediction"]["response"]["risk_score"] == 0.25
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'NoneType' object is not subscriptable
+____________ test_detector_contract_storage_replay[insufficient-M] ____________
+tests\test_phase4d_detector.py:73: in test_detector_contract_storage_replay
+    with pytest.raises(ValueError): replay_prediction(path)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+______________ test_detector_contract_storage_replay[provider-M] ______________
+tests\test_phase4d_detector.py:73: in test_detector_contract_storage_replay
+    with pytest.raises(ValueError): replay_prediction(path)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+______________ test_detector_contract_storage_replay[citation-M] ______________
+tests\test_phase4d_detector.py:73: in test_detector_contract_storage_replay
+    with pytest.raises(ValueError): replay_prediction(path)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_______________ test_detector_contract_storage_replay[score-M] ________________
+tests\test_phase4d_detector.py:73: in test_detector_contract_storage_replay
+    with pytest.raises(ValueError): replay_prediction(path)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+________________ test_detector_contract_storage_replay[json-M] ________________
+tests\test_phase4d_detector.py:73: in test_detector_contract_storage_replay
+    with pytest.raises(ValueError): replay_prediction(path)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_____________ test_detector_contract_storage_replay[duplicate-M] ______________
+tests\test_phase4d_detector.py:73: in test_detector_contract_storage_replay
+    with pytest.raises(ValueError): replay_prediction(path)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_______________ test_detector_contract_storage_replay[length-M] _______________
+tests\test_phase4d_detector.py:73: in test_detector_contract_storage_replay
+    with pytest.raises(ValueError): replay_prediction(path)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_______________ test_detector_contract_storage_replay[extra-M] ________________
+tests\test_phase4d_detector.py:73: in test_detector_contract_storage_replay
+    with pytest.raises(ValueError): replay_prediction(path)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+=========================== short test summary info ===========================
+FAILED tests/test_phase4d_detector.py::test_detector_contract_storage_replay[valid-M]
+FAILED tests/test_phase4d_detector.py::test_detector_contract_storage_replay[valid-A]
+FAILED tests/test_phase4d_detector.py::test_detector_contract_storage_replay[valid-MA]
+FAILED tests/test_phase4d_detector.py::test_detector_contract_storage_replay[valid-R]
+FAILED tests/test_phase4d_detector.py::test_detector_contract_storage_replay[valid-MAE]
+FAILED tests/test_phase4d_detector.py::test_detector_contract_storage_replay[insufficient-M]
+FAILED tests/test_phase4d_detector.py::test_detector_contract_storage_replay[provider-M]
+FAILED tests/test_phase4d_detector.py::test_detector_contract_storage_replay[citation-M]
+FAILED tests/test_phase4d_detector.py::test_detector_contract_storage_replay[score-M]
+FAILED tests/test_phase4d_detector.py::test_detector_contract_storage_replay[json-M]
+FAILED tests/test_phase4d_detector.py::test_detector_contract_storage_replay[duplicate-M]
+FAILED tests/test_phase4d_detector.py::test_detector_contract_storage_replay[length-M]
+FAILED tests/test_phase4d_detector.py::test_detector_contract_storage_replay[extra-M]
+13 failed, 35 passed in 54.31s

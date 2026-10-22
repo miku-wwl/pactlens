@@ -318,3 +318,23 @@ conflicting effects, concurrent attempts, ambiguous outcome, restart with no
 second effect). In offline research runs, scripted consent must be explicitly
 labelled `synthetic_consent=true` and never described as authenticated human
 consent.
+
+
+## Phase 4D additive consumer pathway — 2026-10-22 NZDT
+
+`context_v31` adds an opt-in identity/presentation candidate over the unchanged
+v3 compact context and v2 strict parser. Existing AIG/harness/Arena sources and
+all historical prompts remain intact. A separate `DetectorRequest` reuses the
+provider-neutral generation port and existing Ollama transport without agent
+identity fields. `detector_runner` validates final CompactView text/manifest,
+full-request budget and strict response/citations, then writes exclusive fsynced
+intent/prediction artifacts. Replay has no provider or Gateway dispatch path.
+Finite L4 scores use a separate research serializer; Arena remains integer-only.
+
+L3-only baseline candidates and per-view shortcut diagnostics do not read L1/L2.
+Pure `analysis` works on separately locked future L2/L4; `operations` can only
+run fresh engineering fake-model dry runs. Formal dispatch remains disabled.
+`reporting` verifies future source hashes/review attestations before export,
+while `claims` rejects unsupported/unreviewed manuscript eligibility. These are
+trusted-host contracts, not malicious-Python isolation or human authentication.
+See [Phase 4D report](PHASE4D_EXECUTION_REPORT.md).

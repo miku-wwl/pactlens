@@ -1,0 +1,1 @@
+{"fake_generation_requests": 6, "actual_model_calls": 0, "verified_aig_receipts": 6, "sets": 2}

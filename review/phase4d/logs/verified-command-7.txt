@@ -1,0 +1,10 @@
+COMMAND: git diff --check
+warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/ARCHITECTURE.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/DATA_DICTIONARY.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/PROVENANCE.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/pactlens/agents/prompts.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/pactlens/agents/provider.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/pactlens/research/detector_contract.py', LF will be replaced by CRLF the next time Git touches it
+
+EXIT_CODE: 0

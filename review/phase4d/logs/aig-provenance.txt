@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "module": "d:\\workshop\\oct\\pactlens\\.venv\\Lib\\site-packages\\agentic_intent_gate\\runtime.py",
+  "direct_url": {
+    "url": "https://github.com/miku-wwl/agentic-intent-gate",
+    "vcs_info": {
+      "vcs": "git",
+      "commit_id": "7261fdd2f47d2b15fabe8faac527eeee37338eb1",
+      "requested_revision": "7261fdd2f47d2b15fabe8faac527eeee37338eb1"
+    }
+  },
+  "record_hashes_checked": 57,
+  "api": {
+    "open_runtime": "(*, gate_path, provider, capability, registry, verifier, policy, predecessor_stopped=False, execution_timeout_seconds=5)",
+    "ToolBinding": "(tool_name: str, tool_version: str, adapter_id: str, binding_revision: str, target: str, execution_scope: str) -> None",
+    "ToolCapability": "(binding: agentic_intent_gate.application.action_compiler.ToolBinding, description: str, input_schema: collections.abc.Mapping, target_argument: str | None = None, semantic_rule: collections.abc.Callable | None = None) -> None",
+    "ExecutableRegistry": "(executor=None, *, binding=None)",
+    "CapabilityVerifier": "(token=None, *, subject_id=None, binding=None, operations=())",
+    "BoundCapabilityAuthorization": "(verifier: agentic_intent_gate.infrastructure.security.local_capability.CapabilityVerifier, *, policy_revision: str)"
+  }
+}

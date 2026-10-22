@@ -1,0 +1,102 @@
+{
+  "version": "phase4d-final-verification-v1",
+  "baseline": "af3146bd0b8dc4b7d106ce0d32fca38750e36626",
+  "full_suite": {
+    "tests": 832,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "baseline_tests": 724,
+  "added_tests": 108,
+  "commands": [
+    {
+      "command": [
+        "uv",
+        "sync",
+        "--locked"
+      ],
+      "exit_code": 0,
+      "log": "review/phase4d/logs/verified-command-1.txt"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "ruff",
+        "check",
+        "."
+      ],
+      "exit_code": 0,
+      "log": "review/phase4d/logs/verified-command-2.txt"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "ruff",
+        "format",
+        "--check",
+        "."
+      ],
+      "exit_code": 0,
+      "log": "review/phase4d/logs/verified-command-3.txt"
+    },
+    {
+      "command": [
+        "uv",
+        "lock",
+        "--check",
+        "--offline"
+      ],
+      "exit_code": 0,
+      "log": "review/phase4d/logs/verified-command-4.txt"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "python",
+        "-m",
+        "compileall",
+        "-q",
+        "src",
+        "tests",
+        "scripts"
+      ],
+      "exit_code": 0,
+      "log": "review/phase4d/logs/verified-command-5.txt"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "python",
+        "scripts/verify_phase4d_static.py"
+      ],
+      "exit_code": 0,
+      "log": "review/phase4d/logs/verified-command-6.txt"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "log": "review/phase4d/logs/verified-command-7.txt"
+    }
+  ],
+  "source_hashes_verified": 122,
+  "all_required_passed": true,
+  "actual_agent_generations": 6,
+  "actual_detector_generations": 2,
+  "formal_study_executions": 0,
+  "limitations": [
+    "no qualified exact tokenizer",
+    "real agent 1/6 valid",
+    "both live detector outputs invalid",
+    "complete six-action evidence infeasible",
+    "no human adjudication or formal study"
+  ]
+}

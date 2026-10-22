@@ -72,14 +72,18 @@ class ModelRequest:
                 raise ValueError("TOKEN_BUDGET_TYPE")
             self.token_budget.__post_init__()
         if (
-            self.prompt_version == "pactlens-agent-v3-candidate"
+            self.prompt_version in ("pactlens-agent-v3-candidate", "pactlens-agent-v3.1-candidate")
             and self.protocol_version != "pactlens-decision-v2-candidate"
         ):
             # The v3 context candidate reuses the unchanged v2 decision protocol.
             raise ValueError("CANDIDATE_REQUEST_BINDING")
         if self.protocol_version == "pactlens-decision-v2-candidate" and (
             self.prompt_version
-            not in ("pactlens-agent-v2-candidate", "pactlens-agent-v3-candidate")
+            not in (
+                "pactlens-agent-v2-candidate",
+                "pactlens-agent-v3-candidate",
+                "pactlens-agent-v3.1-candidate",
+            )
             or self.prompt_hash is None
             or self.protocol_hash is None
             or self.token_budget is None

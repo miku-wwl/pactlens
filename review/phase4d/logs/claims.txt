@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "D:\workshop\oct\pactlens\scripts\phase4d_claims.py", line 56, in <module>
+    if __name__ == "__main__": main()
+                               ~~~~^^
+  File "D:\workshop\oct\pactlens\scripts\phase4d_claims.py", line 21, in main
+    dry = json.loads((ROOT / "review/phase4d/audit/pilot-dry-run.json").read_text())
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\pathlib\_local.py", line 546, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\pathlib\_abc.py", line 633, in read_text
+    return f.read()
+           ~~~~~~^^
+UnicodeDecodeError: 'gbk' codec can't decode byte 0x92 in position 12916: illegal multibyte sequence
