@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "D:\workshop\oct\pactlens\scripts\phase5a_synthetic_analysis.py", line 214, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "D:\workshop\oct\pactlens\scripts\phase5a_synthetic_analysis.py", line 186, in main
+    "interval": canonical_json(contrast["bootstrap"]),
+                               ~~~~~~~~^^^^^^^^^^^^^
+KeyError: 'bootstrap'

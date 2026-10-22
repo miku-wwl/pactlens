@@ -10,6 +10,8 @@ from pactlens.agents.context_v3 import (
 )
 from pactlens.agents.context_v31 import SYSTEM_V31, V31_PROMPT
 from pactlens.agents.context_v31 import turns as v31_turns
+from pactlens.agents.context_v32 import SYSTEM_V32, V32_PROMPT
+from pactlens.agents.context_v32 import turns as v32_turns
 from pactlens.agents.models import Turn
 from pactlens.agents.protocol_diagnostics import CANDIDATE_PROTOCOL, LEGACY_PROTOCOL, PROTOCOL_HASH
 from pactlens.agents.provider import ModelRequest
@@ -77,7 +79,15 @@ PROMPT_HASHES[V31_PROMPT] = content_hash(
         "identity": "observation.now-only-v1",
     }
 )
-CANDIDATE_PROMPTS = (CANDIDATE_PROMPT, V3_PROMPT, V31_PROMPT)
+PROMPT_HASHES[V32_PROMPT] = content_hash(
+    {
+        "system": SYSTEM_V32,
+        "context": CONTEXT_VERSION,
+        "protocol_hash": PROTOCOL_HASH,
+        "identity": "observation.now-only-v1",
+    }
+)
+CANDIDATE_PROMPTS = (CANDIDATE_PROMPT, V3_PROMPT, V31_PROMPT, V32_PROMPT)
 
 
 def public_examples(state, actor_id):
@@ -113,8 +123,10 @@ def make_request(
 ):
     if prompt_version not in PROMPT_HASHES:
         raise ValueError("UNREVIEWED_PROMPT_VERSION")
-    if prompt_version == V31_PROMPT:
-        turns = v31_turns(context, state, inbox, channel_access)
+    if prompt_version in (V31_PROMPT, V32_PROMPT):
+        turns = (v31_turns if prompt_version == V31_PROMPT else v32_turns)(
+            context, state, inbox, channel_access
+        )
         if len(canonical_json(turns).encode("utf-8")) > 24000:
             raise ValueError("CONTEXT_OVERFLOW")
         return ModelRequest(
@@ -123,9 +135,9 @@ def make_request(
             turns,
             seed & ((1 << 63) - 1),
             derived_seed=seed,
-            prompt_version=V31_PROMPT,
+            prompt_version=prompt_version,
             protocol_version=CANDIDATE_PROTOCOL,
-            prompt_hash=PROMPT_HASHES[V31_PROMPT],
+            prompt_hash=PROMPT_HASHES[prompt_version],
             protocol_hash=PROTOCOL_HASH,
             token_budget=require_budget(turns, limit=2000, token_counter=token_counter),
         )

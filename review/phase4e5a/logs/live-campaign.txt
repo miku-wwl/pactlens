@@ -1,0 +1,1 @@
+{"episodes": 1, "detector_packets": 12, "usage": {"ceiling_micro_usd": 5000000, "agent_requests": 3, "detector_requests": 8, "reserved_or_charged_micro_usd": 15012, "estimated_completed_micro_usd": 7354}}

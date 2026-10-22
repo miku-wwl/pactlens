@@ -1,0 +1,2 @@
+provenance,actual_api_calls,actual_api_usd,fake_latency_us,real_inference
+SYNTHETIC_SOFTWARE_VALIDATION_ONLY,0,0,1,False

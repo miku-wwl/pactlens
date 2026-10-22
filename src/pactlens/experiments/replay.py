@@ -38,9 +38,9 @@ class Replay:
 def replay_trace(path):
     rows = read_trace(path)
     header = rows[0]["payload"]
-    if (
-        header["config"]["namespace"] != "pre_sprint_engineering"
-        or header["formal_episodes_executed"] != 0
+    if (header["config"]["namespace"], header["formal_episodes_executed"]) not in (
+        ("pre_sprint_engineering", 0),
+        ("formal_pilot_research", 1),
     ):
         raise ValueError("REPLAY_ENGINEERING_ONLY")
     state = restore_state(canonical_json(header["initial_state"]))

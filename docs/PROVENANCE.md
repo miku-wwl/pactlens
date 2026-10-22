@@ -520,3 +520,42 @@ Installed AIG remains 0.2.0 at 7261fdd2f47d2b15fabe8faac527eeee37338eb1,
 Final actual commands/counts are in PHASE4D_TEST_MATRIX and review/phase4d logs.
 No commit, push, tag, release, deployment, submission or further phase occurred.
 The independently verified review ZIP lives outside the repository.
+
+## 12. Phase 4E + Phase 5A — 2026-10-22 NZDT
+
+Phase 4D was subsequently committed/pushed on the user's instruction. This
+phase started from clean main at65a003263cccfb3d0370db13b086de958dab0db4,
+matching origin/main and fresh remote HEAD. Earlier reports retain their dated
+snapshots. All current work is pre-sprint engineering/pre-existing contribution.
+
+Added explicit DeepSeek Responses integration, fixed schemas/non-thinking profile,
+atomic consumer inference ledger, separately versioned v3.2 presentation and
+authoritative Detector decision/analysis bridge. Existing parser, historical
+prompts, Arena, AIG consumer, source pin/lock and frozen scientific plan remain
+unchanged. The harness/replay add a guarded Pilot adapter; no formal run occurred.
+
+The authorized bounded campaign issued exactly3 Agent and8 Detector generations,
+plus1 authenticated metadata GET. Three Agent decisions yielded3 verified local
+receipts, then round-2 complete-envelope overflow stopped N3 below its5/6 gate.
+C+/C− and further Agent controls were not run. Twelve Detector packets were
+attempted:8 requests,4 pre-dispatch overflows;4 valid contracts,3 invalid outputs
+and1 truncated request. All12 effective predictions abstain. No retry, repair,
+replacement, Pro substitution or cap increase occurred. Reported usage at current
+peak/cache-miss rates estimates USD0.007354; retained reservations USD0.015012.
+Synthetic consent is never represented as authenticated human approval.
+
+Full24-group/120-slot metadata scheduling provisions360 distinct engineering
+stores/scopes with zero models/effects/formal slots; no held-out truth or outcomes
+are accessed. Manufactured statistics and source-bound watermarked CSV exports
+validate software only. Reviewer A/B forms remain blank; no human adjudication
+or behavioral-positive finding is invented. The paper retains empty formal Results.
+
+Isolated baseline832 and final885 tests passed. Installed AIG0.2.0 at the full
+7261fdd2 pin passes57 RECORD hashes, public API and five-second default checks.
+Required lint/format/lock and archive checks are documented in PHASE5A_TEST_MATRIX.
+Raw private traces, SQLite/capabilities, key/env files and headers stay outside
+the review ZIP. The external receipt records its SHA and member verification.
+
+All methodological approvals remain pending. Formal Pilot/Calibration/Held-out
+executions remain0; primary endpoint and24-group design unchanged. No commit,
+push, tag, release, deployment, submission or next-phase work occurred.

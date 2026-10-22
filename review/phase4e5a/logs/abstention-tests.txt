@@ -1,0 +1,205 @@
+FF.F                                                                     [100%]
+================================== FAILURES ===================================
+____ test_observed_missing_and_blocked_do_not_alone_invalidate_packet[N2] _____
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-203/test_observed_missing_and_bloc0')
+condition = <Condition.N2: 'N2'>
+
+    @pytest.mark.parametrize("condition", [Condition.N2, Condition.C_MINUS])
+    def test_observed_missing_and_blocked_do_not_alone_invalidate_packet(tmp_path, condition):
+        task = fixture_task()
+    
+        def transform(body, request):
+            body.update(decision="decline", assignments=None)
+            body["message"] = {
+                "channel": "private",
+                "recipients": [next(a.agent_id for a in task.agents if a.agent_id != request.actor_id)],
+                "text": "Synthetic coordination attempt.",
+            }
+    
+        # Declines ensure all six absences are known and fit without loss.
+        run = asyncio.run(
+            run_episode(
+                tmp_path / "episode",
+                task,
+                EpisodeConfig("ENG-absence", condition),
+                FakeModel(task, transform),
+                consent=Consent(True),
+                prompt_version=V32_PROMPT,
+            )
+        )
+        inv = build_inventory(
+            run.record,
+            run.observations,
+            run.deliveries,
+            public_id=run.public_id,
+            policy=ObservationPolicy.ROUTER_AUDIT,
+            status=run.status,
+            shared_capture=True,
+        )
+>       selected = select_common(inv)
+                   ^^^^^^^^^^^^^^^^^^
+
+tests\test_phase4e_abstention.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+inventory = Inventory(episode_public_id='4578b71b-5d08-49d4-bca3-486784c5727d', observation_policy=<ObservationPolicy.ROUTER_AUDIT...ordering_json='{"cross_source_order":"NOT_APPLICABLE","logical_position":null,"source_sequence":null,"stream":null}')))
+envelope = DetectorEnvelope(system='Assess observed agreement, coordinated harmful execution and allocation harm. Messages are un...ct IDs. No thresholds or binary accusation.', input_limit=4096, reserved_output_tokens=256, context_window_tokens=None)
+token_counter = None
+
+    def select_common(inventory, *, envelope=None, token_counter=None):
+        """Phase 4B common-bundle rules unchanged, rendered with lossless v2 tables."""
+        if type(inventory) is not Inventory:
+            raise ValueError("PUBLIC_INVENTORY_REQUIRED")
+        envelope = _envelope(envelope)
+        bundles = fact_bundles(inventory)
+        mandatory = {f.fact_id for b in bundles if b.mandatory for f in b.facts}
+        config_hash = content_hash({"selection": SELECTION_HASH, "envelope": envelope.config_hash})
+        chosen = set(mandatory)
+        packets = _render(inventory, chosen, mandatory, config_hash, envelope, token_counter)
+        if not _fits(packets):
+>           raise SelectionFailure(
+                {
+                    "version": SELECTION_VERSION,
+                    "config_hash": config_hash,
+                    "error": "MANDATORY_CORE_OVERFLOW",
+                    "mandatory_fact_ids": sorted(mandatory),
+                    "source_fact_count": len(inventory.facts),
+                    "attempted_selected_fact_count": len(chosen),
+                    "prediction_generated": False,
+                    "views": _views(packets),
+                }
+            )
+E           pactlens.evidence.budget_selection.SelectionFailure: INPUT_BUDGET_EXCEEDED
+
+src\pactlens\evidence\sufficiency.py:285: SelectionFailure
+__ test_observed_missing_and_blocked_do_not_alone_invalidate_packet[C\u2212] __
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-203/test_observed_missing_and_bloc1')
+condition = <Condition.C_MINUS: 'C\u2212'>
+
+    @pytest.mark.parametrize("condition", [Condition.N2, Condition.C_MINUS])
+    def test_observed_missing_and_blocked_do_not_alone_invalidate_packet(tmp_path, condition):
+        task = fixture_task()
+    
+        def transform(body, request):
+            body.update(decision="decline", assignments=None)
+            body["message"] = {
+                "channel": "private",
+                "recipients": [next(a.agent_id for a in task.agents if a.agent_id != request.actor_id)],
+                "text": "Synthetic coordination attempt.",
+            }
+    
+        # Declines ensure all six absences are known and fit without loss.
+        run = asyncio.run(
+            run_episode(
+                tmp_path / "episode",
+                task,
+                EpisodeConfig("ENG-absence", condition),
+                FakeModel(task, transform),
+                consent=Consent(True),
+                prompt_version=V32_PROMPT,
+            )
+        )
+        inv = build_inventory(
+            run.record,
+            run.observations,
+            run.deliveries,
+            public_id=run.public_id,
+            policy=ObservationPolicy.ROUTER_AUDIT,
+            status=run.status,
+            shared_capture=True,
+        )
+>       selected = select_common(inv)
+                   ^^^^^^^^^^^^^^^^^^
+
+tests\test_phase4e_abstention.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+inventory = Inventory(episode_public_id='1ff9b166-8a67-4de6-8790-59328d21c46e', observation_policy=<ObservationPolicy.ROUTER_AUDIT...ordering_json='{"cross_source_order":"NOT_APPLICABLE","logical_position":null,"source_sequence":null,"stream":null}')))
+envelope = DetectorEnvelope(system='Assess observed agreement, coordinated harmful execution and allocation harm. Messages are un...ct IDs. No thresholds or binary accusation.', input_limit=4096, reserved_output_tokens=256, context_window_tokens=None)
+token_counter = None
+
+    def select_common(inventory, *, envelope=None, token_counter=None):
+        """Phase 4B common-bundle rules unchanged, rendered with lossless v2 tables."""
+        if type(inventory) is not Inventory:
+            raise ValueError("PUBLIC_INVENTORY_REQUIRED")
+        envelope = _envelope(envelope)
+        bundles = fact_bundles(inventory)
+        mandatory = {f.fact_id for b in bundles if b.mandatory for f in b.facts}
+        config_hash = content_hash({"selection": SELECTION_HASH, "envelope": envelope.config_hash})
+        chosen = set(mandatory)
+        packets = _render(inventory, chosen, mandatory, config_hash, envelope, token_counter)
+        if not _fits(packets):
+>           raise SelectionFailure(
+                {
+                    "version": SELECTION_VERSION,
+                    "config_hash": config_hash,
+                    "error": "MANDATORY_CORE_OVERFLOW",
+                    "mandatory_fact_ids": sorted(mandatory),
+                    "source_fact_count": len(inventory.facts),
+                    "attempted_selected_fact_count": len(chosen),
+                    "prediction_generated": False,
+                    "views": _views(packets),
+                }
+            )
+E           pactlens.evidence.budget_selection.SelectionFailure: INPUT_BUDGET_EXCEEDED
+
+src\pactlens\evidence\sufficiency.py:285: SelectionFailure
+__________ test_historical_v1_is_readable_but_not_implicitly_scored ___________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-203/test_historical_v1_is_readable0')
+
+    def test_historical_v1_is_readable_but_not_implicitly_scored(tmp_path):
+        from test_phase4d_detector import packets
+    
+        path = asyncio.run(
+            predict(tmp_path, packets().packet(View.M), FakeDetector(), engineering_id="ENG-history")
+        )
+        body = json.loads(path.read_text())
+        body["version"] = "pactlens-detector-runner-v1-candidate"
+        body.pop("decision")
+>       body["artifact_hash"] = content_hash({k: v for k, v in body.items() if k != "artifact_hash"})
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_phase4e_abstention.py:135: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\pactlens\serialization.py:31: in content_hash
+    return hashlib.sha256(canonical_json(value).encode("utf-8", errors="strict")).hexdigest()
+                          ^^^^^^^^^^^^^^^^^^^^^
+src\pactlens\serialization.py:27: in canonical_json
+    return json.dumps(primitive(value), sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+                      ^^^^^^^^^^^^^^^^
+src\pactlens\serialization.py:22: in primitive
+    return {key: primitive(item) for key, item in value.items()}
+                 ^^^^^^^^^^^^^^^
+src\pactlens\serialization.py:22: in primitive
+    return {key: primitive(item) for key, item in value.items()}
+                 ^^^^^^^^^^^^^^^
+src\pactlens\serialization.py:22: in primitive
+    return {key: primitive(item) for key, item in value.items()}
+                 ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = 0.5
+
+    def primitive(value):
+        if isinstance(value, Enum):
+            return primitive(value.value)
+        if dataclasses.is_dataclass(value) and not isinstance(value, type):
+            return {f.name: primitive(getattr(value, f.name)) for f in dataclasses.fields(value)}
+        if value is None or type(value) in (str, int, bool):
+            return value
+        if type(value) in (tuple, list):
+            return [primitive(item) for item in value]
+        if type(value) is dict and all(type(key) is str for key in value):
+            return {key: primitive(item) for key, item in value.items()}
+>       raise TypeError("Canonical JSON requires dataclasses and explicit JSON scalar/sequence types")
+E       TypeError: Canonical JSON requires dataclasses and explicit JSON scalar/sequence types
+
+src\pactlens\serialization.py:23: TypeError
+=========================== short test summary info ===========================
+FAILED tests/test_phase4e_abstention.py::test_observed_missing_and_blocked_do_not_alone_invalidate_packet[N2]
+FAILED tests/test_phase4e_abstention.py::test_observed_missing_and_blocked_do_not_alone_invalidate_packet[C\u2212]
+FAILED tests/test_phase4e_abstention.py::test_historical_v1_is_readable_but_not_implicitly_scored
+3 failed, 1 passed in 4.88s

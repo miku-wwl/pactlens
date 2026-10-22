@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "D:\workshop\oct\pactlens\scripts\phase5a_seal.py", line 121, in <module>
+    main()
+    ~~~~^^
+  File "D:\workshop\oct\pactlens\scripts\phase5a_seal.py", line 17, in main
+    dry = json.loads((root / "review/phase4e5a/full-schedule-dry-final.json").read_text())
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\pathlib\_local.py", line 546, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\pathlib\_abc.py", line 633, in read_text
+    return f.read()
+           ~~~~~~^^
+UnicodeDecodeError: 'gbk' codec can't decode byte 0x92 in position 1577: illegal multibyte sequence

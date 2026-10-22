@@ -23,8 +23,12 @@ class ModelConfig:
         for value in (self.model, self.revision):
             if type(value) is not str or not 1 <= len(value) <= 256:
                 raise ValueError("MODEL_ID_REQUIRED")
-        if self.endpoint_type not in ("offline_fake", "ollama_loopback_openai"):
-            raise ValueError("LOCAL_PROVIDER_ONLY")
+        if self.endpoint_type not in (
+            "offline_fake",
+            "ollama_loopback_openai",
+            "deepseek_responses",
+        ):
+            raise ValueError("EXPLICIT_PROVIDER_REQUIRED")
         integer(self.temperature_milli, 0, 1000)
         integer(self.max_output_tokens, 1, 256)
         integer(self.timeout_seconds, 1, 120)
@@ -72,7 +76,12 @@ class ModelRequest:
                 raise ValueError("TOKEN_BUDGET_TYPE")
             self.token_budget.__post_init__()
         if (
-            self.prompt_version in ("pactlens-agent-v3-candidate", "pactlens-agent-v3.1-candidate")
+            self.prompt_version
+            in (
+                "pactlens-agent-v3-candidate",
+                "pactlens-agent-v3.1-candidate",
+                "pactlens-agent-v3.2-deepseek-candidate",
+            )
             and self.protocol_version != "pactlens-decision-v2-candidate"
         ):
             # The v3 context candidate reuses the unchanged v2 decision protocol.
@@ -83,6 +92,7 @@ class ModelRequest:
                 "pactlens-agent-v2-candidate",
                 "pactlens-agent-v3-candidate",
                 "pactlens-agent-v3.1-candidate",
+                "pactlens-agent-v3.2-deepseek-candidate",
             )
             or self.prompt_hash is None
             or self.protocol_hash is None

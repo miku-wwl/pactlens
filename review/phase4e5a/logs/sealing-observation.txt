@@ -1,0 +1,1 @@
+First seal snapshot preserved privately. Its stdout file changed after the archive was sealed. Final packaging excludes terminal sealing logs and is independently rechecked after the command exits.

@@ -1,0 +1,9 @@
+5	0	README.md
+39	0	docs/PROVENANCE.md
+17	5	src/pactlens/agents/prompts.py
+13	3	src/pactlens/agents/provider.py
+24	5	src/pactlens/experiments/harness.py
+3	3	src/pactlens/experiments/replay.py
+55	22	src/pactlens/research/detector_runner.py
+47	0	src/pactlens/research/reporting.py
+4	1	tests/test_scenario_fixtures.py

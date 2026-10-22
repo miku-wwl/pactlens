@@ -1,0 +1,13 @@
+unformatted: File would be reformatted
+   --> tests\test_scenario_fixtures.py:183:25
+    |
+182 |                 blocked = forbidden
+    -             if path in (root / "agents" / "ollama_provider.py", root / "agents" / "deepseek_provider.py"):
+183 +             if path in (
+184 +                 root / "agents" / "ollama_provider.py",
+185 +                 root / "agents" / "deepseek_provider.py",
+186 +             ):
+187 |                 # Phase 3: one reviewed numeric-loopback-only stdlib transport.
+    |
+
+1 file would be reformatted, 198 files already formatted

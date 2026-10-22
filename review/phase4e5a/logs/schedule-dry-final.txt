@@ -1,0 +1,1 @@
+{"schedule_hash": "17d20ecf261b328f79e2adb9233543bf89607aee2482768cefc4c75afada0982", "unique_stores": 360, "unique_scopes": 360, "model_calls": 0, "effects": 0, "formal_slots_used": 0, "heldout_truth_or_outputs_opened": 0, "actual_model_responses_reused": 0, "metadata_only_split_access": true, "status": "PASS_ENGINEERING_DRY_RUN"}

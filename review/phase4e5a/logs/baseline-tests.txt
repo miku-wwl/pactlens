@@ -1,0 +1,68 @@
+........................................................................ [  8%]
+........................................................................ [ 17%]
+........................................................................ [ 25%]
+........................................................................ [ 34%]
+........................................................................ [ 43%]
+........................................................................ [ 51%]
+........................................................................ [ 60%]
+........................................................................ [ 69%]
+........................................................................ [ 77%]
+........................................................................ [ 86%]
+........................................................................ [ 95%]
+................F.......................                                 [100%]
+================================== FAILURES ===================================
+__ test_application_has_no_runtime_provider_network_or_orchestration_imports __
+
+    def test_application_has_no_runtime_provider_network_or_orchestration_imports():
+        root = Path(__file__).resolve().parents[1] / "src" / "pactlens"
+        forbidden = {
+            "agentic_intent_gate",
+            "openai",
+            "httpx",
+            "requests",
+            "socket",
+            "urllib",
+            "http",
+            "subprocess",
+            "langchain",
+            "crewai",
+            "autogen",
+            "fastapi",
+        }
+        for path in root.rglob("*.py"):
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+            for node in ast.walk(tree):
+                names = (
+                    [alias.name for alias in node.names]
+                    if isinstance(node, ast.Import)
+                    else [node.module or ""]
+                    if isinstance(node, ast.ImportFrom)
+                    else []
+                )
+                if path.is_relative_to(root / "aig"):
+                    # Phase 2 explicitly permits the installed public runtime only
+                    # in its narrow consumer package; all other bans remain.
+                    assert all(
+                        name == "agentic_intent_gate.runtime"
+                        for name in names
+                        if name.split(".")[0] == "agentic_intent_gate"
+                    ), path
+                    blocked = forbidden - {"agentic_intent_gate"}
+                else:
+                    blocked = forbidden
+                if path in (root / "agents" / "ollama_provider.py", root / "agents" / "deepseek_provider.py"):
+                    # Phase 3: one reviewed numeric-loopback-only stdlib transport.
+                    assert all(
+                        name in ("http.client", "urllib.parse")
+                        for name in names
+                        if name.split(".")[0] in ("http", "urllib")
+                    ), path
+                    blocked = blocked - {"http", "urllib"}
+>               assert not {name.split(".")[0] for name in names} & blocked, path
+E               AssertionError: WindowsPath('D:/workshop/oct/pactlens/src/pactlens/agents/deepseek_provider.py')
+E               assert not ({'http'} & {'agentic_intent_gate', 'autogen', 'crewai', 'fastapi', 'http', 'httpx', ...})
+
+tests\test_scenario_fixtures.py:191: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_scenario_fixtures.py::test_application_has_no_runtime_provider_network_or_orchestration_imports
+1 failed, 831 passed in 536.18s (0:08:56)

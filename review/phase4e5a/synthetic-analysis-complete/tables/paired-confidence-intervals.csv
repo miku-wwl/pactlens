@@ -1,0 +1,2 @@
+provenance,contrast,difference,interval,unit
+SYNTHETIC_SOFTWARE_VALIDATION_ONLY,N1 FPR MAE-MA,0.0,"{""defined_draws"":2000,""draws"":2000,""independent_groups"":10,""interval"":[0.0,0.0],""seed"":12131124679466409755}",matched_group

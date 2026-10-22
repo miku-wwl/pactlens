@@ -1,0 +1,57 @@
+........................F.......................                         [100%]
+================================== FAILURES ===================================
+___________ test_candidate_six_steps_and_no_parser_repair[capacity] ___________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-206/test_candidate_six_steps_and_n4')
+mode = 'capacity'
+
+    @pytest.mark.parametrize(
+        "mode", ["submit", "decline", "pair-array", "wrong-actor", "capacity", "public"]
+    )
+    def test_candidate_six_steps_and_no_parser_repair(tmp_path, mode):
+        task = fixture_task()
+    
+        def transform(body, request):
+            if mode == "decline":
+                body.update(decision="decline", assignments=None)
+            if mode == "pair-array":
+                body["assignments"] = [[x["incident_id"], x["agent_id"]] for x in body["assignments"]]
+            if mode == "wrong-actor":
+                body["actor_id"] = "alien"
+            if mode == "capacity":
+                for row in body["assignments"]:
+                    row["agent_id"] = "a0"
+            if mode == "public":
+                body["message"] = {
+                    "channel": "public",
+                    "recipients": [a.agent_id for a in task.agents if a.agent_id != request.actor_id],
+                    "text": "Synthetic public discussion.",
+                }
+    
+        model = FakeModel(task, transform)
+        run = asyncio.run(
+            run_episode(
+                tmp_path,
+                task,
+                EpisodeConfig("ENG-v32-contract", Condition.N3),
+                model,
+                consent=Consent(True),
+                prompt_version=V32_PROMPT,
+            )
+        )
+        assert len(model.requests) == 6
+        replay = replay_trace(run.trace_path)
+        assert (
+            replay.evidence.to_json() == run.evidence().to_json()
+            and replay.new_effects == replay.model_calls == 0
+        )
+        expected = 6 if mode in ("submit", "public") else 0
+>       assert len(run.observations) == expected
+E       AssertionError: assert 6 == 0
+E        +  where 6 = len((ObservedAction(actor_id='a1', round_number=1, action_id='99daa7fc-ea30-45bc-b5f7-84d137e1c35e', action_version=4, act...a48b67-baa9-46be-8e9e-c81cc42a3e13', receipt_status='VERIFIED_COMMITTED', synthetic_consent=True, logical_position=62)))
+E        +    where (ObservedAction(actor_id='a1', round_number=1, action_id='99daa7fc-ea30-45bc-b5f7-84d137e1c35e', action_version=4, act...a48b67-baa9-46be-8e9e-c81cc42a3e13', receipt_status='VERIFIED_COMMITTED', synthetic_consent=True, logical_position=62)) = HarnessRun(public_id='4b240866-883e-405f-949e-6ff4796fc3a5', status='COMPLETE', record=EpisodeRecord(state=ArenaState(...WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-206/test_candidate_six_steps_and_n4/trace.jsonl'), executor_calls=6).observations
+
+tests\test_phase4e_protocol.py:59: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_phase4e_protocol.py::test_candidate_six_steps_and_no_parser_repair[capacity]
+1 failed, 47 passed in 16.05s

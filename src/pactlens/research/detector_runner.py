@@ -19,11 +19,13 @@ from pactlens.agents.provider import ModelConfig, ModelResponse
 from pactlens.evidence.compact_views import VERSION as EVIDENCE_VERSION
 from pactlens.evidence.compact_views import CompactView
 from pactlens.evidence.views import View
+from pactlens.research.abstention import decision
 from pactlens.research.detector_contract import DetectorEnvelope, PredictionRecord
 from pactlens.research.json_types import canonical_json, content_hash
 from pactlens.serialization import primitive
 
-VERSION = "pactlens-detector-runner-v1-candidate"
+LEGACY_VERSION = "pactlens-detector-runner-v1-candidate"
+VERSION = "pactlens-detector-runner-v2-candidate"
 
 
 @dataclass(frozen=True)
@@ -55,10 +57,22 @@ def _record(body, packet):
     return record
 
 
-async def predict(directory, packet, provider, *, engineering_id, seed=0):
-    if (
-        type(packet) is not CompactView
-        or re.fullmatch(r"ENG-[A-Za-z0-9-]{1,48}", engineering_id) is None
+async def predict(
+    directory, packet, provider, *, engineering_id, seed=0, formal_config=None, formal_permit=None
+):
+    from pactlens.research.study_launch import StudyEpisodeConfig, _LaunchPermit
+
+    formal = (
+        type(formal_config) is StudyEpisodeConfig
+        and type(formal_permit) is _LaunchPermit
+        and formal_config.configuration_hash == formal_permit.configuration_hash
+    )
+    if type(packet) is not CompactView or (
+        not formal
+        and (
+            type(engineering_id) is not str
+            or re.fullmatch(r"ENG-[A-Za-z0-9-]{1,48}", engineering_id) is None
+        )
     ):
         raise ValueError("ENGINEERING_L3_PACKET_REQUIRED_FORMAL_DISABLED")
     if type(seed) is not int or not 0 <= seed < 2**63:
@@ -77,8 +91,11 @@ async def predict(directory, packet, provider, *, engineering_id, seed=0):
         "error_policy": "abstain-no-retry",
         "seed": seed,
         "engineering_id": engineering_id,
-        "formal_execution_enabled": False,
+        "formal_execution_enabled": formal,
     }
+    if formal:
+        config["formal_slot"] = formal_config.episode.episode_id
+        config["configuration_hash"] = formal_config.configuration_hash
     identity = content_hash(
         {"config": config, "text": packet.text, "manifest": packet.manifest_json}
     )
@@ -88,6 +105,7 @@ async def predict(directory, packet, provider, *, engineering_id, seed=0):
         directory / (identity + ".intent.json"), {"identity": identity, "config": config}
     )
     error, raw_hash, usage, response_json = None, None, None, None
+    provider_error = None
     budget = packet.envelope.budget(packet.text)
     record = None
     try:
@@ -129,8 +147,9 @@ async def predict(directory, packet, provider, *, engineering_id, seed=0):
         error = "INPUT_BUDGET_EXCEEDED"
     except (ValueError, TypeError, KeyError, RecursionError, UnicodeError):
         error = "INVALID_OUTPUT"
-    except (OSError, TimeoutError, RuntimeError):
+    except (OSError, TimeoutError, RuntimeError) as failure:
         error = "PROVIDER_ERROR"
+        provider_error = getattr(failure, "code", "PROVIDER_ERROR")
     if error:
         response_json = None
         record = PredictionRecord(
@@ -143,17 +162,7 @@ async def predict(directory, packet, provider, *, engineering_id, seed=0):
         )
     prediction = json.loads(record.to_json())
     # Host-bound abstention retains an otherwise valid model response and its score.
-    incomplete = bool(json.loads(packet.manifest_json)["omitted"]) or any(
-        f.completeness != "OBSERVED" for f in facts
-    )
-    source_incomplete = any(
-        f.kind.endswith("coverage")
-        and any(
-            v not in ("COMPLETE", "NOT_APPLICABLE") for v in json.loads(f.payload_json).values()
-        )
-        for f in facts
-    )
-    forced = incomplete or source_incomplete
+    effective = decision(packet, record)
     artifact = {
         "version": VERSION,
         "identity": identity,
@@ -169,9 +178,13 @@ async def predict(directory, packet, provider, *, engineering_id, seed=0):
         "budget": primitive(budget),
         "usage": usage,
         "raw_response_hash": raw_hash,
-        "source_coverage_insufficient": forced,
-        "abstained": forced or record.verdict == "INSUFFICIENT_EVIDENCE",
-        "provenance": "ENGINEERING_ONLY_NOT_RESEARCH_PREDICTION",
+        "source_coverage_insufficient": effective["host_mandated"],
+        "abstained": effective["state"] == "ABSTAINED",
+        "decision": effective,
+        "provider_error": provider_error,
+        "provenance": "FORMAL_PILOT_PREDICTION"
+        if formal
+        else "ENGINEERING_ONLY_NOT_RESEARCH_PREDICTION",
     }
     artifact["artifact_hash"] = content_hash(artifact)
     path = directory / (identity + ".prediction.json")
@@ -186,7 +199,7 @@ def replay_prediction(path):
         raise ValueError("PREDICTION_BOUND")
     body = closed_json(raw.decode("utf-8"), 2_000_000)
     digest = body.pop("artifact_hash")
-    if content_hash(body) != digest or body["version"] != VERSION:
+    if content_hash(body) != digest or body["version"] not in (VERSION, LEGACY_VERSION):
         raise ValueError("PREDICTION_INTEGRITY")
     p = body["packet"]
     packet = CompactView(
@@ -215,6 +228,14 @@ def replay_prediction(path):
         or prediction["prompt_hash"] != packet.envelope.config_hash
     ):
         raise ValueError("PREDICTION_BINDING")
+    if body["version"] == VERSION:
+        effective = decision(packet, record)
+        if (
+            body.get("decision") != effective
+            or body["abstained"] != (effective["state"] == "ABSTAINED")
+            or body["source_coverage_insufficient"] != effective["host_mandated"]
+        ):
+            raise ValueError("AUTHORITATIVE_ABSTENTION_BINDING")
     return {
         **body,
         "artifact_hash": digest,
@@ -222,3 +243,15 @@ def replay_prediction(path):
         "replay_new_effects": 0,
         "file_sha256": hashlib.sha256(raw).hexdigest(),
     }
+
+
+def analysis_prediction(path):
+    """The supported L4 -> analysis bridge refuses ambiguous historical v1 flags."""
+    body = replay_prediction(path)
+    if body["version"] != VERSION:
+        raise ValueError("LEGACY_PREDICTION_REQUIRES_EXPLICIT_POLICY_REVIEW")
+    return (
+        View(body["prediction"]["view"]),
+        body["decision"]["effective_score"],
+        body["decision"]["effective_confidence"],
+    )

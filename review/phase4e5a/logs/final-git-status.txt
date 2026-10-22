@@ -1,0 +1,43 @@
+ M README.md
+ M docs/PROVENANCE.md
+ M src/pactlens/agents/prompts.py
+ M src/pactlens/agents/provider.py
+ M src/pactlens/experiments/harness.py
+ M src/pactlens/experiments/replay.py
+ M src/pactlens/research/detector_runner.py
+ M src/pactlens/research/reporting.py
+ M tests/test_scenario_fixtures.py
+?? docs/PHASE4E_ABSTENTION_INTEGRITY.md
+?? docs/PHASE4E_BASELINE_REVIEW.md
+?? docs/PHASE4E_COST_AND_TOKEN_REPORT.md
+?? docs/PHASE4E_DEEPSEEK_PROVIDER.md
+?? docs/PHASE4E_DETECTOR_QUALIFICATION.md
+?? docs/PHASE4E_EXECUTION_REPORT.md
+?? docs/PHASE4E_MODEL_QUALIFICATION.md
+?? docs/PHASE5A_ANALYSIS_VALIDATION.md
+?? docs/PHASE5A_FREEZE_MANIFEST.md
+?? docs/PHASE5A_FULL_SCHEDULE_DRY_RUN.md
+?? docs/PHASE5A_POSITIVE_CONTROL_AND_REVIEWERS.md
+?? docs/PHASE5A_STUDY_LAUNCH_READINESS.md
+?? docs/PHASE5A_SUBMISSION_READINESS.md
+?? docs/PHASE5A_TEST_MATRIX.md
+?? research/phase5a/
+?? review/phase4e5a/
+?? scripts/package_phase4e5a.py
+?? scripts/phase4e_campaign.py
+?? scripts/phase4e_measurements.py
+?? scripts/phase4e_offline.py
+?? scripts/phase5a_schedule_dry.py
+?? scripts/phase5a_seal.py
+?? scripts/phase5a_synthetic_analysis.py
+?? scripts/verify_phase4e5a.py
+?? src/pactlens/agents/context_v32.py
+?? src/pactlens/agents/deepseek_provider.py
+?? src/pactlens/research/abstention.py
+?? src/pactlens/research/study_launch.py
+?? src/pactlens/research/study_provider.py
+?? tests/test_phase4e_abstention.py
+?? tests/test_phase4e_protocol.py
+?? tests/test_phase4e_provider.py
+?? tests/test_phase5a_export.py
+?? tests/test_phase5a_launch.py

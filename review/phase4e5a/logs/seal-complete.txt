@@ -1,0 +1,1 @@
+{"manifest_hash": "18b1c2f9afdff95978a7cb123f8c0b835dbd526049acb505e7aa32dd3c881324", "schedule_hash": "17d20ecf261b328f79e2adb9233543bf89607aee2482768cefc4c75afada0982", "abstract_words": 150, "formal_pilot": "NO-GO"}

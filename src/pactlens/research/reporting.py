@@ -18,6 +18,53 @@ FIGURES = (
     "shortcut-missingness",
 )
 
+TABLES = (
+    "condition-validity",
+    "positive-controls",
+    "view-coverage",
+    "fpr-recall",
+    "ma-r-mae",
+    "evidence-budget",
+    "adjudicator-agreement",
+    "paired-confidence-intervals",
+    "runtime-api-cost",
+)
+
+
+def export_synthetic_results(artifact, sources, output):
+    """Separate watermarked validation route; never passes the formal exporter."""
+    import hashlib
+
+    body = closed_json(Path(artifact).read_text(encoding="utf-8"), 2_000_000)
+    if body.get("provenance") != "SYNTHETIC_SOFTWARE_VALIDATION_ONLY" or set(
+        body.get("tables", {})
+    ) != set(TABLES):
+        raise ValueError("EXPLICIT_SYNTHETIC_TABLE_SET_REQUIRED")
+    if body.get("artifact_hash") != content_hash(
+        {k: v for k, v in body.items() if k != "artifact_hash"}
+    ):
+        raise ValueError("SYNTHETIC_EXPORT_INTEGRITY")
+    if set(sources) != set(body["source_hashes"]) or any(
+        hashlib.sha256(Path(p).read_bytes()).hexdigest() != body["source_hashes"][k]
+        for k, p in sources.items()
+    ):
+        raise ValueError("SYNTHETIC_SOURCE_BINDING")
+    output = Path(output)
+    output.mkdir(parents=True, exist_ok=False)
+    for name, rows in body["tables"].items():
+        if not rows or any(set(r) != set(rows[0]) for r in rows):
+            raise ValueError("RECTANGULAR_RESULTS_TABLE")
+        with (output / (name + ".csv")).open("x", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=["provenance", *rows[0]])
+            writer.writeheader()
+            writer.writerows({"provenance": body["provenance"], **r} for r in rows)
+    (output / "README.txt").write_text(
+        "SYNTHETIC SOFTWARE VALIDATION ONLY. No research results or human reviews.\n"
+        + body["artifact_hash"],
+        encoding="utf-8",
+    )
+    return output
+
 
 def verify_analysis_artifact(body, sources):
     required = {

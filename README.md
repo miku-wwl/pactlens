@@ -1,5 +1,10 @@
 # PactLens
 
+Phase4E/5A pre-sprint engineering: [execution report](docs/PHASE4E_EXECUTION_REPORT.md),
+[launch gates](docs/PHASE5A_STUDY_LAUNCH_READINESS.md),
+[prospective manuscript](research/phase5a/manuscript.md). DeepSeek qualification
+preserves negative budget/output results; formal study remains **NO-GO / NOT RUN**.
+
 **Evidence-Based Multi-Agent Collusion Detection** — a research project for the
 Apart Research **AI Collusion Research Sprint** (2026-10-23 → 25), Track 2
 (*Detection and Audit of Collusion*), research questions **2.2** and **2.3**:

@@ -69,13 +69,22 @@ async def run_episode(
     checkpoint=no_fault,
     prompt_version=LEGACY_PROMPT,
     stop_on_input_budget_failure=False,
+    formal_permit=None,
 ):
+    from pactlens.research.study_launch import StudyEpisodeConfig, _LaunchPermit
+
+    formal = type(config) is StudyEpisodeConfig
     if (
-        type(config) is not EpisodeConfig
+        (type(config) is not EpisodeConfig and not formal)
         or type(consent) is not TestConsent
         or consent.synthetic_consent is not True
     ):
         raise ValueError("ENGINEERING_CONFIG_AND_SYNTHETIC_CONSENT_REQUIRED")
+    if formal and (
+        type(formal_permit) is not _LaunchPermit
+        or formal_permit.configuration_hash != config.configuration_hash
+    ):
+        raise ValueError("VERIFIED_FORMAL_LAUNCH_PERMIT_REQUIRED")
     config.__post_init__()
     if prompt_version not in (LEGACY_PROMPT, *CANDIDATE_PROMPTS):
         raise ValueError("UNREVIEWED_PROMPT_VERSION")
@@ -109,7 +118,15 @@ async def run_episode(
     trace.append(
         "CONFIG",
         {
-            "config": config,
+            "config": config
+            if not formal
+            else {
+                "namespace": config.namespace,
+                "group": config.group,
+                "condition": config.condition,
+                "frozen_episode": config.episode,
+                "configuration_hash": config.configuration_hash,
+            },
             "model": provider.config,
             "prompt_version": prompt_version,
             "protocol_version": protocol_version,
@@ -117,8 +134,10 @@ async def run_episode(
             "actor_order": order,
             "private_briefs": {a: c.private_instruction for a, c in contexts.items()},
             "seeds": [config.seed(a, r, task) for r in (1, 2) for a in order],
-            "formal_episodes_executed": 0,
-            "provenance": "PRE_SPRINT_ENGINEERING",
+            "formal_episodes_executed": int(formal),
+            "provenance": "FORMAL_PILOT_SYNTHETIC_SANDBOX_CONSENT"
+            if formal
+            else "PRE_SPRINT_ENGINEERING",
         },
     )
 
@@ -359,7 +378,7 @@ async def run_episode(
                     "state_digest": content_hash(state),
                     "finalized": state.status == Lifecycle.FINALIZED,
                     "executor_calls": trace.executor_calls,
-                    "formal_episodes_executed": 0,
+                    "formal_episodes_executed": int(formal),
                     "submission_failures": submission_failures,
                 },
             )
