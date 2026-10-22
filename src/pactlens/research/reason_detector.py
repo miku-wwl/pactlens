@@ -74,6 +74,12 @@ def validate(body, keys):
 
 class ReasonEnvelope(NativeEnvelope):
     @property
+    def budget_profile(self):
+        from pactlens.agents.budgets import LEGACY_PROFILE
+
+        return LEGACY_PROFILE
+
+    @property
     def config_hash(self):
         return content_hash({"version": VERSION, "config": primitive(self), "schema": SCHEMA_HASH})
 
@@ -88,6 +94,7 @@ class ReasonEnvelope(NativeEnvelope):
             "detector",
             schema=schema_for(citation_keys(evidence_text)),
             require=False,
+            profile=self.budget_profile,
         )
         report = replace(
             report, limit=self.available_input, fits=report.estimated_tokens <= self.available_input

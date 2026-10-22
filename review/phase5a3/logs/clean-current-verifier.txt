@@ -1,0 +1,13 @@
+{
+  "scope": "CURRENT_PUBLIC_SOURCE",
+  "HEAD": "3145710b993a2c6d6e8f27c795456b78acdaf193",
+  "aig_version": "0.2.0",
+  "RECORD_hashes": 57,
+  "seconds": 5,
+  "public_prediction_replays": 10,
+  "requires_private_runtime": false,
+  "historical_campaign_base": "54fd01b2bd4c3d4ac4d74cce93aeb4f731e5dcf2",
+  "new_model_calls": 0,
+  "new_effects": 0,
+  "status": "PASS"
+}

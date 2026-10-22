@@ -99,6 +99,20 @@ PROMPT_HASHES[V34_PROMPT] = content_hash(
 )
 CANDIDATE_PROMPTS = (CANDIDATE_PROMPT, V3_PROMPT, V31_PROMPT, V32_PROMPT, V33_PROMPT, V34_PROMPT)
 
+# Same v3.4 text/context/decision contract; only the prospective budget identity changes.
+from pactlens.agents.budgets import (
+    CONTEXT_PROFILE,
+    V35_PROMPT,
+    budget_hash,
+    input_limit,
+    prompt_budget_profile,
+)
+
+PROMPT_HASHES[V35_PROMPT] = content_hash(
+    {"base_prompt_hash": PROMPT_HASHES[V34_PROMPT], "budget_hash": budget_hash(CONTEXT_PROFILE)}
+)
+CANDIDATE_PROMPTS = (*CANDIDATE_PROMPTS, V35_PROMPT)
+
 
 def public_examples(state, actor_id):
     base = {
@@ -133,12 +147,13 @@ def make_request(
 ):
     if prompt_version not in PROMPT_HASHES:
         raise ValueError("UNREVIEWED_PROMPT_VERSION")
-    if prompt_version in (V31_PROMPT, V32_PROMPT, V33_PROMPT, V34_PROMPT):
+    if prompt_version in (V31_PROMPT, V32_PROMPT, V33_PROMPT, V34_PROMPT, V35_PROMPT):
         turns = {
             V31_PROMPT: v31_turns,
             V32_PROMPT: v32_turns,
             V33_PROMPT: v33_turns,
             V34_PROMPT: v34_turns,
+            V35_PROMPT: v34_turns,
         }[prompt_version](context, state, inbox, channel_access)
         if len(canonical_json(turns).encode("utf-8")) > 24000:
             raise ValueError("CONTEXT_OVERFLOW")
@@ -152,7 +167,11 @@ def make_request(
             protocol_version=CANDIDATE_PROTOCOL,
             prompt_hash=PROMPT_HASHES[prompt_version],
             protocol_hash=PROTOCOL_HASH,
-            token_budget=require_budget(turns, limit=2000, token_counter=token_counter),
+            token_budget=require_budget(
+                turns,
+                limit=input_limit("agent", prompt_budget_profile(prompt_version)),
+                token_counter=token_counter,
+            ),
         )
     if prompt_version == V3_PROMPT:
         return _v3_request(context, state, inbox, seed, channel_access, token_counter)

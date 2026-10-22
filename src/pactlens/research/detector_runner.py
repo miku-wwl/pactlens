@@ -27,6 +27,11 @@ LEGACY_VERSION = "pactlens-detector-runner-v1-candidate"
 VERSION = "pactlens-detector-runner-v2-candidate"
 CANDIDATE_VERSION = "pactlens-detector-runner-v3-candidate"
 REASON_VERSION = "pactlens-detector-runner-v4-candidate"
+CONTEXT_VERSION = "pactlens-detector-runner-v5-context-candidate"
+
+
+class SourceIneligible(ValueError):
+    """Known source incompleteness prevents dispatch under the new profile."""
 
 
 @dataclass(frozen=True)
@@ -50,11 +55,14 @@ def exclusive_json(path, body):
 
 
 def _record(body, packet):
+    from pactlens.research.context_profile import ContextEnvelope
     from pactlens.research.reason_detector import ReasonEnvelope, ReasonPredictionRecord
 
     header, facts = packet.verify()
     record = (
-        ReasonPredictionRecord if type(packet.envelope) is ReasonEnvelope else PredictionRecord
+        ReasonPredictionRecord
+        if type(packet.envelope) in (ReasonEnvelope, ContextEnvelope)
+        else PredictionRecord
     )(
         header["episode"],
         packet.view,
@@ -101,6 +109,7 @@ async def predict(
     if provider.config.max_output_tokens > packet.envelope.reserved_output_tokens:
         raise ValueError("OUTPUT_RESERVATION")
     header, facts = packet.verify()
+    from pactlens.research.context_profile import ContextEnvelope
     from pactlens.research.native_detector import NativeEnvelope, NativeOutputError, validate
     from pactlens.research.reason_detector import ReasonEnvelope, ReasonPredictionRecord
     from pactlens.research.reason_detector import validate as reason_validate
@@ -111,8 +120,9 @@ async def predict(
         decision as sufficient_decision,
     )
 
-    reason = type(packet.envelope) is ReasonEnvelope
-    native = type(packet.envelope) in (NativeEnvelope, ReasonEnvelope)
+    context_profile = type(packet.envelope) is ContextEnvelope
+    reason = type(packet.envelope) in (ReasonEnvelope, ContextEnvelope)
+    native = type(packet.envelope) in (NativeEnvelope, ReasonEnvelope, ContextEnvelope)
     record_type = ReasonPredictionRecord if reason else PredictionRecord
     approved_candidate = (
         formal
@@ -131,7 +141,15 @@ async def predict(
         sufficiency_policy is not None and (not native or (formal and not approved_candidate))
     ):
         raise ValueError("ENGINEERING_ONLY_SUFFICIENCY_CANDIDATE")
-    version = REASON_VERSION if reason else CANDIDATE_VERSION if native else VERSION
+    version = (
+        CONTEXT_VERSION
+        if context_profile
+        else REASON_VERSION
+        if reason
+        else CANDIDATE_VERSION
+        if native
+        else VERSION
+    )
     config = {
         "version": version,
         "model": primitive(provider.config),
@@ -144,6 +162,13 @@ async def predict(
     }
     if native:
         config.update(native_schema=True, sufficiency_policy=sufficiency_policy)
+    if context_profile:
+        from pactlens.agents.budgets import CONTEXT_PROFILE, budget_contract, budget_hash
+
+        config.update(
+            budget_contract=budget_contract(CONTEXT_PROFILE),
+            budget_hash=budget_hash(CONTEXT_PROFILE),
+        )
     if formal:
         config["formal_slot"] = formal_config.episode.episode_id
         config["configuration_hash"] = formal_config.configuration_hash
@@ -162,6 +187,11 @@ async def predict(
     budget = packet.envelope.budget(packet.text)
     record = None
     try:
+        if context_profile:
+            from pactlens.research.sufficiency_v3 import eligibility
+
+            if not eligibility(packet)["eligible"]:
+                raise SourceIneligible("INELIGIBLE_SOURCE_PREFLIGHT")
         # Never accept a synthetic manifest's claimed exact count as provider qualification.
         turns = packet.conversation()
         request = DetectorRequest(
@@ -212,6 +242,13 @@ async def predict(
                 body["evidence_ids"] = list(packet.resolve_citations(ids))
         response_json = canonical_json(body)
         record = _record(response_json, packet)
+    except SourceIneligible:
+        error = "MISSING_PREDICTION"
+        diagnostic = {
+            "code": "INELIGIBLE_SOURCE_PREFLIGHT",
+            "field": "source",
+            "branch": "unsent-authoritative-abstention",
+        }
     except BudgetExceeded:
         error = "INPUT_BUDGET_EXCEEDED"
         diagnostic = {"code": error, "field": "request", "branch": "full-native-budget"}
@@ -288,14 +325,17 @@ def replay_prediction(path):
         LEGACY_VERSION,
         CANDIDATE_VERSION,
         REASON_VERSION,
+        CONTEXT_VERSION,
     ):
         raise ValueError("PREDICTION_INTEGRITY")
     p = body["packet"]
+    from pactlens.research.context_profile import ContextEnvelope
     from pactlens.research.native_detector import NativeEnvelope
     from pactlens.research.reason_detector import ReasonEnvelope, ReasonPredictionRecord
 
-    reason = body["version"] == REASON_VERSION
-    native = body["version"] in (CANDIDATE_VERSION, REASON_VERSION)
+    context_profile = body["version"] == CONTEXT_VERSION
+    reason = body["version"] in (REASON_VERSION, CONTEXT_VERSION)
+    native = body["version"] in (CANDIDATE_VERSION, REASON_VERSION, CONTEXT_VERSION)
     if native and (
         p.get("native_envelope") is not True or body["config"].get("native_schema") is not True
     ):
@@ -304,11 +344,26 @@ def replay_prediction(path):
         View(p["view"]),
         p["text"],
         p["manifest_json"],
-        (ReasonEnvelope if reason else NativeEnvelope if native else DetectorEnvelope)(
-            **p["envelope"]
-        ),
+        (
+            ContextEnvelope
+            if context_profile
+            else ReasonEnvelope
+            if reason
+            else NativeEnvelope
+            if native
+            else DetectorEnvelope
+        )(**p["envelope"]),
     )
     packet.verify()
+    if context_profile:
+        from pactlens.agents.budgets import CONTEXT_PROFILE, budget_contract, budget_hash
+
+        if (
+            body["config"].get("budget_contract") != budget_contract(CONTEXT_PROFILE)
+            or body["config"].get("budget_hash") != budget_hash(CONTEXT_PROFILE)
+            or body["budget"] != primitive(packet.envelope.budget(packet.text))
+        ):
+            raise ValueError("PREDICTION_BUDGET_PROFILE_BINDING")
     expected = content_hash(
         {"config": body["config"], "text": packet.text, "manifest": packet.manifest_json}
     )
@@ -331,7 +386,7 @@ def replay_prediction(path):
         or prediction["prompt_hash"] != packet.envelope.config_hash
     ):
         raise ValueError("PREDICTION_BINDING")
-    if body["version"] in (VERSION, CANDIDATE_VERSION, REASON_VERSION):
+    if body["version"] in (VERSION, CANDIDATE_VERSION, REASON_VERSION, CONTEXT_VERSION):
         from pactlens.research.sufficiency_v3 import (
             VERSION as SUFFICIENCY_VERSION,
         )
@@ -361,7 +416,7 @@ def replay_prediction(path):
 def analysis_prediction(path):
     """The supported L4 -> analysis bridge refuses ambiguous historical v1 flags."""
     body = replay_prediction(path)
-    if body["version"] not in (VERSION, CANDIDATE_VERSION, REASON_VERSION):
+    if body["version"] not in (VERSION, CANDIDATE_VERSION, REASON_VERSION, CONTEXT_VERSION):
         raise ValueError("LEGACY_PREDICTION_REQUIRES_EXPLICIT_POLICY_REVIEW")
     return (
         View(body["prediction"]["view"]),

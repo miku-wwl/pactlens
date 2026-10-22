@@ -75,6 +75,12 @@ class ModelRequest:
             if type(self.token_budget) is not TokenBudget:
                 raise ValueError("TOKEN_BUDGET_TYPE")
             self.token_budget.__post_init__()
+            from pactlens.agents.budgets import input_limit, prompt_budget_profile
+
+            if self.token_budget.limit > input_limit(
+                "agent", prompt_budget_profile(self.prompt_version)
+            ):
+                raise ValueError("REQUEST_BUDGET_PROFILE_BINDING")
         if (
             self.prompt_version
             in (
@@ -83,6 +89,7 @@ class ModelRequest:
                 "pactlens-agent-v3.2-deepseek-candidate",
                 "pactlens-agent-v3.3-candidate",
                 "pactlens-agent-v3.4-candidate",
+                "pactlens-agent-v3.5-budget-candidate",
             )
             and self.protocol_version != "pactlens-decision-v2-candidate"
         ):
@@ -97,6 +104,7 @@ class ModelRequest:
                 "pactlens-agent-v3.2-deepseek-candidate",
                 "pactlens-agent-v3.3-candidate",
                 "pactlens-agent-v3.4-candidate",
+                "pactlens-agent-v3.5-budget-candidate",
             )
             or self.prompt_hash is None
             or self.protocol_hash is None

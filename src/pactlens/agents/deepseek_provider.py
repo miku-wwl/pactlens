@@ -15,7 +15,17 @@ from dataclasses import asdict
 from decimal import Decimal
 from pathlib import Path
 
-from pactlens.agents.budgets import BudgetExceeded, require_budget, token_preflight
+from pactlens.agents.budgets import (
+    CONTEXT_PROFILE,
+    LEGACY_PROFILE,
+    V35_PROMPT,
+    BudgetExceeded,
+    budget_contract,
+    budget_hash,
+    input_limit,
+    require_budget,
+    token_preflight,
+)
 from pactlens.agents.models import Turn, closed_json
 from pactlens.agents.provider import ModelConfig, ModelResponse
 from pactlens.research.detector_contract import RESPONSE_SCHEMA
@@ -143,6 +153,35 @@ class CampaignLedger:
         )
 
     @classmethod
+    def phase5a3(cls, path, agent_contexts, detector_contexts):
+        if (
+            len(agent_contexts) != 5
+            or len(set(agent_contexts)) != 5
+            or len(detector_contexts) != 45
+            or len(set(detector_contexts)) != 45
+            or any(
+                type(x) is not str or not x.startswith("ENG-5a3-")
+                for x in (*agent_contexts, *detector_contexts)
+            )
+        ):
+            raise ValueError("EXACT_PREDECLARED_CONTEXTS_REQUIRED")
+        result = object.__new__(cls)
+        result._initialize(
+            path,
+            Decimal(2),
+            {
+                "agent": 30,
+                "detector": 45,
+                "total": 75,
+                "purpose": "phase5a3_engineering",
+                "contexts": {"agent": list(agent_contexts), "detector": list(detector_contexts)},
+                "per_context": {"agent": 6, "detector": 1},
+            },
+            profile=profile_5a3(),
+        )
+        return result
+
+    @classmethod
     def phase5a2(cls, path, agent_contexts, detector_contexts):
         if (
             len(agent_contexts) != 10
@@ -202,9 +241,11 @@ class CampaignLedger:
                 "purpose": "authorized_pilot",
                 "manifest_hash": manifest["manifest_hash"],
             },
-            profile={"phase5a1-native-v1": profile_5a1, "phase5a2-reason-v1": profile_5a2}.get(
-                manifest["configuration"]["provider"].get("version"), lambda: None
-            )(),
+            profile={
+                "phase5a1-native-v1": profile_5a1,
+                "phase5a2-reason-v1": profile_5a2,
+                "phase5a3-context-v1": profile_5a3,
+            }.get(manifest["configuration"]["provider"].get("version"), lambda: None)(),
         )
         return result
 
@@ -246,7 +287,16 @@ class CampaignLedger:
     def reserve(self, role, identity, budget, *, context_id=None):
         if role not in ("agent", "detector"):
             raise ValueError("INFERENCE_ROLE")
-        reserve = estimated_micro_usd(2000 if role == "agent" else 4096, 256)
+        profile = (
+            CONTEXT_PROFILE
+            if self.profile.get("version") == "phase5a3-context-v1"
+            else LEGACY_PROFILE
+        )
+        if profile == CONTEXT_PROFILE and (
+            budget.limit != input_limit(role, profile) or not budget.fits
+        ):
+            raise ProviderFailure("LEDGER_BUDGET_PROFILE_BINDING")
+        reserve = estimated_micro_usd(input_limit(role, profile), 256)
         with self.connect() as db:
             db.execute("BEGIN IMMEDIATE")
             total, charged = db.execute(
@@ -262,7 +312,7 @@ class CampaignLedger:
                 ).fetchone()[0]
                 if used >= self.limits["per_context"]:
                     raise ProviderFailure("EPISODE_CALL_CAP")
-            if self.limits["purpose"] == "phase5a2_engineering":
+            if self.limits["purpose"] in ("phase5a2_engineering", "phase5a3_engineering"):
                 if context_id not in self.limits["contexts"][role]:
                     raise ProviderFailure("UNDECLARED_CAMPAIGN_SLOT")
                 used = db.execute(
@@ -344,13 +394,13 @@ def payload(turns, schema):
     }
 
 
-def request_budget(turns, role, *, require=True, schema=None):
+def request_budget(turns, role, *, require=True, schema=None, profile=LEGACY_PROFILE):
     schema = (AGENT_SCHEMA if role == "agent" else RESPONSE_SCHEMA) if schema is None else schema
     # Same binding heuristic, applied conservatively to the complete serialized
     # request including native schema and generation controls. No exact-token claim.
     wire = canonical_json(payload(turns, schema))
     fn = require_budget if require else token_preflight
-    return fn((Turn("user", wire),), limit=2000 if role == "agent" else 4096)
+    return fn((Turn("user", wire),), limit=input_limit(role, profile), profile=profile)
 
 
 def _http(method, path, body, timeout):
@@ -413,6 +463,16 @@ def available_models():
         raise ProviderFailure("INVALID_MODELS_RESPONSE") from None
 
 
+def profile_5a3():
+    return {
+        **profile_5a2(),
+        "version": "phase5a3-context-v1",
+        "agent_prompt": V35_PROMPT,
+        "budget_contract": budget_contract(CONTEXT_PROFILE),
+        "budget_hash": budget_hash(CONTEXT_PROFILE),
+    }
+
+
 def profile_5a2():
     from pactlens.research.reason_detector import SCHEMA_HASH
 
@@ -445,12 +505,13 @@ class DeepSeekProvider:
         if type(ledger) is not CampaignLedger or role not in ("agent", "detector"):
             raise ValueError("TRUSTED_CAMPAIGN_REQUIRED")
         self.ledger, self.role, self.blocked = ledger, role, False
-        if profile not in ("phase4e", "phase5a1", "phase5a2"):
+        if profile not in ("phase4e", "phase5a1", "phase5a2", "phase5a3"):
             raise ValueError("UNREVIEWED_PROVIDER_PROFILE")
         self.profile = {
             "phase4e": lambda: PROFILE,
             "phase5a1": profile_5a1,
             "phase5a2": profile_5a2,
+            "phase5a3": profile_5a3,
         }[profile]()
         if self.profile != ledger.profile:
             raise ValueError("LEDGER_PROFILE_BINDING")
@@ -471,6 +532,11 @@ class DeepSeekProvider:
             from dataclasses import replace
 
             self.config = replace(self.config, revision="phase5a2-reason-nonthinking-v1")
+        if profile == "phase5a3":
+            from dataclasses import replace
+
+            self.config = replace(self.config, revision="phase5a3-context-nonthinking-v1")
+        self.budget_profile = CONTEXT_PROFILE if profile == "phase5a3" else LEGACY_PROFILE
         self.returned_model = None
 
     async def generate(self, request):
@@ -481,18 +547,36 @@ class DeepSeekProvider:
         ):
             raise ValueError("REVIEWED_DEEPSEEK_PROMPT_REQUIRED")
         schema = AGENT_SCHEMA if self.role == "agent" else RESPONSE_SCHEMA
-        if self.role == "agent" and self.profile.get("version") == "phase5a2-reason-v1":
+        if self.role == "agent" and self.profile.get("version") in (
+            "phase5a2-reason-v1",
+            "phase5a3-context-v1",
+        ):
             schema = AGENT_SCHEMA_V34
         if self.role == "detector" and self.profile.get("version") == "phase5a1-native-v1":
             from pactlens.research.native_detector import schema_for
 
             schema = schema_for(request.citation_keys)
-        if self.role == "detector" and self.profile.get("version") == "phase5a2-reason-v1":
+        if self.role == "detector" and self.profile.get("version") in (
+            "phase5a2-reason-v1",
+            "phase5a3-context-v1",
+        ):
             from pactlens.research.reason_detector import schema_for
 
             schema = schema_for(request.citation_keys)
+        if self.budget_profile == CONTEXT_PROFILE:
+            if self.role == "agent" and request.token_budget.limit != input_limit(
+                "agent", CONTEXT_PROFILE
+            ):
+                raise ValueError("REQUEST_BUDGET_PROFILE_BINDING")
+            if self.role == "detector":
+                from pactlens.research.context_profile import envelope
+
+                if request.prompt_hash != envelope().config_hash:
+                    raise ValueError("DETECTOR_BUDGET_PROFILE_BINDING")
         try:
-            budget = request_budget(request.turns, self.role, schema=schema)
+            budget = request_budget(
+                request.turns, self.role, schema=schema, profile=self.budget_profile
+            )
         except BudgetExceeded:
             self.blocked = True
             raise
@@ -612,7 +696,7 @@ class DeepSeekProvider:
         )
         if reasoning not in (None, 0):
             raise ProviderFailure("UNEXPECTED_REASONING_TOKENS", uncertain=True)
-        if usage["input_tokens"] > (2000 if self.role == "agent" else 4096):
+        if usage["input_tokens"] > input_limit(self.role, self.budget_profile):
             raise ProviderFailure("ACTUAL_INPUT_BUDGET_EXCEEDED", uncertain=True)
         if data.get("status") == "incomplete" or usage["output_tokens"] > 256:
             raise ProviderFailure("OUTPUT_SCHEMA_BUDGET_INFEASIBLE", uncertain=True)

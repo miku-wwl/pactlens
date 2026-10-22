@@ -5,6 +5,7 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from uuid import uuid4
 
+from pactlens.agents.budgets import input_limit, prompt_budget_profile
 from pactlens.agents.models import ActorContext, Turn
 from pactlens.agents.prompts import CANDIDATE_PROMPTS, LEGACY_PROMPT, make_request
 from pactlens.agents.protocol_diagnostics import (
@@ -200,7 +201,11 @@ async def run_episode(
                         ),
                     )
                     if prompt_version in CANDIDATE_PROMPTS:
-                        if response.input_tokens is not None and response.input_tokens > 2000:
+                        if (
+                            response.input_tokens is not None
+                            and response.input_tokens
+                            > input_limit("agent", prompt_budget_profile(prompt_version))
+                        ):
                             raise ValueError("ACTUAL_INPUT_BUDGET_EXCEEDED")
                         if response.finish_reason == "length" or (
                             response.output_tokens is not None

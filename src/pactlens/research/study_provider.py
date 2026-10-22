@@ -18,9 +18,11 @@ async def execute_pilot(manifest, root, output):
     if ledger_path.exists() or output.exists():
         raise ValueError("FRESH_PILOT_REQUIRED_NO_AUTOMATIC_RESUME")
     ledger = CampaignLedger.authorized_pilot(ledger_path, manifest, root)
-    profile = {"phase5a1-native-v1": "phase5a1", "phase5a2-reason-v1": "phase5a2"}.get(
-        manifest["configuration"]["provider"].get("version"), "phase4e"
-    )
+    profile = {
+        "phase5a1-native-v1": "phase5a1",
+        "phase5a2-reason-v1": "phase5a2",
+        "phase5a3-context-v1": "phase5a3",
+    }.get(manifest["configuration"]["provider"].get("version"), "phase4e")
     candidate = profile != "phase4e"
     providers = []
 
@@ -43,7 +45,11 @@ async def execute_pilot(manifest, root, output):
             status=run.status,
             shared_capture=True,
         )
-        if candidate:
+        if profile == "phase5a3":
+            from pactlens.research.context_profile import full_packets
+
+            packets = {p.view: p for p in full_packets(inv)}
+        elif candidate:
             from pactlens.evidence.tight_views import render
             from pactlens.research.native_detector import envelope
 
@@ -51,14 +57,16 @@ async def execute_pilot(manifest, root, output):
                 from pactlens.research.reason_detector import envelope
 
             selected = select_common(inv, envelope=envelope(), renderer=render)
+            packets = {p.view: p for p in selected.packets}
         else:
             selected = select_common(inv)
+            packets = {p.view: p for p in selected.packets}
         model = DeepSeekProvider(ledger, "detector", context_id=episode.episode_id, profile=profile)
         config = StudyEpisodeConfig(episode, manifest["configuration_hash"])
         for view in View:
             await predict(
                 output / "predictions",
-                selected.packet(view),
+                packets[view],
                 model,
                 engineering_id=None,
                 formal_config=config,

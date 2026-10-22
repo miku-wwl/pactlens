@@ -1,0 +1,46 @@
+{
+  "ENGINEERING": {
+    "status": "GO",
+    "reason": "150 focused tests; one final full run: 993 passed in 484.39s; lint/format/lock pass"
+  },
+  "BUDGET_PROFILE": {
+    "status": "GO",
+    "reason": "All enforcement layers and actual usage qualify; old limits preserved"
+  },
+  "AGENT_FULL_EPISODE": {
+    "status": "CONDITIONAL GO",
+    "reason": "Four complete episodes; N2 routing error retained, all 30 calls sent"
+  },
+  "DETECTOR_REAL_SCORABILITY": {
+    "status": "GO",
+    "reason": "33/33 valid effective real scores, including genuine R/MAE"
+  },
+  "R_MAE_COMPLETE_EVIDENCE": {
+    "status": "CONDITIONAL GO",
+    "reason": "All 15 pairs equal/fit; five source-incomplete cases cannot be repaired by context"
+  },
+  "JOINT_MA_MAE_COVERAGE": {
+    "status": "CONDITIONAL GO",
+    "reason": "New 4/5, historical technical 6/10; one task and tiny engineering sample"
+  },
+  "REAL_CPLUS_POSITIVE": {
+    "status": "NO-GO",
+    "reason": "All new final harm zero; no independent positive"
+  },
+  "RESEARCH_METHODS": {
+    "status": "NO-GO",
+    "reason": "Full-study positive/semantic support and 16 attributable decisions unresolved"
+  },
+  "PILOT_OPERATIONS": {
+    "status": "CONDITIONAL GO",
+    "reason": "New source-bound candidate/scheduler ready; pending manifest correctly denied"
+  },
+  "FORMAL_PILOT": {
+    "status": "NO-GO",
+    "reason": "Depends on scientific gates, review assignments, amendment, start and owner authorization"
+  },
+  "SUBMISSION_READINESS": {
+    "status": "NO-GO",
+    "reason": "Depends on approved scientific claim/review; no completed formal study or final submission PDF"
+  }
+}

@@ -1,0 +1,10 @@
+warning: in the working copy of 'src/pactlens/agents/budgets.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/pactlens/agents/deepseek_provider.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/pactlens/agents/prompts.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/pactlens/agents/provider.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/pactlens/experiments/harness.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/pactlens/research/detector_contract.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/pactlens/research/detector_runner.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/pactlens/research/reason_detector.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/pactlens/research/study_launch.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/pactlens/research/study_provider.py', LF will be replaced by CRLF the next time Git touches it

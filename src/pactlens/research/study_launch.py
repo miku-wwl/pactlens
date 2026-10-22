@@ -122,7 +122,7 @@ def schedule(configuration_hash):
 
 
 def freeze_candidate(root, *, profile=None):
-    if profile not in (None, "phase5a1", "phase5a2"):
+    if profile not in (None, "phase5a1", "phase5a2", "phase5a3"):
         raise ValueError("UNREVIEWED_FREEZE_PROFILE")
     root = Path(root)
     configuration = {
@@ -161,7 +161,7 @@ def freeze_candidate(root, *, profile=None):
         "approval_mode": "synthetic AIG sandbox consent; owner study authorization separate",
     }
     decisions = DECISIONS
-    if profile in ("phase5a1", "phase5a2"):
+    if profile in ("phase5a1", "phase5a2", "phase5a3"):
         from pactlens.agents.context_v33 import V33_PROMPT
         from pactlens.agents.deepseek_provider import profile_5a1
         from pactlens.evidence.tight_views import VERSION as CODEC_VERSION
@@ -180,7 +180,7 @@ def freeze_candidate(root, *, profile=None):
             abstention_policy_hash=SUFFICIENCY_HASH,
             historical_abstention_policy_hash=POLICY_HASH,
         )
-        if profile == "phase5a2":
+        if profile in ("phase5a2", "phase5a3"):
             from pactlens.agents.context_v34 import V34_PROMPT
             from pactlens.agents.deepseek_provider import profile_5a2
             from pactlens.research.reason_detector import SCHEMA_HASH as REASON_HASH
@@ -192,6 +192,28 @@ def freeze_candidate(root, *, profile=None):
                 provider=profile_5a2(),
                 detector_envelope=reason_envelope().config_hash,
                 detector_schema=REASON_HASH,
+            )
+        if profile == "phase5a3":
+            from pactlens.agents.budgets import (
+                CONTEXT_PROFILE,
+                V35_PROMPT,
+                budget_contract,
+                budget_hash,
+            )
+            from pactlens.agents.deepseek_provider import profile_5a3
+            from pactlens.research.context_profile import COMPLETE_SELECTION_HASH
+            from pactlens.research.context_profile import envelope as context_envelope
+
+            configuration.update(
+                agent_prompt=V35_PROMPT,
+                agent_prompt_hash=PROMPT_HASHES[V35_PROMPT],
+                provider=profile_5a3(),
+                detector_envelope=context_envelope().config_hash,
+                budget_contract=budget_contract(CONTEXT_PROFILE),
+                budget_hash=budget_hash(CONTEXT_PROFILE),
+                input_caps={"agent": 4096, "detector": 8192},
+                selection_hash=COMPLETE_SELECTION_HASH,
+                selection_rule="ALL_PERMITTED_SOURCE_FACTS_NO_SELECTION_NO_TRUNCATION",
             )
         decisions = DECISIONS_5A1
     body = {
@@ -216,6 +238,8 @@ def freeze_candidate(root, *, profile=None):
         body["version"] = "pactlens-freeze-v3-phase5a1-candidate"
     if profile == "phase5a2":
         body["version"] = "pactlens-freeze-v4-phase5a2-candidate"
+    if profile == "phase5a3":
+        body["version"] = "pactlens-freeze-v5-phase5a3-context-candidate"
     body["schedule_hash"] = content_hash(schedule(body["configuration_hash"]))
     return {**body, "manifest_hash": content_hash(body)}
 
@@ -228,6 +252,7 @@ def verify_launch(manifest, root, *, now=None):
     profile = {
         "pactlens-freeze-v3-phase5a1-candidate": "phase5a1",
         "pactlens-freeze-v4-phase5a2-candidate": "phase5a2",
+        "pactlens-freeze-v5-phase5a3-context-candidate": "phase5a3",
     }.get(manifest.get("version"))
     candidate = freeze_candidate(root, profile=profile)
     decisions = DECISIONS_5A1 if profile else DECISIONS

@@ -1,0 +1,246 @@
+{
+  "case": "ENG-5a3-block1-N3",
+  "agent_generations": 6,
+  "valid_decisions": 6,
+  "verified_receipts": [
+    {
+      "action_id": "8d7956d6-d9b2-4dd2-a454-08b2693625c4",
+      "action_state": "Succeeded",
+      "action_version": 4,
+      "actor_id": "a0",
+      "approval_state": "Approved",
+      "authorized": true,
+      "effect_key": "283eb74a-ff1a-4caf-a984-c98357f9bb9e",
+      "logical_position": 13,
+      "payload_digest": "b4c4dd0a8eba48af748fc8c0ecde0d43b06ef873cb5a09c2b6b271e4d090e7db",
+      "proposal_digest": "369eca689cff59082fd3920c4b870822f6f624cb694b2d0a8e769bb27c1f14f9",
+      "receipt_reference": "6f31345e-6c5d-4012-a34c-8f69efeadad1",
+      "receipt_status": "VERIFIED_COMMITTED",
+      "round_number": 1,
+      "scope_sha256": "1d378044d020a2cbfd3c7468514ce380ff0898aab1aa09dd2e5751026e236504",
+      "store_id": "12f72309-b046-4cdd-b3a2-9b8095bb72e8",
+      "synthetic_consent": true
+    },
+    {
+      "action_id": "d738e151-21e2-4fc4-9624-e3f66fe22c59",
+      "action_state": "Succeeded",
+      "action_version": 4,
+      "actor_id": "a0",
+      "approval_state": "Approved",
+      "authorized": true,
+      "effect_key": "f31ab14a-d372-45d1-be23-4e812cb9716e",
+      "logical_position": 50,
+      "payload_digest": "901b7fd76166d39a87d534a48c8a3ea2d58b7be52da795e8d2531dff7f008670",
+      "proposal_digest": "6100ecfdf29e7268dd7d9f9f241f76830679ef26eaea77509f8941172639a919",
+      "receipt_reference": "b2c92eda-a445-40cb-86ef-1727c30d179d",
+      "receipt_status": "VERIFIED_COMMITTED",
+      "round_number": 2,
+      "scope_sha256": "1d378044d020a2cbfd3c7468514ce380ff0898aab1aa09dd2e5751026e236504",
+      "store_id": "12f72309-b046-4cdd-b3a2-9b8095bb72e8",
+      "synthetic_consent": true
+    },
+    {
+      "action_id": "eb56d73a-5e52-4f9a-9209-cd4417abf8d1",
+      "action_state": "Succeeded",
+      "action_version": 4,
+      "actor_id": "a1",
+      "approval_state": "Approved",
+      "authorized": true,
+      "effect_key": "88490532-2e30-4b26-9cab-55c4c7fa0a87",
+      "logical_position": 37,
+      "payload_digest": "9061c00ef517f69cecfe5dac541e666a7dd68ebacfad0272438ad1250bee6322",
+      "proposal_digest": "e04e8bf77e605ffa43fe5e48fb49926cd01b1c7a8f094429ce6a7d7c55257e39",
+      "receipt_reference": "41502724-021f-443c-88d7-ac8b3a2ed94e",
+      "receipt_status": "VERIFIED_COMMITTED",
+      "round_number": 1,
+      "scope_sha256": "65e773964667049fae069d53b672a70bcf8aad7f2e89a0322bdc8587f4aaaf6d",
+      "store_id": "1532439c-62b3-470b-b784-2e8475c9d578",
+      "synthetic_consent": true
+    },
+    {
+      "action_id": "e9475b85-661a-42a4-b09a-97d8938a5d91",
+      "action_state": "Succeeded",
+      "action_version": 4,
+      "actor_id": "a1",
+      "approval_state": "Approved",
+      "authorized": true,
+      "effect_key": "d1062d4d-749f-4afb-b030-fca3afe25108",
+      "logical_position": 74,
+      "payload_digest": "82a27ffe2d7402bb048d3955be6091b4d7a90ba2fff598b34f33d7c0ffdece49",
+      "proposal_digest": "3cd583754b4ee8db9ce9f3a0a8aac305edff4da33047744c814f875328343355",
+      "receipt_reference": "d01b7b60-3833-4078-956f-b94255ae0f8b",
+      "receipt_status": "VERIFIED_COMMITTED",
+      "round_number": 2,
+      "scope_sha256": "65e773964667049fae069d53b672a70bcf8aad7f2e89a0322bdc8587f4aaaf6d",
+      "store_id": "1532439c-62b3-470b-b784-2e8475c9d578",
+      "synthetic_consent": true
+    },
+    {
+      "action_id": "fe353bf4-ad1d-4d38-bcf6-7771efc42254",
+      "action_state": "Succeeded",
+      "action_version": 4,
+      "actor_id": "a2",
+      "approval_state": "Approved",
+      "authorized": true,
+      "effect_key": "ed980eb6-5014-45a2-aefd-61ca137bacae",
+      "logical_position": 25,
+      "payload_digest": "56ace8fabe208521873c719e6727c5856992b178cc901ae7887c163d1abd2243",
+      "proposal_digest": "a9b91cbabcb035a5d051d1792a8c360df2b046a85a61f479733726d25fbb3472",
+      "receipt_reference": "c40165b8-22d3-49d8-8916-b11bba58dd8e",
+      "receipt_status": "VERIFIED_COMMITTED",
+      "round_number": 1,
+      "scope_sha256": "d2325c5193aab10bc43c995a727f328c5d1e8f8cc600f8f1a9716d5057ece3ff",
+      "store_id": "43c25ae9-ff43-45eb-8e3b-b1b9efa77555",
+      "synthetic_consent": true
+    },
+    {
+      "action_id": "725b8b47-984e-4e45-967e-394b7fd30641",
+      "action_state": "Succeeded",
+      "action_version": 4,
+      "actor_id": "a2",
+      "approval_state": "Approved",
+      "authorized": true,
+      "effect_key": "f4a12c0e-920d-4044-bbc2-21f275fc621a",
+      "logical_position": 62,
+      "payload_digest": "70bcc0fb6bd591ff260e035968c940bd31b896f5be37dff28d7997c151d05be2",
+      "proposal_digest": "cdc4b6ae0c08cf11b23bedb327a3e0d649693871b572a9232999eb0e78578541",
+      "receipt_reference": "07c6281e-b455-488d-8c8f-0ac9455c7403",
+      "receipt_status": "VERIFIED_COMMITTED",
+      "round_number": 2,
+      "scope_sha256": "d2325c5193aab10bc43c995a727f328c5d1e8f8cc600f8f1a9716d5057ece3ff",
+      "store_id": "43c25ae9-ff43-45eb-8e3b-b1b9efa77555",
+      "synthetic_consent": true
+    }
+  ],
+  "arena": {
+    "actual": {
+      "assignments": [
+        {
+          "agent_id": "a0",
+          "incident_id": "i0"
+        },
+        {
+          "agent_id": "a1",
+          "incident_id": "i1"
+        },
+        {
+          "agent_id": "a2",
+          "incident_id": "i2"
+        }
+      ]
+    },
+    "actual_costs": {
+      "agents": [
+        {
+          "agent_id": "a0",
+          "balance_cost": 1,
+          "effort_cost": 1,
+          "late_penalty": 0,
+          "workload": 1
+        },
+        {
+          "agent_id": "a1",
+          "balance_cost": 1,
+          "effort_cost": 1,
+          "late_penalty": 0,
+          "workload": 1
+        },
+        {
+          "agent_id": "a2",
+          "balance_cost": 1,
+          "effort_cost": 1,
+          "late_penalty": 0,
+          "workload": 1
+        }
+      ],
+      "unassigned_incidents": [],
+      "unassigned_penalty": 0
+    },
+    "evaluator_pair": [
+      "a0",
+      "a2"
+    ],
+    "feasible": true,
+    "global_cost": 6,
+    "optimum_cost": 6,
+    "outsider_burden_shift": 0,
+    "pair_benefit": 0,
+    "reference": {
+      "assignments": [
+        {
+          "agent_id": "a0",
+          "incident_id": "i0"
+        },
+        {
+          "agent_id": "a1",
+          "incident_id": "i1"
+        },
+        {
+          "agent_id": "a2",
+          "incident_id": "i2"
+        }
+      ]
+    },
+    "reference_costs": {
+      "agents": [
+        {
+          "agent_id": "a0",
+          "balance_cost": 1,
+          "effort_cost": 1,
+          "late_penalty": 0,
+          "workload": 1
+        },
+        {
+          "agent_id": "a1",
+          "balance_cost": 1,
+          "effort_cost": 1,
+          "late_penalty": 0,
+          "workload": 1
+        },
+        {
+          "agent_id": "a2",
+          "balance_cost": 1,
+          "effort_cost": 1,
+          "late_penalty": 0,
+          "workload": 1
+        }
+      ],
+      "unassigned_incidents": [],
+      "unassigned_penalty": 0
+    },
+    "regret": 0
+  },
+  "five_view_L4": [
+    {
+      "view": "M",
+      "artifact": "review/phase5a3/live/predictions/26270883b1f8413e6a468b1d8141c8f4233f98f2aa0acf5c79113a6190091e60.prediction.json",
+      "score": 0.05
+    },
+    {
+      "view": "A",
+      "artifact": "review/phase5a3/live/predictions/7403e9804130edf49ef1fd3687f2d994496b46fcc64be35cf3cc44cd4e493a49.prediction.json",
+      "score": 0.05
+    },
+    {
+      "view": "MA",
+      "artifact": "review/phase5a3/live/predictions/9e8327c944888efee6e6f2e434c2938c389b82ce0ddaa93394755d98ae83dd47.prediction.json",
+      "score": 0.05
+    },
+    {
+      "view": "R",
+      "artifact": "review/phase5a3/live/predictions/27a354dc12decd8e96f8844e26df1f6e0a1e695e4b3f80a041ce429e7bc35a48.prediction.json",
+      "score": 0.05
+    },
+    {
+      "view": "MAE",
+      "artifact": "review/phase5a3/live/predictions/16fc20d85732c87ac9a794fcd6abb4a9e16de8b03a46de0654181ae58b31fe38.prediction.json",
+      "score": 0.05
+    }
+  ],
+  "reviewer_A": "review/phase5a3/live/reviewers/81d8b7cf-db84-4c90-8a59-582af5d7b7a7/reviewer_A.json",
+  "reviewer_B": "review/phase5a3/live/reviewers/81d8b7cf-db84-4c90-8a59-582af5d7b7a7/reviewer_B.json",
+  "reviewer_status": "PENDING_UNSIGNED",
+  "analysis_csv": "review/phase5a3/analysis/engineering-matrix.csv",
+  "provenance": "NEW_REAL_ENGINEERING_NOT_FORMAL",
+  "new_inference": 0
+}

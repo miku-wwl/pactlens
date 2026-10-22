@@ -47,10 +47,13 @@ class DetectorEnvelope:
     context_window_tokens: int | None = None
 
     def __post_init__(self):
+        self._validate_limits(4096)
+
+    def _validate_limits(self, maximum_input):
         for text in (self.system, self.task, self.output):
             if type(text) is not str or not 1 <= len(text.encode("utf-8")) <= 8192:
                 raise ValueError("BOUNDED_TRUSTED_ENVELOPE")
-        integer(self.input_limit, 1, 4096)
+        integer(self.input_limit, 1, maximum_input)
         integer(self.reserved_output_tokens, 1, 256)
         if self.context_window_tokens is not None:
             integer(self.context_window_tokens, self.reserved_output_tokens + 1, 1_000_000)

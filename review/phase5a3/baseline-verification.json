@@ -1,0 +1,11 @@
+{
+  "HEAD": "3145710b993a2c6d6e8f27c795456b78acdaf193",
+  "clean_entry": true,
+  "historical_archive_sha256": "722cd949a73a7a9fa9605d3d7db2c31be91030743dcaa539c4e7142418520080",
+  "historical_members_verified": 313,
+  "installed_AIG": "0.2.0",
+  "installed_record_hashes": 57,
+  "core_seconds": 5,
+  "baseline_tests": 979,
+  "baseline_test_source": "preserved Phase5A2 actual regression logs;not rerun"
+}
