@@ -1,0 +1,18 @@
+{
+  "scope": "HISTORICAL_PHASE5A1_PRIVATE_AUDIT",
+  "campaign_base": "54fd01b2bd4c3d4ac4d74cce93aeb4f731e5dcf2",
+  "outcomes": [
+    {
+      "case": "N3",
+      "committed_rows": 5
+    },
+    {
+      "case": "C_PLUS",
+      "committed_rows": 4
+    }
+  ],
+  "files_unchanged": true,
+  "new_model_calls": 0,
+  "new_effects": 0,
+  "status": "PASS"
+}

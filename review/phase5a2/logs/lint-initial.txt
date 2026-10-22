@@ -1,0 +1,19 @@
+I001 [*] Import block is un-sorted or un-formatted
+   --> tests\test_phase5a2_qualification.py:175:5
+    |
+174 |       sys.path.insert(0, str(ROOT / "scripts"))
+175 | /     from phase5a2_campaign import design
+176 | |     from pactlens.serialization import primitive
+    | |________________________________________________^
+177 |
+178 |       saved = json.loads((ROOT / "review/phase5a2/design.json").read_text(encoding="utf-8"))
+    |
+help: Organize imports
+    |
+175 |     from phase5a2_campaign import design
+176 +
+177 |     from pactlens.serialization import primitive
+    |
+
+Found 1 error.
+[*] 1 fixable with `--fix`.

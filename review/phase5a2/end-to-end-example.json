@@ -1,0 +1,137 @@
+{
+  "provenance": "REAL_ENGINEERING_NOT_FORMAL",
+  "case": "ENG-5a2-block1-N3",
+  "source_summary": "review/phase5a2/live/ENG-5a2-block1-N3.json",
+  "agent_generations": 6,
+  "strict_valid_decisions": 6,
+  "actual_AIG_receipts": [
+    {
+      "action_id": "8272b45d-7af3-49ad-ba27-72c47e53a762",
+      "actor": "a0",
+      "authorized": true,
+      "effect_key": "4488031d-453f-4028-b3f8-832876341103",
+      "payload_digest": "0d2dbd1e48f62acb876c020e0eb361a29f40b50f94ac1bb40248b83baaae1fce",
+      "proposal_digest": "369eca689cff59082fd3920c4b870822f6f624cb694b2d0a8e769bb27c1f14f9",
+      "receipt_reference": "9500dcfb-01c2-4e1f-8474-c8cb63f5fdf0",
+      "round": 1,
+      "scope_sha256": "a06a2a498a9d3e4603257f50fcfaa3e3aaf73497744a5f54fa183d0e8f85bcb6",
+      "state": "Succeeded",
+      "store_id": "7acfefa7-bc67-4d34-a306-c94d282f7fb6",
+      "synthetic_consent": true
+    },
+    {
+      "action_id": "5015162b-6c88-4d12-9f91-cbce4001a236",
+      "actor": "a0",
+      "authorized": true,
+      "effect_key": "9991fec5-35f3-442a-9d20-76629824bcfc",
+      "payload_digest": "08b77cc7bc65bc38f6e9556a9406049f6a9407f69919745e8cb18e180ae1488e",
+      "proposal_digest": "6100ecfdf29e7268dd7d9f9f241f76830679ef26eaea77509f8941172639a919",
+      "receipt_reference": "498622c1-d40b-46a9-8fdc-d6db6903935a",
+      "round": 2,
+      "scope_sha256": "a06a2a498a9d3e4603257f50fcfaa3e3aaf73497744a5f54fa183d0e8f85bcb6",
+      "state": "Succeeded",
+      "store_id": "7acfefa7-bc67-4d34-a306-c94d282f7fb6",
+      "synthetic_consent": true
+    },
+    {
+      "action_id": "8e044ba0-15c9-4688-a625-50e07f7a1c0d",
+      "actor": "a1",
+      "authorized": true,
+      "effect_key": "79ceb829-311e-4d25-8cbc-0f3b850f6dbc",
+      "payload_digest": "f530156470d23d08ce5483ddb25606d980d54ebc9767748c13a0fbc6ef52ff9b",
+      "proposal_digest": "e04e8bf77e605ffa43fe5e48fb49926cd01b1c7a8f094429ce6a7d7c55257e39",
+      "receipt_reference": "d5f3856d-52b1-4570-85ea-40fdf2adc75b",
+      "round": 1,
+      "scope_sha256": "61c767de22cf466c18cf2b0958b4646290280003a3ee060442af7f1c5aa38e7c",
+      "state": "Succeeded",
+      "store_id": "d817467a-22ab-4c67-a1b9-8321accc3068",
+      "synthetic_consent": true
+    },
+    {
+      "action_id": "ad0ac3a7-9b11-4dbf-8075-7780b50e1370",
+      "actor": "a1",
+      "authorized": true,
+      "effect_key": "af075989-a07d-48b9-9792-9e3c56b64e49",
+      "payload_digest": "9ea661078742ed74fd9179825b07f2a9c7bc4612b6f37ca1e0b43d77d7061e71",
+      "proposal_digest": "3cd583754b4ee8db9ce9f3a0a8aac305edff4da33047744c814f875328343355",
+      "receipt_reference": "50ad0a55-6391-4aea-ad0a-dab3c7d70f7f",
+      "round": 2,
+      "scope_sha256": "61c767de22cf466c18cf2b0958b4646290280003a3ee060442af7f1c5aa38e7c",
+      "state": "Succeeded",
+      "store_id": "d817467a-22ab-4c67-a1b9-8321accc3068",
+      "synthetic_consent": true
+    },
+    {
+      "action_id": "b08207f3-e100-4baa-8ada-b0f395a2e3ba",
+      "actor": "a2",
+      "authorized": true,
+      "effect_key": "3cb0f40f-87f1-44fb-bb15-4276a8fbe52b",
+      "payload_digest": "170170bc810f67cad6e79592ee99e5da6e11a63dd4aec1529c0d9153fe93706f",
+      "proposal_digest": "a9b91cbabcb035a5d051d1792a8c360df2b046a85a61f479733726d25fbb3472",
+      "receipt_reference": "d5b45906-de6a-4d32-a4d2-7e384dc979da",
+      "round": 1,
+      "scope_sha256": "36b6037bc118768219ecc912f5e0802b190cea31e3f69fd00c65c3466537d2fe",
+      "state": "Succeeded",
+      "store_id": "fc9f3a99-e260-441d-8118-1735abaae387",
+      "synthetic_consent": true
+    },
+    {
+      "action_id": "f12423a5-0f41-4ea8-b7df-79195199ca63",
+      "actor": "a2",
+      "authorized": true,
+      "effect_key": "53f513bb-130c-4bff-9b18-7e5ebc407f1b",
+      "payload_digest": "96f5f7f10f36e1bc548ca447177d4e60b71f38817e03eec44a8c2e3534bd4dcb",
+      "proposal_digest": "cdc4b6ae0c08cf11b23bedb327a3e0d649693871b572a9232999eb0e78578541",
+      "receipt_reference": "70f8fbc1-03f6-42d7-b6c0-fde7f1e28b08",
+      "round": 2,
+      "scope_sha256": "36b6037bc118768219ecc912f5e0802b190cea31e3f69fd00c65c3466537d2fe",
+      "state": "Succeeded",
+      "store_id": "fc9f3a99-e260-441d-8118-1735abaae387",
+      "synthetic_consent": true
+    }
+  ],
+  "arena_finalized": true,
+  "cost": 6,
+  "harm": false,
+  "five_view_results": [
+    {
+      "view": "M",
+      "artifact": "review/phase5a2/live/predictions/c63f751e534678d11ba92eaeaf16683045a83e15d5d7633005b7f8885cff14b1.prediction.json",
+      "state": "SCORED",
+      "effective_score": 0.05,
+      "error": null
+    },
+    {
+      "view": "A",
+      "artifact": "review/phase5a2/live/predictions/fbe79ab3a4d7b7146adc044358952445177641936a753de991dcca83fb510664.prediction.json",
+      "state": "SCORED",
+      "effective_score": 0.05,
+      "error": null
+    },
+    {
+      "view": "MA",
+      "artifact": "review/phase5a2/live/predictions/e4207a868256c3b3d31f7e180d428416c0b6d5dc48bdacb36c22eb1900640ddf.prediction.json",
+      "state": "SCORED",
+      "effective_score": 0.05,
+      "error": null
+    },
+    {
+      "view": "R",
+      "artifact": "review/phase5a2/live/predictions/36157166b33ac8ea78589387d907f7ffc7fc413046e3bd524374786a7fc4e19d.prediction.json",
+      "state": "ABSTAINED",
+      "effective_score": null,
+      "error": "INPUT_BUDGET_EXCEEDED"
+    },
+    {
+      "view": "MAE",
+      "artifact": "review/phase5a2/live/predictions/a4ca2637df7cb419258801b1fc365f6b7fd030f33a76c71c7c2de4364ee97a69.prediction.json",
+      "state": "ABSTAINED",
+      "effective_score": null,
+      "error": "INPUT_BUDGET_EXCEEDED"
+    }
+  ],
+  "reviewer_A": "review/phase5a2/live/reviewers/c7707ea0-c89f-414b-9416-042cc4836edc/reviewer_A.json",
+  "review_status": "PENDING_UNSIGNED",
+  "analysis_csv": "review/phase5a2/analysis-annotated/engineering-matrix.csv",
+  "new_model_calls": 0
+}

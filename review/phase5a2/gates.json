@@ -1,0 +1,58 @@
+{
+  "ENGINEERING": {
+    "status": "GO",
+    "evidence_or_limit": "Baseline 930, final 979 and no-private-runtime clean checkout 979 pass; lint/format/lock pass"
+  },
+  "DETECTOR_PROTOCOL": {
+    "status": "CONDITIONAL GO",
+    "evidence_or_limit": "39/40 valid; one unsupported citation; no reliability guarantee"
+  },
+  "DETECTOR_SCORABILITY": {
+    "status": "GO",
+    "evidence_or_limit": "30 effective scores, all five view types represented across controls"
+  },
+  "FIVE_VIEW_EXECUTION": {
+    "status": "CONDITIONAL GO",
+    "evidence_or_limit": "Controls exercise all five; all ten real R/MAE pairs are unsent overflows"
+  },
+  "MECHANICAL_POSITIVE": {
+    "status": "GO",
+    "evidence_or_limit": "Exact enumeration, independent arithmetic, two genuine S1 receipts"
+  },
+  "REAL_CPLUS_FEASIBILITY": {
+    "status": "NO-GO",
+    "evidence_or_limit": "Agreement/partial harmful ballots in block 1; zero realized harm in both"
+  },
+  "MATCHED_ENG_BLOCKS": {
+    "status": "CONDITIONAL GO",
+    "evidence_or_limit": "All ten fixed cases accounted; four capture-incomplete; same-task replications"
+  },
+  "EVIDENCE_PARITY": {
+    "status": "GO",
+    "evidence_or_limit": "12/12 independent R/MAE parses equal; pre-response eligibility equal"
+  },
+  "EVIDENCE_SUFFICIENCY": {
+    "status": "NO-GO",
+    "evidence_or_limit": "MAE 0/10 real-case scores; safe subset still exceeds fixed budget"
+  },
+  "RESEARCH_INTEGRITY": {
+    "status": "GO",
+    "evidence_or_limit": "No tuning, substitution, oracle injection, formal scoring or invented adjudication"
+  },
+  "REVIEWER_READINESS": {
+    "status": "CONDITIONAL GO",
+    "evidence_or_limit": "Ten blinded packet sets prepared; no reviewer assignments/signatures"
+  },
+  "PILOT_OPERATIONS": {
+    "status": "CONDITIONAL GO",
+    "evidence_or_limit": "Existing scheduler/profile/guards prepared; pending manifest denied"
+  },
+  "FORMAL_PILOT": {
+    "status": "NO-GO",
+    "evidence_or_limit": "Dependent scientific gates, 16 decisions, start and owner authorization pending"
+  },
+  "SUBMISSION_READINESS": {
+    "status": "NO-GO",
+    "evidence_or_limit": "Formal study and compliant scientific submission PDF not produced"
+  }
+}

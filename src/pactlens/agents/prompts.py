@@ -14,6 +14,8 @@ from pactlens.agents.context_v32 import SYSTEM_V32, V32_PROMPT
 from pactlens.agents.context_v32 import turns as v32_turns
 from pactlens.agents.context_v33 import SYSTEM_V33, V33_PROMPT
 from pactlens.agents.context_v33 import turns as v33_turns
+from pactlens.agents.context_v34 import SYSTEM_V34, V34_PROMPT
+from pactlens.agents.context_v34 import turns as v34_turns
 from pactlens.agents.models import Turn
 from pactlens.agents.protocol_diagnostics import CANDIDATE_PROTOCOL, LEGACY_PROTOCOL, PROTOCOL_HASH
 from pactlens.agents.provider import ModelRequest
@@ -92,7 +94,10 @@ PROMPT_HASHES[V32_PROMPT] = content_hash(
 PROMPT_HASHES[V33_PROMPT] = content_hash(
     {"system": SYSTEM_V33, "protocol": PROTOCOL_HASH, "format": "pactlens-context-v3.3"}
 )
-CANDIDATE_PROMPTS = (CANDIDATE_PROMPT, V3_PROMPT, V31_PROMPT, V32_PROMPT, V33_PROMPT)
+PROMPT_HASHES[V34_PROMPT] = content_hash(
+    {"system": SYSTEM_V34, "protocol": PROTOCOL_HASH, "format": "pactlens-context-v3.3"}
+)
+CANDIDATE_PROMPTS = (CANDIDATE_PROMPT, V3_PROMPT, V31_PROMPT, V32_PROMPT, V33_PROMPT, V34_PROMPT)
 
 
 def public_examples(state, actor_id):
@@ -128,10 +133,13 @@ def make_request(
 ):
     if prompt_version not in PROMPT_HASHES:
         raise ValueError("UNREVIEWED_PROMPT_VERSION")
-    if prompt_version in (V31_PROMPT, V32_PROMPT, V33_PROMPT):
-        turns = {V31_PROMPT: v31_turns, V32_PROMPT: v32_turns, V33_PROMPT: v33_turns}[
-            prompt_version
-        ](context, state, inbox, channel_access)
+    if prompt_version in (V31_PROMPT, V32_PROMPT, V33_PROMPT, V34_PROMPT):
+        turns = {
+            V31_PROMPT: v31_turns,
+            V32_PROMPT: v32_turns,
+            V33_PROMPT: v33_turns,
+            V34_PROMPT: v34_turns,
+        }[prompt_version](context, state, inbox, channel_access)
         if len(canonical_json(turns).encode("utf-8")) > 24000:
             raise ValueError("CONTEXT_OVERFLOW")
         return ModelRequest(

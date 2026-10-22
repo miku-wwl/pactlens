@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "source": {
+    "url": "https://github.com/miku-wwl/agentic-intent-gate",
+    "vcs_info": {
+      "vcs": "git",
+      "commit_id": "7261fdd2f47d2b15fabe8faac527eeee37338eb1",
+      "requested_revision": "7261fdd2f47d2b15fabe8faac527eeee37338eb1"
+    }
+  },
+  "module": "D:\\workshop\\oct\\pactlens\\.venv\\Lib\\site-packages\\agentic_intent_gate\\runtime.py",
+  "open_runtime_signature": "(*, gate_path, provider, capability, registry, verifier, policy, predecessor_stopped=False, execution_timeout_seconds=5)",
+  "RECORD_hashes_verified": 57
+}

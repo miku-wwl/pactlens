@@ -26,6 +26,7 @@ from pactlens.serialization import primitive
 LEGACY_VERSION = "pactlens-detector-runner-v1-candidate"
 VERSION = "pactlens-detector-runner-v2-candidate"
 CANDIDATE_VERSION = "pactlens-detector-runner-v3-candidate"
+REASON_VERSION = "pactlens-detector-runner-v4-candidate"
 
 
 @dataclass(frozen=True)
@@ -49,8 +50,12 @@ def exclusive_json(path, body):
 
 
 def _record(body, packet):
+    from pactlens.research.reason_detector import ReasonEnvelope, ReasonPredictionRecord
+
     header, facts = packet.verify()
-    record = PredictionRecord(
+    record = (
+        ReasonPredictionRecord if type(packet.envelope) is ReasonEnvelope else PredictionRecord
+    )(
         header["episode"],
         packet.view,
         header["version"],
@@ -97,6 +102,8 @@ async def predict(
         raise ValueError("OUTPUT_RESERVATION")
     header, facts = packet.verify()
     from pactlens.research.native_detector import NativeEnvelope, NativeOutputError, validate
+    from pactlens.research.reason_detector import ReasonEnvelope, ReasonPredictionRecord
+    from pactlens.research.reason_detector import validate as reason_validate
     from pactlens.research.sufficiency_v3 import (
         VERSION as SUFFICIENCY_VERSION,
     )
@@ -104,7 +111,9 @@ async def predict(
         decision as sufficient_decision,
     )
 
-    native = type(packet.envelope) is NativeEnvelope
+    reason = type(packet.envelope) is ReasonEnvelope
+    native = type(packet.envelope) in (NativeEnvelope, ReasonEnvelope)
+    record_type = ReasonPredictionRecord if reason else PredictionRecord
     approved_candidate = (
         formal
         and getattr(formal_permit, "configuration", {}).get("sufficiency_policy")
@@ -122,7 +131,7 @@ async def predict(
         sufficiency_policy is not None and (not native or (formal and not approved_candidate))
     ):
         raise ValueError("ENGINEERING_ONLY_SUFFICIENCY_CANDIDATE")
-    version = CANDIDATE_VERSION if native else VERSION
+    version = REASON_VERSION if reason else CANDIDATE_VERSION if native else VERSION
     config = {
         "version": version,
         "model": primitive(provider.config),
@@ -191,7 +200,7 @@ async def predict(
             raise ValueError("OUTPUT_BUDGET_EXCEEDED")
         body = closed_json(response.text, 8192)
         if native:
-            validate(body, request.citation_keys)
+            (reason_validate if reason else validate)(body, request.citation_keys)
         if type(body) is not dict:
             raise ValueError("DETECTOR_OBJECT")
         # The v2 table legend explicitly asks for logical keys. Resolve exactly;
@@ -221,7 +230,7 @@ async def predict(
         provider_error = getattr(failure, "code", "PROVIDER_ERROR")
     if error:
         response_json = None
-        record = PredictionRecord(
+        record = record_type(
             header["episode"],
             packet.view,
             header["version"],
@@ -278,12 +287,15 @@ def replay_prediction(path):
         VERSION,
         LEGACY_VERSION,
         CANDIDATE_VERSION,
+        REASON_VERSION,
     ):
         raise ValueError("PREDICTION_INTEGRITY")
     p = body["packet"]
     from pactlens.research.native_detector import NativeEnvelope
+    from pactlens.research.reason_detector import ReasonEnvelope, ReasonPredictionRecord
 
-    native = body["version"] == CANDIDATE_VERSION
+    reason = body["version"] == REASON_VERSION
+    native = body["version"] in (CANDIDATE_VERSION, REASON_VERSION)
     if native and (
         p.get("native_envelope") is not True or body["config"].get("native_schema") is not True
     ):
@@ -292,14 +304,16 @@ def replay_prediction(path):
         View(p["view"]),
         p["text"],
         p["manifest_json"],
-        (NativeEnvelope if native else DetectorEnvelope)(**p["envelope"]),
+        (ReasonEnvelope if reason else NativeEnvelope if native else DetectorEnvelope)(
+            **p["envelope"]
+        ),
     )
     packet.verify()
     expected = content_hash(
         {"config": body["config"], "text": packet.text, "manifest": packet.manifest_json}
     )
     prediction = body["prediction"]
-    record = PredictionRecord(
+    record = (ReasonPredictionRecord if reason else PredictionRecord)(
         prediction["episode_public_id"],
         View(prediction["view"]),
         prediction["evidence_version"],
@@ -317,7 +331,7 @@ def replay_prediction(path):
         or prediction["prompt_hash"] != packet.envelope.config_hash
     ):
         raise ValueError("PREDICTION_BINDING")
-    if body["version"] in (VERSION, CANDIDATE_VERSION):
+    if body["version"] in (VERSION, CANDIDATE_VERSION, REASON_VERSION):
         from pactlens.research.sufficiency_v3 import (
             VERSION as SUFFICIENCY_VERSION,
         )
@@ -347,7 +361,7 @@ def replay_prediction(path):
 def analysis_prediction(path):
     """The supported L4 -> analysis bridge refuses ambiguous historical v1 flags."""
     body = replay_prediction(path)
-    if body["version"] not in (VERSION, CANDIDATE_VERSION):
+    if body["version"] not in (VERSION, CANDIDATE_VERSION, REASON_VERSION):
         raise ValueError("LEGACY_PREDICTION_REQUIRES_EXPLICIT_POLICY_REVIEW")
     return (
         View(body["prediction"]["view"]),

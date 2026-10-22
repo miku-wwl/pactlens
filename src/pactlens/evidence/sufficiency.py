@@ -151,9 +151,10 @@ def _views(packets):
 
 def _envelope(envelope):
     from pactlens.research.native_detector import NativeEnvelope
+    from pactlens.research.reason_detector import ReasonEnvelope
 
     envelope = DetectorEnvelope() if envelope is None else envelope
-    if type(envelope) not in (DetectorEnvelope, NativeEnvelope):
+    if type(envelope) not in (DetectorEnvelope, NativeEnvelope, ReasonEnvelope):
         raise ValueError("TRUSTED_DETECTOR_ENVELOPE")
     envelope.__post_init__()
     return envelope
@@ -282,9 +283,10 @@ def select_common(inventory, *, envelope=None, token_counter=None, renderer=rend
     envelope = _envelope(envelope)
     from pactlens.evidence.tight_views import render as tight_render
     from pactlens.research.native_detector import NativeEnvelope
+    from pactlens.research.reason_detector import ReasonEnvelope
 
     if renderer not in (render_compact, tight_render) or (
-        (renderer is tight_render) != (type(envelope) is NativeEnvelope)
+        (renderer is tight_render) != (type(envelope) in (NativeEnvelope, ReasonEnvelope))
     ):
         raise ValueError("REVIEWED_RENDERER_ENVELOPE_REQUIRED")
     bundles = fact_bundles(inventory)

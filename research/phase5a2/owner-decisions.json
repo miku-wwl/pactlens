@@ -1,0 +1,264 @@
+{
+  "status": "PENDING",
+  "configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723",
+  "decisions": [
+    {
+      "decision": "agent_model_prompt",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "v3.4/Flash; hold qualification",
+      "evidence": "53/60 valid opportunities",
+      "risks": "Four input overflows and three suppressed opportunities",
+      "alternative": "Qualify exact token budget or prospectively amend cap",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    },
+    {
+      "decision": "api_mode_schema",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "Native Responses, nonthinking; retain strict validation",
+      "evidence": "93 calls, zero reasoning tokens",
+      "risks": "Mutable model alias; one unsupported citation",
+      "alternative": "Separately pinned qualified provider revision",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    },
+    {
+      "decision": "agent_budget",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "2000 input/256 output; do not expand silently",
+      "evidence": "Offline six-fit but real histories overflow",
+      "risks": "Long communication causes selective missingness",
+      "alternative": "Approved new engineering budget study",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    },
+    {
+      "decision": "detector_model_prompt_schema",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "Reason v3; candidate only",
+      "evidence": "39/40 valid, 30 scores",
+      "risks": "Low S1 risk despite harm; one invalid output",
+      "alternative": "New prospective protocol qualification",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    },
+    {
+      "decision": "detector_budget",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "4096/256; hold",
+      "evidence": "All ten genuine R/MAE overflow",
+      "risks": "No primary paired real-case scores",
+      "alternative": "Qualified exact counter / dated cap amendment",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    },
+    {
+      "decision": "evidence_selection_sufficiency",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "Common selector+suff-v3; reject current readiness",
+      "evidence": "Offline counterfactuals fail required retention",
+      "risks": "Fits can omit required evidence",
+      "alternative": "Full evidence exact counter first",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    },
+    {
+      "decision": "authoritative_abstention",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "Preserve capture/Unknown/invalid abstention",
+      "evidence": "16 host-mandated slots",
+      "risks": "Condition-dependent coverage",
+      "alternative": "Explicitly revised, independently reviewed observation contract",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    },
+    {
+      "decision": "observer",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "Delivered intercept; retain candidate",
+      "evidence": "Actual delivered facts and 12/12 parity",
+      "risks": "Observer cannot see undelivered private messages",
+      "alternative": "Router audit only as frozen sensitivity",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    },
+    {
+      "decision": "n2",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "Block all R2 admission, allow R1",
+      "evidence": "Both N2 have three receipts",
+      "risks": "\u201cNo execution\u201d would be false",
+      "alternative": "New design amendment, not reinterpretation",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    },
+    {
+      "decision": "positive_control_rubric",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "Existing agreement+execution+harm; retain",
+      "evidence": "Mechanical S1 passes, both C+ final harm zero",
+      "risks": "Necessary formal positive not established",
+      "alternative": "Path B separately approved case study",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    },
+    {
+      "decision": "human_reviewers",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "Two independent reviewers plus reconciliation; assign actual people",
+      "evidence": "Ten opaque packet sets, unsigned",
+      "risks": "No independent behavioral labels",
+      "alternative": "Disclosed limited review only under new approved protocol",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    },
+    {
+      "decision": "split_protection",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "Preserve 4/10/10 groups and locks",
+      "evidence": "Pending schedule 120 slots, 0 used",
+      "risks": "Accidental exploratory tuning on formal data",
+      "alternative": "No alternative within current claim",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    },
+    {
+      "decision": "primary_metric_uncertainty",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "Preserve frozen FPR difference, recall/coverage, bootstrap",
+      "evidence": "Original plan unchanged",
+      "risks": "No real MAE scores/positives; estimand unsupported",
+      "alternative": "New prospective claim under Path B",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    },
+    {
+      "decision": "call_cost_ceilings",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "Exactly 220 max Pilot generations; choose explicit USD cap",
+      "evidence": "Existing ledger and measured usage",
+      "risks": "Price/latency/alias can change",
+      "alternative": "Smaller bounded Pilot cap after review",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    },
+    {
+      "decision": "start_eligibility",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "Actual official start verification required",
+      "evidence": "Not verified; current engineering precedes stated sprint start",
+      "risks": "Ineligible timing/provenance",
+      "alternative": "Wait for official eligibility, record primary source and UTC time",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    },
+    {
+      "decision": "owner_authorization",
+      "status": "PENDING",
+      "existing_candidate_and_recommendation": "Separate explicit operation-specific owner record",
+      "evidence": "None supplied",
+      "risks": "Engineering wording mistaken for launch",
+      "alternative": "Keep blocked",
+      "blocks_formal_pilot": true,
+      "exact_approval_record": {
+        "record": null,
+        "researcher": null,
+        "status": "PENDING",
+        "timestamp": null
+      },
+      "must_reference_configuration_hash": "423a22aae6555c05dee6d3f1785a4cd888f8f151a2559c8559c81c2ded2b0723"
+    }
+  ],
+  "owner_authorization": null,
+  "start_verification": null
+}

@@ -100,6 +100,12 @@ PROFILE = {
     "detector_schema_hash": content_hash(RESPONSE_SCHEMA),
     "pricing": PRICING,
 }
+from copy import deepcopy
+
+AGENT_SCHEMA_V34 = deepcopy(AGENT_SCHEMA)
+# enum already determines these JSON types. Host validation remains unchanged.
+del AGENT_SCHEMA_V34["properties"]["round_number"]["type"]
+del AGENT_SCHEMA_V34["properties"]["end_step"]["type"]
 
 
 class ProviderFailure(OSError):
@@ -137,6 +143,32 @@ class CampaignLedger:
         )
 
     @classmethod
+    def phase5a2(cls, path, agent_contexts, detector_contexts):
+        if (
+            len(agent_contexts) != 10
+            or len(set(agent_contexts)) != 10
+            or len(detector_contexts) != 60
+            or len(set(detector_contexts)) != 60
+            or any(not x.startswith("ENG-5a2-") for x in (*agent_contexts, *detector_contexts))
+        ):
+            raise ValueError("EXACT_PREDECLARED_CONTEXTS_REQUIRED")
+        result = object.__new__(cls)
+        result._initialize(
+            path,
+            Decimal(5),
+            {
+                "agent": 60,
+                "detector": 60,
+                "total": 120,
+                "purpose": "phase5a2_engineering",
+                "contexts": {"agent": list(agent_contexts), "detector": list(detector_contexts)},
+                "per_context": {"agent": 6, "detector": 1},
+            },
+            profile=profile_5a2(),
+        )
+        return result
+
+    @classmethod
     def phase5a1(cls, path):
         result = object.__new__(cls)
         result._initialize(
@@ -170,9 +202,9 @@ class CampaignLedger:
                 "purpose": "authorized_pilot",
                 "manifest_hash": manifest["manifest_hash"],
             },
-            profile=profile_5a1()
-            if manifest["configuration"]["provider"].get("version") == "phase5a1-native-v1"
-            else None,
+            profile={"phase5a1-native-v1": profile_5a1, "phase5a2-reason-v1": profile_5a2}.get(
+                manifest["configuration"]["provider"].get("version"), lambda: None
+            )(),
         )
         return result
 
@@ -230,6 +262,15 @@ class CampaignLedger:
                 ).fetchone()[0]
                 if used >= self.limits["per_context"]:
                     raise ProviderFailure("EPISODE_CALL_CAP")
+            if self.limits["purpose"] == "phase5a2_engineering":
+                if context_id not in self.limits["contexts"][role]:
+                    raise ProviderFailure("UNDECLARED_CAMPAIGN_SLOT")
+                used = db.execute(
+                    "SELECT count(*) FROM calls WHERE role=? AND json_extract(metadata,'$.context_id')=?",
+                    (role, context_id),
+                ).fetchone()[0]
+                if used >= self.limits["per_context"][role]:
+                    raise ProviderFailure("SLOT_CALL_CAP")
             if total >= self.limits["total"] or count >= self.limits[role]:
                 raise ProviderFailure("CALL_CAP")
             if charged + reserve > self.ceiling:
@@ -372,6 +413,20 @@ def available_models():
         raise ProviderFailure("INVALID_MODELS_RESPONSE") from None
 
 
+def profile_5a2():
+    from pactlens.research.reason_detector import SCHEMA_HASH
+
+    return {
+        **PROFILE,
+        "version": "phase5a2-reason-v1",
+        "agent_prompt": "pactlens-agent-v3.4-candidate",
+        "agent_schema_hash": content_hash(AGENT_SCHEMA_V34),
+        "detector_schema_hash": SCHEMA_HASH,
+        "citations": "packet-bound-f-index-max4",
+        "explanation": "enumerated-reason-code-only",
+    }
+
+
 def profile_5a1():
     from pactlens.research.native_detector import SCHEMA_HASH
 
@@ -390,9 +445,13 @@ class DeepSeekProvider:
         if type(ledger) is not CampaignLedger or role not in ("agent", "detector"):
             raise ValueError("TRUSTED_CAMPAIGN_REQUIRED")
         self.ledger, self.role, self.blocked = ledger, role, False
-        if profile not in ("phase4e", "phase5a1"):
+        if profile not in ("phase4e", "phase5a1", "phase5a2"):
             raise ValueError("UNREVIEWED_PROVIDER_PROFILE")
-        self.profile = PROFILE if profile == "phase4e" else profile_5a1()
+        self.profile = {
+            "phase4e": lambda: PROFILE,
+            "phase5a1": profile_5a1,
+            "phase5a2": profile_5a2,
+        }[profile]()
         if self.profile != ledger.profile:
             raise ValueError("LEDGER_PROFILE_BINDING")
         if type(context_id) is not str or not 1 <= len(context_id) <= 128:
@@ -408,6 +467,10 @@ class DeepSeekProvider:
             from dataclasses import replace
 
             self.config = replace(self.config, revision="phase5a1-native-nonthinking-v1")
+        if profile == "phase5a2":
+            from dataclasses import replace
+
+            self.config = replace(self.config, revision="phase5a2-reason-nonthinking-v1")
         self.returned_model = None
 
     async def generate(self, request):
@@ -418,8 +481,14 @@ class DeepSeekProvider:
         ):
             raise ValueError("REVIEWED_DEEPSEEK_PROMPT_REQUIRED")
         schema = AGENT_SCHEMA if self.role == "agent" else RESPONSE_SCHEMA
+        if self.role == "agent" and self.profile.get("version") == "phase5a2-reason-v1":
+            schema = AGENT_SCHEMA_V34
         if self.role == "detector" and self.profile.get("version") == "phase5a1-native-v1":
             from pactlens.research.native_detector import schema_for
+
+            schema = schema_for(request.citation_keys)
+        if self.role == "detector" and self.profile.get("version") == "phase5a2-reason-v1":
+            from pactlens.research.reason_detector import schema_for
 
             schema = schema_for(request.citation_keys)
         try:

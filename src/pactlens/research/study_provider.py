@@ -18,8 +18,10 @@ async def execute_pilot(manifest, root, output):
     if ledger_path.exists() or output.exists():
         raise ValueError("FRESH_PILOT_REQUIRED_NO_AUTOMATIC_RESUME")
     ledger = CampaignLedger.authorized_pilot(ledger_path, manifest, root)
-    candidate = manifest["configuration"]["provider"].get("version") == "phase5a1-native-v1"
-    profile = "phase5a1" if candidate else "phase4e"
+    profile = {"phase5a1-native-v1": "phase5a1", "phase5a2-reason-v1": "phase5a2"}.get(
+        manifest["configuration"]["provider"].get("version"), "phase4e"
+    )
+    candidate = profile != "phase4e"
     providers = []
 
     def provider_factory(episode_id):
@@ -44,6 +46,9 @@ async def execute_pilot(manifest, root, output):
         if candidate:
             from pactlens.evidence.tight_views import render
             from pactlens.research.native_detector import envelope
+
+            if profile == "phase5a2":
+                from pactlens.research.reason_detector import envelope
 
             selected = select_common(inv, envelope=envelope(), renderer=render)
         else:

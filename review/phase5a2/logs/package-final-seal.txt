@@ -1,0 +1,10 @@
+{
+  "archive": "D:\\workshop\\oct\\pactlens-phase5a2-review.zip",
+  "archive_sha256": "722cd949a73a7a9fa9605d3d7db2c31be91030743dcaa539c4e7142418520080",
+  "archive_bytes": 2618388,
+  "member_count": 1021,
+  "crc": "PASS",
+  "every_member_hash": "PASS",
+  "source_consistency": "PASS",
+  "secret_checks": "PASS"
+}

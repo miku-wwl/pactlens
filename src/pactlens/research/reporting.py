@@ -1,6 +1,7 @@
 """Validated, source-bound future analysis export. No invented result generation."""
 
 import csv
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -201,3 +202,57 @@ def export_results(artifact, sources, output, *, charts=False):
         encoding="utf-8",
     )
     return output
+
+
+def export_engineering_results(rows, sources, output):
+    """Descriptive real-engineering tables, without relaxing formal result guards."""
+    from pactlens.research.detector_runner import analysis_prediction, replay_prediction
+
+    output = Path(output)
+    output.mkdir(parents=True, exist_ok=False)
+    identities = set()
+    table = []
+    scored = 0
+    for row in rows:
+        artifact = replay_prediction(row["artifact"])
+        if artifact["provenance"] != "ENGINEERING_ONLY_NOT_RESEARCH_PREDICTION":
+            raise ValueError("ENGINEERING_L4_REQUIRED")
+        if artifact["identity"] in identities:
+            raise ValueError("DUPLICATE_ENGINEERING_PREDICTION")
+        identities.add(artifact["identity"])
+        view, score, confidence = analysis_prediction(row["artifact"])
+        scored += score is not None
+        table.append(
+            {
+                **row,
+                "view": view.value,
+                "effective_score": score,
+                "effective_confidence": confidence,
+                "state": artifact["decision"]["state"],
+                "error": artifact["prediction"]["error"],
+                "evidence_eligible": artifact["decision"].get("eligibility", {}).get("eligible"),
+                "host_abstained": artifact["decision"]["host_mandated"],
+                "model_abstained": artifact["decision"].get("model_abstained", False),
+                "reason_codes": ";".join(artifact["decision"]["reasons"]),
+            }
+        )
+    if table:
+        with (output / "engineering-matrix.csv").open("x", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=list(table[0]))
+            writer.writeheader()
+            writer.writerows(table)
+    provenance = {
+        "provenance": "REAL_ENGINEERING_DESCRIPTIVE_NOT_FORMAL",
+        "attempts": len(table),
+        "effective_scores": scored,
+        "coverage": None if not table else scored / len(table),
+        "threshold": "NOT_SELECTED",
+        "formal_inference": False,
+        "source_hashes": {
+            str(p): hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in sources
+        },
+    }
+    (output / "provenance.json").write_text(
+        json.dumps(provenance, indent=2) + "\n", encoding="utf-8"
+    )
+    return provenance

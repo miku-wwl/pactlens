@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "rows": 93,
+  "agent_requests": 53,
+  "detector_requests": 40,
+  "actual_SQL_matches_public_accounting": true,
+  "ledger_unchanged": true,
+  "sha256": "a376f0c9c83dc2ffcf9172314167d3b10563c13240564d504c6631ea5fdf45bb",
+  "unknown_requests": 0,
+  "new_inference": 0
+}
