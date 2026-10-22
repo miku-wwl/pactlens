@@ -1,0 +1,34 @@
+ M docs/PROVENANCE.md
+ M src/pactlens/agents/deepseek_provider.py
+ M src/pactlens/agents/prompts.py
+ M src/pactlens/agents/provider.py
+ M src/pactlens/evidence/compact_views.py
+ M src/pactlens/evidence/sufficiency.py
+ M src/pactlens/research/detector_contract.py
+ M src/pactlens/research/detector_runner.py
+ M src/pactlens/research/study_launch.py
+ M src/pactlens/research/study_provider.py
+?? docs/PHASE5A1_AGENT_BUDGET_AND_MODEL.md
+?? docs/PHASE5A1_BASELINE_REVIEW.md
+?? docs/PHASE5A1_DETECTOR_QUALIFICATION.md
+?? docs/PHASE5A1_EVIDENCE_SUFFICIENCY_DECISION.md
+?? docs/PHASE5A1_EXECUTION_REPORT.md
+?? docs/PHASE5A1_REAL_ENGINEERING_RESULTS.md
+?? docs/PHASE5A1_RESEARCH_FREEZE_READINESS.md
+?? docs/PHASE5A1_TEST_MATRIX.md
+?? research/phase5a1/
+?? review/phase5a1/
+?? scripts/package_phase5a1.py
+?? scripts/phase5a1_audit.py
+?? scripts/phase5a1_campaign.py
+?? scripts/phase5a1_diagnose.py
+?? scripts/phase5a1_offline.py
+?? scripts/phase5a1_reports.py
+?? scripts/phase5a1_summarize.py
+?? scripts/verify_phase5a1.py
+?? scripts/verify_phase5a1_archive.py
+?? src/pactlens/agents/context_v33.py
+?? src/pactlens/evidence/tight_views.py
+?? src/pactlens/research/native_detector.py
+?? src/pactlens/research/sufficiency_v3.py
+?? tests/test_phase5a1_qualification.py

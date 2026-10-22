@@ -105,6 +105,7 @@ class PredictionRecord:
         if self.evidence_version not in (
             "pactlens-budgeted-facts-v1-candidate",
             "pactlens-budgeted-facts-v2-candidate",
+            "pactlens-budgeted-facts-v3-candidate",
         ):
             raise ValueError("DETECTOR_EVIDENCE_VERSION")
         if (

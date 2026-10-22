@@ -1,0 +1,48 @@
+{
+  "artifact_url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-recipe/main/static/tokenizers/v41/tokenizer.json",
+  "sha256": "81f64d1248a68ce3663e07ab3ee48b851e5df0e32d27cb98e4c9a268151e8d99",
+  "bytes": 6367247,
+  "provenance": "Official DeepSeek repository README checksum verified",
+  "upstream_model": "DeepSeek-V4-Flash-Vision-Exp",
+  "comparison_revision": "6821d6ad3681a4b137b066b76094fa82ebd0a380",
+  "model_type": "BPE",
+  "pre_tokenizer": {
+    "type": "Sequence",
+    "pretokenizers": [
+      {
+        "type": "Split",
+        "pattern": {
+          "Regex": "\\p{N}{1,3}"
+        },
+        "behavior": "Isolated",
+        "invert": false
+      },
+      {
+        "type": "Split",
+        "pattern": {
+          "Regex": "[一-龥぀-ゟ゠-ヿ]+"
+        },
+        "behavior": "Isolated",
+        "invert": false
+      },
+      {
+        "type": "Split",
+        "pattern": {
+          "Regex": "[!\"#$%&'()*+,\\-./:;<=>?@\\[\\\\\\]^_`{|}~][A-Za-z]+|[^\r\n\\p{L}\\p{P}\\p{S}]?[\\p{L}\\p{M}]+| ?[\\p{P}\\p{S}]+[\r\n]*|\\s*[\r\n]+|\\s+(?!\\S)|\\s+"
+        },
+        "behavior": "Isolated",
+        "invert": false
+      },
+      {
+        "type": "ByteLevel",
+        "add_prefix_space": false,
+        "trim_offsets": true,
+        "use_regex": false
+      }
+    ]
+  },
+  "chat_or_responses_serialization_present": false,
+  "exact_hosted_flash_1017_counter_qualified": false,
+  "scripts_executed": 0,
+  "dependencies_installed": 0
+}

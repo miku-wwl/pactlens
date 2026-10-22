@@ -16,7 +16,6 @@ from pathlib import Path
 from pactlens.agents.budgets import BudgetExceeded
 from pactlens.agents.models import closed_json
 from pactlens.agents.provider import ModelConfig, ModelResponse
-from pactlens.evidence.compact_views import VERSION as EVIDENCE_VERSION
 from pactlens.evidence.compact_views import CompactView
 from pactlens.evidence.views import View
 from pactlens.research.abstention import decision
@@ -26,6 +25,7 @@ from pactlens.serialization import primitive
 
 LEGACY_VERSION = "pactlens-detector-runner-v1-candidate"
 VERSION = "pactlens-detector-runner-v2-candidate"
+CANDIDATE_VERSION = "pactlens-detector-runner-v3-candidate"
 
 
 @dataclass(frozen=True)
@@ -34,6 +34,11 @@ class DetectorRequest:
     seed: int
     prompt_hash: str
     evidence_hash: str
+
+
+@dataclass(frozen=True)
+class NativeDetectorRequest(DetectorRequest):
+    citation_keys: tuple
 
 
 def exclusive_json(path, body):
@@ -48,7 +53,7 @@ def _record(body, packet):
     record = PredictionRecord(
         header["episode"],
         packet.view,
-        EVIDENCE_VERSION,
+        header["version"],
         packet.envelope.config_hash,
         body,
         None,
@@ -58,7 +63,15 @@ def _record(body, packet):
 
 
 async def predict(
-    directory, packet, provider, *, engineering_id, seed=0, formal_config=None, formal_permit=None
+    directory,
+    packet,
+    provider,
+    *,
+    engineering_id,
+    seed=0,
+    formal_config=None,
+    formal_permit=None,
+    sufficiency_policy=None,
 ):
     from pactlens.research.study_launch import StudyEpisodeConfig, _LaunchPermit
 
@@ -83,16 +96,45 @@ async def predict(
     if provider.config.max_output_tokens > packet.envelope.reserved_output_tokens:
         raise ValueError("OUTPUT_RESERVATION")
     header, facts = packet.verify()
+    from pactlens.research.native_detector import NativeEnvelope, NativeOutputError, validate
+    from pactlens.research.sufficiency_v3 import (
+        VERSION as SUFFICIENCY_VERSION,
+    )
+    from pactlens.research.sufficiency_v3 import (
+        decision as sufficient_decision,
+    )
+
+    native = type(packet.envelope) is NativeEnvelope
+    approved_candidate = (
+        formal
+        and getattr(formal_permit, "configuration", {}).get("sufficiency_policy")
+        == SUFFICIENCY_VERSION
+        and getattr(formal_permit, "configuration", {}).get("detector_envelope")
+        == packet.envelope.config_hash
+    )
+    if formal and (
+        native != approved_candidate
+        or sufficiency_policy
+        != getattr(formal_permit, "configuration", {}).get("sufficiency_policy")
+    ):
+        raise ValueError("FORMAL_APPROVED_POLICY_PROFILE_REQUIRED")
+    if sufficiency_policy not in (None, SUFFICIENCY_VERSION) or (
+        sufficiency_policy is not None and (not native or (formal and not approved_candidate))
+    ):
+        raise ValueError("ENGINEERING_ONLY_SUFFICIENCY_CANDIDATE")
+    version = CANDIDATE_VERSION if native else VERSION
     config = {
-        "version": VERSION,
+        "version": version,
         "model": primitive(provider.config),
         "prompt_hash": packet.envelope.config_hash,
-        "template_version": EVIDENCE_VERSION,
+        "template_version": header["version"],
         "error_policy": "abstain-no-retry",
         "seed": seed,
         "engineering_id": engineering_id,
         "formal_execution_enabled": formal,
     }
+    if native:
+        config.update(native_schema=True, sufficiency_policy=sufficiency_policy)
     if formal:
         config["formal_slot"] = formal_config.episode.episode_id
         config["configuration_hash"] = formal_config.configuration_hash
@@ -106,6 +148,8 @@ async def predict(
     )
     error, raw_hash, usage, response_json = None, None, None, None
     provider_error = None
+    diagnostic = None
+    lengths = None
     budget = packet.envelope.budget(packet.text)
     record = None
     try:
@@ -114,12 +158,26 @@ async def predict(
         request = DetectorRequest(
             turns, seed, packet.envelope.config_hash, content_hash(packet.text)
         )
+        if native:
+            from pactlens.evidence.tight_views import citation_keys
+
+            request = NativeDetectorRequest(
+                turns,
+                seed,
+                packet.envelope.config_hash,
+                content_hash(packet.text),
+                citation_keys(packet.text),
+            )
         async with asyncio.timeout(provider.config.timeout_seconds):
             response = await provider.generate(request)
         if type(response) is not ModelResponse:
             raise ValueError("DETECTOR_RESPONSE_TYPE")
         response.__post_init__()
         raw_hash = content_hash(response.text)
+        lengths = {
+            "characters": len(response.text),
+            "utf8_bytes": len(response.text.encode("utf-8")),
+        }
         usage = {
             k: getattr(response, k)
             for k in ("input_tokens", "output_tokens", "latency_us", "finish_reason")
@@ -132,6 +190,8 @@ async def predict(
         ):
             raise ValueError("OUTPUT_BUDGET_EXCEEDED")
         body = closed_json(response.text, 8192)
+        if native:
+            validate(body, request.citation_keys)
         if type(body) is not dict:
             raise ValueError("DETECTOR_OBJECT")
         # The v2 table legend explicitly asks for logical keys. Resolve exactly;
@@ -145,8 +205,17 @@ async def predict(
         record = _record(response_json, packet)
     except BudgetExceeded:
         error = "INPUT_BUDGET_EXCEEDED"
+        diagnostic = {"code": error, "field": "request", "branch": "full-native-budget"}
+    except NativeOutputError as failure:
+        error = "INVALID_OUTPUT"
+        diagnostic = failure.diagnostic
     except (ValueError, TypeError, KeyError, RecursionError, UnicodeError):
         error = "INVALID_OUTPUT"
+        diagnostic = {
+            "code": "STRICT_OUTPUT_VALIDATION",
+            "field": "response",
+            "branch": "json-or-host-contract",
+        }
     except (OSError, TimeoutError, RuntimeError) as failure:
         error = "PROVIDER_ERROR"
         provider_error = getattr(failure, "code", "PROVIDER_ERROR")
@@ -155,16 +224,18 @@ async def predict(
         record = PredictionRecord(
             header["episode"],
             packet.view,
-            EVIDENCE_VERSION,
+            header["version"],
             packet.envelope.config_hash,
             None,
             error,
         )
     prediction = json.loads(record.to_json())
     # Host-bound abstention retains an otherwise valid model response and its score.
-    effective = decision(packet, record)
+    effective = (
+        sufficient_decision(packet, record) if sufficiency_policy else decision(packet, record)
+    )
     artifact = {
-        "version": VERSION,
+        "version": version,
         "identity": identity,
         "config": config,
         "packet": {
@@ -186,6 +257,10 @@ async def predict(
         if formal
         else "ENGINEERING_ONLY_NOT_RESEARCH_PREDICTION",
     }
+    if native:
+        artifact["packet"]["native_envelope"] = True
+        artifact["validation_diagnostic"] = diagnostic
+        artifact["output_length"] = lengths
     artifact["artifact_hash"] = content_hash(artifact)
     path = directory / (identity + ".prediction.json")
     exclusive_json(path, artifact)
@@ -199,11 +274,25 @@ def replay_prediction(path):
         raise ValueError("PREDICTION_BOUND")
     body = closed_json(raw.decode("utf-8"), 2_000_000)
     digest = body.pop("artifact_hash")
-    if content_hash(body) != digest or body["version"] not in (VERSION, LEGACY_VERSION):
+    if content_hash(body) != digest or body["version"] not in (
+        VERSION,
+        LEGACY_VERSION,
+        CANDIDATE_VERSION,
+    ):
         raise ValueError("PREDICTION_INTEGRITY")
     p = body["packet"]
+    from pactlens.research.native_detector import NativeEnvelope
+
+    native = body["version"] == CANDIDATE_VERSION
+    if native and (
+        p.get("native_envelope") is not True or body["config"].get("native_schema") is not True
+    ):
+        raise ValueError("NATIVE_ENVELOPE_BINDING")
     packet = CompactView(
-        View(p["view"]), p["text"], p["manifest_json"], DetectorEnvelope(**p["envelope"])
+        View(p["view"]),
+        p["text"],
+        p["manifest_json"],
+        (NativeEnvelope if native else DetectorEnvelope)(**p["envelope"]),
     )
     packet.verify()
     expected = content_hash(
@@ -228,8 +317,18 @@ def replay_prediction(path):
         or prediction["prompt_hash"] != packet.envelope.config_hash
     ):
         raise ValueError("PREDICTION_BINDING")
-    if body["version"] == VERSION:
-        effective = decision(packet, record)
+    if body["version"] in (VERSION, CANDIDATE_VERSION):
+        from pactlens.research.sufficiency_v3 import (
+            VERSION as SUFFICIENCY_VERSION,
+        )
+        from pactlens.research.sufficiency_v3 import (
+            decision as sufficient_decision,
+        )
+
+        policy = body["config"].get("sufficiency_policy")
+        if policy not in (None, SUFFICIENCY_VERSION) or (policy and not native):
+            raise ValueError("SUFFICIENCY_POLICY_BINDING")
+        effective = sufficient_decision(packet, record) if policy else decision(packet, record)
         if (
             body.get("decision") != effective
             or body["abstained"] != (effective["state"] == "ABSTAINED")
@@ -248,7 +347,7 @@ def replay_prediction(path):
 def analysis_prediction(path):
     """The supported L4 -> analysis bridge refuses ambiguous historical v1 flags."""
     body = replay_prediction(path)
-    if body["version"] != VERSION:
+    if body["version"] not in (VERSION, CANDIDATE_VERSION):
         raise ValueError("LEGACY_PREDICTION_REQUIRES_EXPLICIT_POLICY_REVIEW")
     return (
         View(body["prediction"]["view"]),

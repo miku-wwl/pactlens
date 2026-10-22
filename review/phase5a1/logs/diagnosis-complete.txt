@@ -1,0 +1,56 @@
+{
+  "provenance": "OFFLINE_READ_ONLY_NO_CALLS",
+  "historical_full_estimate": 2132,
+  "historical_conversation_estimate": 1481,
+  "wire_utf8_bytes": 3940,
+  "wire_value_bytes": {
+    "model": 16,
+    "input": 2836,
+    "reasoning": 17,
+    "temperature": 1,
+    "max_output_tokens": 3,
+    "stream": 5,
+    "text": 976
+  },
+  "wire_key_separator_bytes": 86,
+  "system_instruction_bytes": 977,
+  "brief_bytes": 78,
+  "content_utf8_bytes": {
+    "system_and_brief": 1070,
+    "observation": 1498
+  },
+  "observation_field_value_bytes": {
+    "now": 179,
+    "public_task": 298,
+    "accepted_proposals": 142,
+    "own_history": 434,
+    "delivered_inbox": 366
+  },
+  "observation_keys_separator_bytes": 79,
+  "native_schema_bytes": 906,
+  "native_text_format_bytes": 976,
+  "input_json_framing_and_escape_bytes": 268,
+  "heuristic_role_and_margin_tokens": 162,
+  "historical_sent_calls": [
+    {
+      "estimate": 1607,
+      "provider_usage": 792,
+      "absolute_error": 815,
+      "qualified_exact": false
+    },
+    {
+      "estimate": 1730,
+      "provider_usage": 883,
+      "absolute_error": 847,
+      "qualified_exact": false
+    },
+    {
+      "estimate": 1857,
+      "provider_usage": 980,
+      "absolute_error": 877,
+      "qualified_exact": false
+    }
+  ],
+  "new_model_calls": 0,
+  "new_effects": 0
+}

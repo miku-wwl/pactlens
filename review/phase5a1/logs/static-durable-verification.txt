@@ -1,0 +1,50 @@
+{
+  "all_required_passed": true,
+  "HEAD": "54fd01b2bd4c3d4ac4d74cce93aeb4f731e5dcf2",
+  "checks": {
+    "final-sync": true,
+    "final-regression": true,
+    "final-ruff-check": true,
+    "final-ruff-format": true,
+    "final-lock": true,
+    "baseline-retry": true
+  },
+  "tests_passed": 930,
+  "baseline_passed": 885,
+  "aig_version": "0.2.0",
+  "aig_record_hashes": 57,
+  "aig_seconds": 5,
+  "historical_policy_hash": "aac41eb4516f89ff68637d1d4da9b638e4c94655df5db8f5c06d3bb588084817",
+  "historical_response_hash": "28fc9e785981fb5010e5acfbd667415b9efa60c6a94371df88bad552b7f172bc",
+  "historical_envelope_hash": "4514c3d752300b690dbb1b1f6f9eff37d27c70af57b7099fd338f75799f5c53d",
+  "durable_rows": [
+    {
+      "case": "N3",
+      "verified_committed_rows": 5,
+      "core_action_states": {
+        "Succeeded": 5
+      },
+      "independent_authorization_rows": 5,
+      "durable_claim_attempts": 5,
+      "replay_calls": 0,
+      "replay_effects": 0
+    },
+    {
+      "case": "C_PLUS",
+      "verified_committed_rows": 4,
+      "core_action_states": {
+        "Succeeded": 4
+      },
+      "independent_authorization_rows": 4,
+      "durable_claim_attempts": 4,
+      "replay_calls": 0,
+      "replay_effects": 0
+    }
+  ],
+  "private_files_unchanged_by_replay": true,
+  "prediction_replays": 10,
+  "rendered_R_MAE_pairs": 2,
+  "formal_executions": 0,
+  "approval_status": "PENDING",
+  "research_ready": false
+}

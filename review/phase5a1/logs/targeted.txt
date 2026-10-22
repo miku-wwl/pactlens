@@ -1,0 +1,685 @@
+FFFFF.....FFFFFFFFFFFFFFF.....F......................................... [ 54%]
+...........................................................              [100%]
+================================== FAILURES ===================================
+___________ test_one_shot_native_and_authoritative_policy[valid-M] ____________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho0')
+view = <View.M: 'M'>, mode = 'valid'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+>           assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+E           AssertionError: assert ('ABSTAINED' == 'SCORED'
+E             
+E             - SCORED
+E             + ABSTAINED)
+
+tests\test_phase5a1_qualification.py:80: AssertionError
+___________ test_one_shot_native_and_authoritative_policy[valid-A] ____________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho1')
+view = <View.A: 'A'>, mode = 'valid'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+>           assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+E           AssertionError: assert ('ABSTAINED' == 'SCORED'
+E             
+E             - SCORED
+E             + ABSTAINED)
+
+tests\test_phase5a1_qualification.py:80: AssertionError
+___________ test_one_shot_native_and_authoritative_policy[valid-MA] ___________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho2')
+view = <View.MA: 'MA'>, mode = 'valid'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+>           assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+E           AssertionError: assert ('ABSTAINED' == 'SCORED'
+E             
+E             - SCORED
+E             + ABSTAINED)
+
+tests\test_phase5a1_qualification.py:80: AssertionError
+___________ test_one_shot_native_and_authoritative_policy[valid-R] ____________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho3')
+view = <View.R: 'R'>, mode = 'valid'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+>           assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+E           AssertionError: assert ('ABSTAINED' == 'SCORED'
+E             
+E             - SCORED
+E             + ABSTAINED)
+
+tests\test_phase5a1_qualification.py:80: AssertionError
+__________ test_one_shot_native_and_authoritative_policy[valid-MAE] ___________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho4')
+view = <View.MAE: 'MAE'>, mode = 'valid'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+>           assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+E           AssertionError: assert ('ABSTAINED' == 'SCORED'
+E             
+E             - SCORED
+E             + ABSTAINED)
+
+tests\test_phase5a1_qualification.py:80: AssertionError
+__________ test_one_shot_native_and_authoritative_policy[citation-M] __________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho10')
+view = <View.M: 'M'>, mode = 'citation'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+            assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+        else:
+            assert out["decision"]["state"] == "ABSTAINED" and analysis_prediction(path)[1] is None
+        if mode in ("citation", "score", "rationale"):
+>           assert out["validation_diagnostic"]["field"] in (
+                "risk_score",
+                "evidence_ids",
+                "rationale_short",
+            )
+E           AssertionError: assert 'response' in ('risk_score', 'evidence_ids', 'rationale_short')
+
+tests\test_phase5a1_qualification.py:84: AssertionError
+__________ test_one_shot_native_and_authoritative_policy[citation-A] __________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho11')
+view = <View.A: 'A'>, mode = 'citation'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+            assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+        else:
+            assert out["decision"]["state"] == "ABSTAINED" and analysis_prediction(path)[1] is None
+        if mode in ("citation", "score", "rationale"):
+>           assert out["validation_diagnostic"]["field"] in (
+                "risk_score",
+                "evidence_ids",
+                "rationale_short",
+            )
+E           AssertionError: assert 'response' in ('risk_score', 'evidence_ids', 'rationale_short')
+
+tests\test_phase5a1_qualification.py:84: AssertionError
+_________ test_one_shot_native_and_authoritative_policy[citation-MA] __________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho12')
+view = <View.MA: 'MA'>, mode = 'citation'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+            assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+        else:
+            assert out["decision"]["state"] == "ABSTAINED" and analysis_prediction(path)[1] is None
+        if mode in ("citation", "score", "rationale"):
+>           assert out["validation_diagnostic"]["field"] in (
+                "risk_score",
+                "evidence_ids",
+                "rationale_short",
+            )
+E           AssertionError: assert 'response' in ('risk_score', 'evidence_ids', 'rationale_short')
+
+tests\test_phase5a1_qualification.py:84: AssertionError
+__________ test_one_shot_native_and_authoritative_policy[citation-R] __________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho13')
+view = <View.R: 'R'>, mode = 'citation'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+            assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+        else:
+            assert out["decision"]["state"] == "ABSTAINED" and analysis_prediction(path)[1] is None
+        if mode in ("citation", "score", "rationale"):
+>           assert out["validation_diagnostic"]["field"] in (
+                "risk_score",
+                "evidence_ids",
+                "rationale_short",
+            )
+E           AssertionError: assert 'response' in ('risk_score', 'evidence_ids', 'rationale_short')
+
+tests\test_phase5a1_qualification.py:84: AssertionError
+_________ test_one_shot_native_and_authoritative_policy[citation-MAE] _________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho14')
+view = <View.MAE: 'MAE'>, mode = 'citation'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+            assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+        else:
+            assert out["decision"]["state"] == "ABSTAINED" and analysis_prediction(path)[1] is None
+        if mode in ("citation", "score", "rationale"):
+>           assert out["validation_diagnostic"]["field"] in (
+                "risk_score",
+                "evidence_ids",
+                "rationale_short",
+            )
+E           AssertionError: assert 'response' in ('risk_score', 'evidence_ids', 'rationale_short')
+
+tests\test_phase5a1_qualification.py:84: AssertionError
+___________ test_one_shot_native_and_authoritative_policy[score-M] ____________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho15')
+view = <View.M: 'M'>, mode = 'score'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+            assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+        else:
+            assert out["decision"]["state"] == "ABSTAINED" and analysis_prediction(path)[1] is None
+        if mode in ("citation", "score", "rationale"):
+>           assert out["validation_diagnostic"]["field"] in (
+                "risk_score",
+                "evidence_ids",
+                "rationale_short",
+            )
+E           AssertionError: assert 'response' in ('risk_score', 'evidence_ids', 'rationale_short')
+
+tests\test_phase5a1_qualification.py:84: AssertionError
+___________ test_one_shot_native_and_authoritative_policy[score-A] ____________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho16')
+view = <View.A: 'A'>, mode = 'score'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+            assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+        else:
+            assert out["decision"]["state"] == "ABSTAINED" and analysis_prediction(path)[1] is None
+        if mode in ("citation", "score", "rationale"):
+>           assert out["validation_diagnostic"]["field"] in (
+                "risk_score",
+                "evidence_ids",
+                "rationale_short",
+            )
+E           AssertionError: assert 'response' in ('risk_score', 'evidence_ids', 'rationale_short')
+
+tests\test_phase5a1_qualification.py:84: AssertionError
+___________ test_one_shot_native_and_authoritative_policy[score-MA] ___________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho17')
+view = <View.MA: 'MA'>, mode = 'score'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+            assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+        else:
+            assert out["decision"]["state"] == "ABSTAINED" and analysis_prediction(path)[1] is None
+        if mode in ("citation", "score", "rationale"):
+>           assert out["validation_diagnostic"]["field"] in (
+                "risk_score",
+                "evidence_ids",
+                "rationale_short",
+            )
+E           AssertionError: assert 'response' in ('risk_score', 'evidence_ids', 'rationale_short')
+
+tests\test_phase5a1_qualification.py:84: AssertionError
+___________ test_one_shot_native_and_authoritative_policy[score-R] ____________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho18')
+view = <View.R: 'R'>, mode = 'score'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+            assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+        else:
+            assert out["decision"]["state"] == "ABSTAINED" and analysis_prediction(path)[1] is None
+        if mode in ("citation", "score", "rationale"):
+>           assert out["validation_diagnostic"]["field"] in (
+                "risk_score",
+                "evidence_ids",
+                "rationale_short",
+            )
+E           AssertionError: assert 'response' in ('risk_score', 'evidence_ids', 'rationale_short')
+
+tests\test_phase5a1_qualification.py:84: AssertionError
+__________ test_one_shot_native_and_authoritative_policy[score-MAE] ___________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho19')
+view = <View.MAE: 'MAE'>, mode = 'score'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+            assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+        else:
+            assert out["decision"]["state"] == "ABSTAINED" and analysis_prediction(path)[1] is None
+        if mode in ("citation", "score", "rationale"):
+>           assert out["validation_diagnostic"]["field"] in (
+                "risk_score",
+                "evidence_ids",
+                "rationale_short",
+            )
+E           AssertionError: assert 'response' in ('risk_score', 'evidence_ids', 'rationale_short')
+
+tests\test_phase5a1_qualification.py:84: AssertionError
+_________ test_one_shot_native_and_authoritative_policy[rationale-M] __________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho20')
+view = <View.M: 'M'>, mode = 'rationale'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+            assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+        else:
+            assert out["decision"]["state"] == "ABSTAINED" and analysis_prediction(path)[1] is None
+        if mode in ("citation", "score", "rationale"):
+>           assert out["validation_diagnostic"]["field"] in (
+                "risk_score",
+                "evidence_ids",
+                "rationale_short",
+            )
+E           AssertionError: assert 'response' in ('risk_score', 'evidence_ids', 'rationale_short')
+
+tests\test_phase5a1_qualification.py:84: AssertionError
+_________ test_one_shot_native_and_authoritative_policy[rationale-A] __________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho21')
+view = <View.A: 'A'>, mode = 'rationale'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+            assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+        else:
+            assert out["decision"]["state"] == "ABSTAINED" and analysis_prediction(path)[1] is None
+        if mode in ("citation", "score", "rationale"):
+>           assert out["validation_diagnostic"]["field"] in (
+                "risk_score",
+                "evidence_ids",
+                "rationale_short",
+            )
+E           AssertionError: assert 'response' in ('risk_score', 'evidence_ids', 'rationale_short')
+
+tests\test_phase5a1_qualification.py:84: AssertionError
+_________ test_one_shot_native_and_authoritative_policy[rationale-MA] _________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho22')
+view = <View.MA: 'MA'>, mode = 'rationale'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+            assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+        else:
+            assert out["decision"]["state"] == "ABSTAINED" and analysis_prediction(path)[1] is None
+        if mode in ("citation", "score", "rationale"):
+>           assert out["validation_diagnostic"]["field"] in (
+                "risk_score",
+                "evidence_ids",
+                "rationale_short",
+            )
+E           AssertionError: assert 'response' in ('risk_score', 'evidence_ids', 'rationale_short')
+
+tests\test_phase5a1_qualification.py:84: AssertionError
+_________ test_one_shot_native_and_authoritative_policy[rationale-R] __________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho23')
+view = <View.R: 'R'>, mode = 'rationale'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+            assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+        else:
+            assert out["decision"]["state"] == "ABSTAINED" and analysis_prediction(path)[1] is None
+        if mode in ("citation", "score", "rationale"):
+>           assert out["validation_diagnostic"]["field"] in (
+                "risk_score",
+                "evidence_ids",
+                "rationale_short",
+            )
+E           AssertionError: assert 'response' in ('risk_score', 'evidence_ids', 'rationale_short')
+
+tests\test_phase5a1_qualification.py:84: AssertionError
+________ test_one_shot_native_and_authoritative_policy[rationale-MAE] _________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_one_shot_native_and_autho24')
+view = <View.MAE: 'MAE'>, mode = 'rationale'
+
+    @pytest.mark.parametrize("view", list(View))
+    @pytest.mark.parametrize(
+        "mode", ["valid", "insufficient", "citation", "score", "rationale", "length"]
+    )
+    def test_one_shot_native_and_authoritative_policy(tmp_path, view, mode):
+        p = packet("known-absence", view)
+        fake = Fake(mode)
+        path = asyncio.run(
+            predict(tmp_path, p, fake, engineering_id="ENG-5a1-test", sufficiency_policy=VERSION)
+        )
+        before = path.read_bytes()
+        out = replay_prediction(path)
+        assert path.read_bytes() == before and fake.calls == 1
+        assert out["replay_generation_calls"] == out["replay_new_effects"] == 0
+        assert out["decision"]["host_mandated"] is False
+        if mode == "valid":
+            assert out["decision"]["state"] == "SCORED" and analysis_prediction(path)[1] == 0.2
+        else:
+            assert out["decision"]["state"] == "ABSTAINED" and analysis_prediction(path)[1] is None
+        if mode in ("citation", "score", "rationale"):
+>           assert out["validation_diagnostic"]["field"] in (
+                "risk_score",
+                "evidence_ids",
+                "rationale_short",
+            )
+E           AssertionError: assert 'response' in ('risk_score', 'evidence_ids', 'rationale_short')
+
+tests\test_phase5a1_qualification.py:84: AssertionError
+______________ test_selected_omission_is_not_blanket_permission _______________
+
+tmp_path = WindowsPath('D:/Ollama/Temp/pytest-of-weila/pytest-213/test_selected_omission_is_not_0')
+
+    def test_selected_omission_is_not_blanket_permission(tmp_path):
+        a = packet("executed-lawful", View.A)
+        assert eligibility(a)["eligible"]
+        path = asyncio.run(
+            predict(
+                tmp_path,
+                a,
+                Fake("valid"),
+                engineering_id="ENG-5a1-selected",
+                sufficiency_policy=VERSION,
+            )
+        )
+        out = replay_prediction(path)
+>       assert out["decision"]["state"] == "SCORED"
+E       AssertionError: assert 'ABSTAINED' == 'SCORED'
+E         
+E         - SCORED
+E         + ABSTAINED
+
+tests\test_phase5a1_qualification.py:108: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[valid-M]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[valid-A]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[valid-MA]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[valid-R]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[valid-MAE]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[citation-M]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[citation-A]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[citation-MA]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[citation-R]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[citation-MAE]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[score-M]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[score-A]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[score-MA]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[score-R]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[score-MAE]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[rationale-M]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[rationale-A]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[rationale-MA]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[rationale-R]
+FAILED tests/test_phase5a1_qualification.py::test_one_shot_native_and_authoritative_policy[rationale-MAE]
+FAILED tests/test_phase5a1_qualification.py::test_selected_omission_is_not_blanket_permission
+21 failed, 110 passed in 87.24s (0:01:27)

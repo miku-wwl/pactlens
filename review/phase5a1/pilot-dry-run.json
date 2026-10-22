@@ -1,0 +1,11 @@
+{
+  "status": "EXPECTED_BLOCKED_DRY_RUN",
+  "command": "uv run python -m pactlens.research.study_launch --manifest research/phase5a1/freeze-candidate.json",
+  "execute_flag": false,
+  "exit_code": 1,
+  "reason": "FROZEN_APPROVALS_REQUIRED",
+  "formal_output_exists": false,
+  "formal_inference_ledger_exists": false,
+  "new_model_calls": 0,
+  "formal_executions": 0
+}

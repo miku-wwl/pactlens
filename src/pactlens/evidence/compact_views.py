@@ -350,6 +350,12 @@ class _Source:
 
 
 def extract_compact(text, view):
+    if type(text) is str and text.startswith(
+        ('{"v":"pactlens-facts-v3"', '{"h":{"v":"pactlens-facts-v3"')
+    ):
+        from pactlens.evidence.tight_views import extract
+
+        return extract(text, view)
     if type(view) is not View or type(text) is not str or len(text.encode("utf-8")) > MAX_BYTES:
         raise ValueError("BOUNDED_COMPACT_TEXT")
     if view == View.MAE:
@@ -483,7 +489,7 @@ class CompactView:
             k: sum(x["category"] == k for x in omitted) for k in sorted(CATEGORIES[self.view])
         }
         if (
-            manifest["version"] != VERSION
+            manifest["version"] != header["version"]
             or manifest["header"] != header
             or manifest["facts"] != canonical_fact_records(facts)
             or manifest["render_hash"] != content_hash(self.text)
@@ -503,6 +509,12 @@ class CompactView:
     def resolve_citations(self, keys):
         """Host mapping of cited packet keys to canonical fact UUIDs; no guessing."""
         header, facts = self.verify()
+        if header["version"] == "pactlens-budgeted-facts-v3-candidate":
+            from pactlens.evidence.tight_views import resolve
+
+            if type(keys) is not list or any(type(k) is not str for k in keys) or len(keys) > 16:
+                raise ValueError("DETECTOR_EVIDENCE_IDS")
+            return resolve(self.text, keys)
         if (
             type(keys) is not list
             or len(keys) > 16

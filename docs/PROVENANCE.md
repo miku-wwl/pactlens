@@ -559,3 +559,16 @@ the review ZIP. The external receipt records its SHA and member verification.
 All methodological approvals remain pending. Formal Pilot/Calibration/Held-out
 executions remain0; primary endpoint and24-group design unchanged. No commit,
 push, tag, release, deployment, submission or next-phase work occurred.
+
+
+## 13. Phase 5A.1 — 2026-10-22 NZDT
+
+Started clean at54fd01b2bd4c3d4ac4d74cce93aeb4f731e5dcf2, matching origin/main and fresh remote. All changes are pre-sprint engineering; no commit/push/release/deploy/submission. Frozen120-episode study remains0/120. Historical reports/failures/prompt versions/policy hashes are preserved. Installed AIG0.2.0/full7261fdd2 pin/default5seconds remain unchanged; no shared core modifications.
+
+Added reversible v3.3 Agent presentation, opt-in lossless evidence codec, native short-citation Detector schema/typed diagnostics, condition-blind sufficiency candidate, and16-choice guarded freeze extension. No formal default, input/output cap, metric, group allocation or threshold changed. Official tokenizer JSON was checksum-verified as public data only; no script execution or environment addition, and full hosted-envelope exactness remains unqualified.
+
+The single fixed campaign made11 Agent and10 Detector generations plus1 model metadata GET. N3 reached6 opportunities with5 valid/5 receipts and lawful fallback; C+4 valid/4 receipts withzero mechanical harm; C- skipped by the declared completion gate. Detector3/10 contract-valid,0 effective scores,7 rationale-limit violations. All outcomes retained with no repair/retry/replacement/model substitution. Peak/cache-miss usage estimates USD.011547; retained reservations USD.025348 within the effectiveUSD2/28-generation cap. Full audits still overflow4096 despite lossless compression. Synthetic sandbox consent is not authenticated human approval.
+
+Baseline885 and final928 tests pass; real qualification failures remain NO-GO. Two blinded reviewer forms per executed episode are blank; no independent adjudication or method approval is fabricated. The16-choice freeze candidate is PENDING; Pilot dry check rejects before dispatch. Required Phase5A1 reports and safe artifacts are included in the separately verified review ZIP; private prompts/responses/keys/stores/capabilities/tokenizer data remain excluded. Stop at this phase boundary.
+
+Final envelope-limit guard verification: 930 current tests passed after honoring smaller trusted input/context limits. The prior928-test snapshot is retained. Default4096 accounting and paid campaign inputs/outcomes are unchanged; no further inference occurred.

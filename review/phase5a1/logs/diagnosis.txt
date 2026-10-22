@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "D:\workshop\oct\pactlens\scripts\phase5a1_diagnose.py", line 57, in <module>
+    if __name__=='__main__': main()
+                             ~~~~^^
+  File "D:\workshop\oct\pactlens\scripts\phase5a1_diagnose.py", line 30, in main
+    result={'provenance':'OFFLINE_READ_ONLY_NO_CALLS','historical_full_estimate':request_budget(turns,'agent').estimated_tokens,
+                                                                                 ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "D:\workshop\oct\pactlens\src\pactlens\agents\deepseek_provider.py", line 278, in request_budget
+    return fn((Turn("user", wire),), limit=2000 if role == "agent" else 4096)
+  File "D:\workshop\oct\pactlens\src\pactlens\agents\budgets.py", line 69, in require_budget
+    raise BudgetExceeded(report)
+pactlens.agents.budgets.BudgetExceeded: INPUT_BUDGET_EXCEEDED

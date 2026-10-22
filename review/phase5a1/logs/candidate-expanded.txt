@@ -1,0 +1,60 @@
+......................................FF                                 [100%]
+================================== FAILURES ===================================
+_______ test_protected_denominators_and_matched_groups_remain_original ________
+
+    def test_protected_denominators_and_matched_groups_remain_original():
+        from pactlens.research.analysis import Case, metrics
+        from pactlens.research.seeds import Condition, Split
+    
+        case = Case(
+            "synthetic-episode",
+            "synthetic-matched-group",
+            Split.HELD_OUT,
+            Condition.N1,
+            0,
+            True,
+            True,
+            True,
+            False,
+            True,
+            ((View.MA, 0.8, 0.9), (View.MAE, None, None)),
+        )
+        # Manufactured rows validate the frozen denominator; no held-out files/outcomes are opened.
+        ma, mae = metrics([case], View.MA, 0.5), metrics([case], View.MAE, 0.5)
+        assert ma["n1_fpr"] == 1 and mae["n1_fpr"] == 0
+>       assert ma["n1_count"] == mae["n1_count"] == 1
+               ^^^^^^^^^^^^^^
+E       KeyError: 'n1_count'
+
+tests\test_phase5a1_qualification.py:237: KeyError
+_________ test_unknown_missing_capture_and_communication_are_distinct _________
+
+    def test_unknown_missing_capture_and_communication_are_distinct():
+        from pactlens.evidence.inventory import Inventory
+        from pactlens.evidence.observation_policy import ObservationPolicy
+        from pactlens.evidence.tight_views import render
+        from pactlens.serialization import canonical_json as integer_json
+    
+        original = packet("known-absence", View.R)
+        h, facts = original.verify()
+        assert eligibility(original)["eligible"] and any(f.completeness == "MISSING" for f in facts)
+        for mode in ("unknown", "capture", "omitted_message"):
+            changed = []
+            for f in facts:
+                p = json.loads(f.payload_json)
+                if (
+                    mode == "unknown"
+                    and f.kind == "aig_action"
+                    and f.actor == "Actor-1"
+                    and p["round"] == 1
+                ):
+                    p["action_state"] = "Unknown"
+>                   f = replace(f, payload_json=integer_json(p))
+                        ^^^^^^^
+E                   NameError: name 'replace' is not defined
+
+tests\test_phase5a1_qualification.py:260: NameError
+=========================== short test summary info ===========================
+FAILED tests/test_phase5a1_qualification.py::test_protected_denominators_and_matched_groups_remain_original
+FAILED tests/test_phase5a1_qualification.py::test_unknown_missing_capture_and_communication_are_distinct
+2 failed, 38 passed in 13.99s

@@ -1,0 +1,21 @@
+{
+  "archive": "D:\\workshop\\oct\\pactlens-phase5a1-review.zip",
+  "archive_bytes": 1629975,
+  "archive_sha256": "711b1f0444d75ea9c06f451cf43ae9222ae26497d071397ad9896c6dddfdfd35",
+  "crc": "PASS",
+  "every_member_hash": "PASS",
+  "member_count": 698,
+  "secret_checks": "PASS",
+  "source_consistency": "PASS",
+  "independent_post_process_verification": {
+    "status": "PASS",
+    "crc": "PASS",
+    "every_member_sha256": "PASS",
+    "current_source_bytes": "PASS",
+    "source_members": 696,
+    "secret_exact_value_scan": "PASS",
+    "excluded_private_paths": "PASS",
+    "packaging_process_already_exited": true,
+    "archive_unchanged": true
+  }
+}

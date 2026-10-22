@@ -46,6 +46,24 @@ DECISIONS = (
     "pilot_authorization",
 )
 QUALIFICATIONS = ("agent", "detector", "evidence", "operations")
+DECISIONS_5A1 = (
+    "agent_model_prompt",
+    "api_mode_schema",
+    "agent_budget",
+    "detector_model_prompt_schema",
+    "detector_budget",
+    "evidence_selection_sufficiency",
+    "authoritative_abstention",
+    "observer",
+    "n2",
+    "positive_control_rubric",
+    "human_reviewers",
+    "split_protection",
+    "primary_metric_uncertainty",
+    "call_cost_ceilings",
+    "start_eligibility",
+    "owner_authorization",
+)
 
 
 def code_hash(root):
@@ -103,7 +121,9 @@ def schedule(configuration_hash):
     }
 
 
-def freeze_candidate(root):
+def freeze_candidate(root, *, profile=None):
+    if profile not in (None, "phase5a1"):
+        raise ValueError("UNREVIEWED_FREEZE_PROFILE")
     root = Path(root)
     configuration = {
         "protocol_sha256": hashlib.sha256(
@@ -140,6 +160,27 @@ def freeze_candidate(root):
         "positive_control": "2/4 independently adjudicated behavioral positives; no replacement",
         "approval_mode": "synthetic AIG sandbox consent; owner study authorization separate",
     }
+    decisions = DECISIONS
+    if profile == "phase5a1":
+        from pactlens.agents.context_v33 import V33_PROMPT
+        from pactlens.agents.deepseek_provider import profile_5a1
+        from pactlens.evidence.tight_views import VERSION as CODEC_VERSION
+        from pactlens.research.native_detector import SCHEMA_HASH, envelope
+        from pactlens.research.sufficiency_v3 import POLICY_HASH as SUFFICIENCY_HASH
+        from pactlens.research.sufficiency_v3 import VERSION as SUFFICIENCY_VERSION
+
+        configuration.update(
+            agent_prompt=V33_PROMPT,
+            agent_prompt_hash=PROMPT_HASHES[V33_PROMPT],
+            provider=profile_5a1(),
+            detector_envelope=envelope().config_hash,
+            detector_schema=SCHEMA_HASH,
+            evidence_codec=CODEC_VERSION,
+            sufficiency_policy=SUFFICIENCY_VERSION,
+            abstention_policy_hash=SUFFICIENCY_HASH,
+            historical_abstention_policy_hash=POLICY_HASH,
+        )
+        decisions = DECISIONS_5A1
     body = {
         "version": "pactlens-freeze-v2-candidate",
         "status": "PENDING",
@@ -147,7 +188,7 @@ def freeze_candidate(root):
         "configuration_hash": content_hash(configuration),
         "decisions": {
             k: {"status": "PENDING", "researcher": None, "timestamp": None, "record": None}
-            for k in DECISIONS
+            for k in decisions
         },
         "qualifications": {
             k: {"status": "BLOCKED", "path": None, "sha256": None} for k in QUALIFICATIONS
@@ -158,6 +199,8 @@ def freeze_candidate(root):
         "calibration_locked": True,
         "held_out_locked": True,
     }
+    if profile == "phase5a1":
+        body["version"] = "pactlens-freeze-v3-phase5a1-candidate"
     body["schedule_hash"] = content_hash(schedule(body["configuration_hash"]))
     return {**body, "manifest_hash": content_hash(body)}
 
@@ -167,7 +210,11 @@ def verify_launch(manifest, root, *, now=None):
     digest = manifest.get("manifest_hash")
     if digest != content_hash({k: v for k, v in manifest.items() if k != "manifest_hash"}):
         raise ValueError("MANIFEST_INTEGRITY")
-    candidate = freeze_candidate(root)
+    profile = (
+        "phase5a1" if manifest.get("version") == "pactlens-freeze-v3-phase5a1-candidate" else None
+    )
+    candidate = freeze_candidate(root, profile=profile)
+    decisions = DECISIONS_5A1 if profile else DECISIONS
     if (
         manifest.get("configuration") != candidate["configuration"]
         or manifest.get("configuration_hash") != candidate["configuration_hash"]
@@ -175,7 +222,7 @@ def verify_launch(manifest, root, *, now=None):
         raise ValueError("FROZEN_SOURCE_OR_CONFIGURATION_CHANGED")
     if manifest.get("schedule_hash") != content_hash(schedule(manifest["configuration_hash"])):
         raise ValueError("SCHEDULE_CHANGED")
-    if manifest.get("status") != "APPROVED" or set(manifest.get("decisions", {})) != set(DECISIONS):
+    if manifest.get("status") != "APPROVED" or set(manifest.get("decisions", {})) != set(decisions):
         raise ValueError("FROZEN_APPROVALS_REQUIRED")
     for d in manifest["decisions"].values():
         if d.get("status") != "APPROVED" or not all(
@@ -288,6 +335,7 @@ class _LaunchPermit:
     def __init__(self, manifest, root, now):
         verify_launch(manifest, root, now=now)
         self.configuration_hash = manifest["configuration_hash"]
+        self.configuration = manifest["configuration"]
 
 
 async def launch_verified(manifest, root, output, provider_factory, detector_step, *, now=None):
@@ -326,7 +374,7 @@ async def _launch_once(manifest, root, output, provider_factory, detector_step, 
                 StudyEpisodeConfig(episode, manifest["configuration_hash"]),
                 provider_factory(episode.episode_id),
                 consent=TestConsent(True),
-                prompt_version=V32_PROMPT,
+                prompt_version=manifest["configuration"]["agent_prompt"],
                 formal_permit=permit,
                 stop_on_input_budget_failure=True,
             )

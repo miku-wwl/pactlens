@@ -5,6 +5,7 @@ The ledger is consumer inference accounting, not an AIG execution mechanism.
 """
 
 import asyncio
+import hashlib
 import http.client
 import json
 import os
@@ -136,6 +137,24 @@ class CampaignLedger:
         )
 
     @classmethod
+    def phase5a1(cls, path):
+        result = object.__new__(cls)
+        result._initialize(
+            path,
+            Decimal(2),
+            {
+                "agent": 18,
+                "detector": 10,
+                "total": 28,
+                "purpose": "phase5a1_engineering",
+                "agent_contexts": ["ENG-5a1-N3", "ENG-5a1-C_PLUS", "ENG-5a1-C_MINUS"],
+                "per_context": 6,
+            },
+            profile=profile_5a1(),
+        )
+        return result
+
+    @classmethod
     def authorized_pilot(cls, path, manifest, root):
         from pactlens.research.study_launch import verify_launch
 
@@ -151,10 +170,14 @@ class CampaignLedger:
                 "purpose": "authorized_pilot",
                 "manifest_hash": manifest["manifest_hash"],
             },
+            profile=profile_5a1()
+            if manifest["configuration"]["provider"].get("version") == "phase5a1-native-v1"
+            else None,
         )
         return result
 
-    def _initialize(self, path, ceiling_usd, limits):
+    def _initialize(self, path, ceiling_usd, limits, *, profile=None):
+        self.profile = PROFILE if profile is None else profile
         self.limits = limits
         configured = os.environ.get("PACTLENS_DEEPSEEK_MAX_USD")
         ceiling = min(
@@ -173,7 +196,7 @@ class CampaignLedger:
             )
             settings = canonical_json(
                 {
-                    "profile": PROFILE,
+                    "profile": self.profile,
                     "ceiling_micro_usd": self.ceiling,
                     "limits": limits,
                 }
@@ -188,7 +211,7 @@ class CampaignLedger:
     def connect(self):
         return sqlite3.connect(self.path, timeout=5)
 
-    def reserve(self, role, identity, budget):
+    def reserve(self, role, identity, budget, *, context_id=None):
         if role not in ("agent", "detector"):
             raise ValueError("INFERENCE_ROLE")
         reserve = estimated_micro_usd(2000 if role == "agent" else 4096, 256)
@@ -198,6 +221,15 @@ class CampaignLedger:
                 "SELECT count(*), coalesce(sum(charge),0) FROM calls"
             ).fetchone()
             count = db.execute("SELECT count(*) FROM calls WHERE role=?", (role,)).fetchone()[0]
+            if self.limits["purpose"] == "phase5a1_engineering" and role == "agent":
+                if context_id not in self.limits["agent_contexts"]:
+                    raise ProviderFailure("UNDECLARED_AGENT_CONTEXT")
+                used = db.execute(
+                    "SELECT count(*) FROM calls WHERE json_extract(metadata,'$.context_id')=?",
+                    (context_id,),
+                ).fetchone()[0]
+                if used >= self.limits["per_context"]:
+                    raise ProviderFailure("EPISODE_CALL_CAP")
             if total >= self.limits["total"] or count >= self.limits[role]:
                 raise ProviderFailure("CALL_CAP")
             if charged + reserve > self.ceiling:
@@ -211,6 +243,8 @@ class CampaignLedger:
                 "reserved_micro_usd": reserve,
                 "estimated_actual_micro_usd": None,
             }
+            if context_id is not None:
+                meta["context_id"] = context_id
             try:
                 call_id = db.execute(
                     "INSERT INTO calls(role,identity,reserve,charge,metadata) VALUES (?,?,?,?,?)",
@@ -245,7 +279,7 @@ class CampaignLedger:
                 )
             ]
         return {
-            "profile": PROFILE,
+            "profile": self.profile,
             "ceiling_micro_usd": self.ceiling,
             "calls": rows,
             "agent_requests": sum(x["role"] == "agent" for x in rows),
@@ -269,8 +303,8 @@ def payload(turns, schema):
     }
 
 
-def request_budget(turns, role, *, require=True):
-    schema = AGENT_SCHEMA if role == "agent" else RESPONSE_SCHEMA
+def request_budget(turns, role, *, require=True, schema=None):
+    schema = (AGENT_SCHEMA if role == "agent" else RESPONSE_SCHEMA) if schema is None else schema
     # Same binding heuristic, applied conservatively to the complete serialized
     # request including native schema and generation controls. No exact-token claim.
     wire = canonical_json(payload(turns, schema))
@@ -338,11 +372,29 @@ def available_models():
         raise ProviderFailure("INVALID_MODELS_RESPONSE") from None
 
 
+def profile_5a1():
+    from pactlens.research.native_detector import SCHEMA_HASH
+
+    return {
+        **PROFILE,
+        "version": "phase5a1-native-v1",
+        "agent_prompt": "pactlens-agent-v3.3-candidate",
+        "detector_schema_hash": SCHEMA_HASH,
+        "citations": "packet-bound-f-index-max4",
+        "rationale_max_characters": 80,
+    }
+
+
 class DeepSeekProvider:
-    def __init__(self, ledger, role, *, context_id="engineering-default"):
+    def __init__(self, ledger, role, *, context_id="engineering-default", profile="phase4e"):
         if type(ledger) is not CampaignLedger or role not in ("agent", "detector"):
             raise ValueError("TRUSTED_CAMPAIGN_REQUIRED")
         self.ledger, self.role, self.blocked = ledger, role, False
+        if profile not in ("phase4e", "phase5a1"):
+            raise ValueError("UNREVIEWED_PROVIDER_PROFILE")
+        self.profile = PROFILE if profile == "phase4e" else profile_5a1()
+        if self.profile != ledger.profile:
+            raise ValueError("LEDGER_PROFILE_BINDING")
         if type(context_id) is not str or not 1 <= len(context_id) <= 128:
             raise ValueError("CONTEXT_ID")
         self.context_id = context_id
@@ -352,38 +404,52 @@ class DeepSeekProvider:
             "deepseek_responses",
             seed_support="UNSUPPORTED",
         )
+        if profile == "phase5a1":
+            from dataclasses import replace
+
+            self.config = replace(self.config, revision="phase5a1-native-nonthinking-v1")
         self.returned_model = None
 
     async def generate(self, request):
         if self.blocked:
             raise ProviderFailure("PROFILE_STOPPED_NO_FALLBACK")
-        if (
-            self.role == "agent"
-            and getattr(request, "prompt_version", None) != "pactlens-agent-v3.2-deepseek-candidate"
+        if self.role == "agent" and getattr(request, "prompt_version", None) != self.profile.get(
+            "agent_prompt", "pactlens-agent-v3.2-deepseek-candidate"
         ):
             raise ValueError("REVIEWED_DEEPSEEK_PROMPT_REQUIRED")
+        schema = AGENT_SCHEMA if self.role == "agent" else RESPONSE_SCHEMA
+        if self.role == "detector" and self.profile.get("version") == "phase5a1-native-v1":
+            from pactlens.research.native_detector import schema_for
+
+            schema = schema_for(request.citation_keys)
         try:
-            budget = request_budget(request.turns, self.role)
+            budget = request_budget(request.turns, self.role, schema=schema)
         except BudgetExceeded:
             self.blocked = True
             raise
-        schema = AGENT_SCHEMA if self.role == "agent" else RESPONSE_SCHEMA
         body = canonical_json(payload(request.turns, schema)).encode("utf-8")
         identity = content_hash(
             {
                 "request": request,
                 "role": self.role,
-                "profile": PROFILE,
+                "profile": self.profile,
                 "context_id": self.context_id,
             }
         )
         try:
-            call_id = self.ledger.reserve(self.role, identity, budget)
+            call_id = self.ledger.reserve(
+                self.role,
+                identity,
+                budget,
+                context_id=self.context_id if self.profile.get("version") else None,
+            )
         except ProviderFailure:
             self.blocked = True
             raise
         started = time.monotonic_ns()
         metadata = {}
+        metadata["request_sha256"] = hashlib.sha256(body).hexdigest()
+        metadata["schema_hash"] = content_hash(schema)
         try:
             data = await asyncio.to_thread(
                 _http, "POST", "/responses", body, self.config.timeout_seconds
@@ -454,6 +520,27 @@ class DeepSeekProvider:
         )
         reasoning = usage.get("output_tokens_details", {}).get("reasoning_tokens")
         metadata["reasoning_tokens"] = reasoning
+        # Bounded measurements survive incomplete output. No raw text is exported.
+        visible = [
+            p["text"]
+            for o in data.get("output", [])
+            if type(o) is dict
+            for p in o.get("content", [])
+            if type(p) is dict and p.get("type") == "output_text" and type(p.get("text")) is str
+        ]
+        if len(visible) == 1:
+            metadata.update(
+                output_characters=len(visible[0]),
+                output_utf8_bytes=len(visible[0].encode("utf-8")),
+                raw_response_hash=content_hash(visible[0]),
+            )
+        metadata["finish_reason"] = (
+            "stop"
+            if data.get("status") == "completed"
+            else "length"
+            if data.get("status") == "incomplete"
+            else "unknown"
+        )
         if reasoning not in (None, 0):
             raise ProviderFailure("UNEXPECTED_REASONING_TOKENS", uncertain=True)
         if usage["input_tokens"] > (2000 if self.role == "agent" else 4096):
@@ -476,6 +563,10 @@ class DeepSeekProvider:
                 texts.append(part["text"])
         if len(texts) != 1 or not texts[0].strip():
             raise ProviderFailure("EMPTY_OR_MULTIPART_OUTPUT", uncertain=True)
+        metadata["output_characters"] = len(texts[0])
+        metadata["output_utf8_bytes"] = len(texts[0].encode("utf-8"))
+        metadata["raw_response_hash"] = content_hash(texts[0])
+        metadata["finish_reason"] = "stop"
         try:
             closed_json(texts[0], 4096)
             return ModelResponse(

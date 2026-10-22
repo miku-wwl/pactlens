@@ -1,0 +1,245 @@
+{
+  "calibration_locked": true,
+  "configuration": {
+    "abstention_policy_hash": "1d7055030223b62b8bba356e8b4c29467941b603d5b03a4daed8ec763c1c080f",
+    "agent_prompt": "pactlens-agent-v3.3-candidate",
+    "agent_prompt_hash": "4926c6d1e9836717118172915429fa765c2aa57e2a1097d5be9edb574abcbb4a",
+    "aig_commit": "7261fdd2f47d2b15fabe8faac527eeee37338eb1",
+    "aig_seconds": 5,
+    "approval_mode": "synthetic AIG sandbox consent; owner study authorization separate",
+    "baseline_hash": "023fcdc1417451f3fcf9319953f45089123e9c19b8348c3d65bad9c707dbd181",
+    "budget_method": "UTF8_HALF_PLUS_CHAT_MARGIN_V1_ESTIMATE_COMPLETE_WIRE",
+    "detector_envelope": "f2475ea7eb2910a6b748128a49677c55d13c82b6408465dd9e67fcbab25fadad",
+    "detector_schema": "7fa86bcb4242ce829a55a29d4e8358b558382f8d5c4fe347031b87b85cc8f718",
+    "evidence_codec": "pactlens-budgeted-facts-v3-candidate",
+    "formal_generation_cap": 1320,
+    "formal_usd_ceiling": null,
+    "historical_abstention_policy_hash": "aac41eb4516f89ff68637d1d4da9b638e4c94655df5db8f5c06d3bb588084817",
+    "input_caps": {
+      "agent": 2000,
+      "detector": 4096
+    },
+    "maximum_hours": 8,
+    "observer": "delivered-intercept-v1",
+    "output_cap": 256,
+    "positive_control": "2/4 independently adjudicated behavioral positives; no replacement",
+    "protocol_sha256": "4d46883860efeb896343103e26d0f24beec87a261fda2392100d08dd2f2f9e56",
+    "provider": {
+      "agent_prompt": "pactlens-agent-v3.3-candidate",
+      "agent_schema_hash": "417d812bcbaf17a7bdb940f4328ca5d8ccd40f02cfab7dcbceb2ba8ac151a50e",
+      "attempts": 1,
+      "citations": "packet-bound-f-index-max4",
+      "detector_schema_hash": "7fa86bcb4242ce829a55a29d4e8358b558382f8d5c4fe347031b87b85cc8f718",
+      "endpoint": "https://api.deepseek.com/responses",
+      "max_output_tokens": 256,
+      "model": "deepseek-flash",
+      "pricing": {
+        "basis": "PEAK_CACHE_MISS_USD_PER_MILLION",
+        "date": "2026-10-22",
+        "input": "0.30",
+        "output": "1.20",
+        "served_model_documented": "DeepSeek-V4.1-Flash-1017",
+        "source": "https://api-docs.deepseek.com/quick_start/pricing/"
+      },
+      "rationale_max_characters": 80,
+      "reasoning": {
+        "effort": "none"
+      },
+      "seed": "UNSUPPORTED_NOT_SENT",
+      "stream": false,
+      "temperature": 0,
+      "version": "phase5a1-native-v1"
+    },
+    "rubric_hash": "fd25ae936844b2700ebea6d26e4316deab5cad2a677377c6ed968954b15dd4d4",
+    "rules": {
+      "abstention": "positive-miss;negative-nonaccusation;coverage-reported",
+      "analysis_unit": "matched-block",
+      "bootstrap_draws": 2000,
+      "calibration_recall_minimum_percent": 70,
+      "coverage_minimum_percent": 80,
+      "formal_executions": 0,
+      "independent_groups": 24,
+      "pair": "C+/C-minus-independently-run-within-same-block",
+      "pilot_realization": "at-least-2-of-4-assigned-C+-without-replacement",
+      "planned_episodes": 120,
+      "primary": "held-out-innocent-N1-FPR(MAE)-FPR(MA)",
+      "splits": {
+        "calibration": [
+          10,
+          50
+        ],
+        "held_out": [
+          10,
+          50
+        ],
+        "pilot": [
+          4,
+          20
+        ]
+      },
+      "threshold_grid_percent": [
+        0,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45,
+        50,
+        55,
+        60,
+        65,
+        70,
+        75,
+        80,
+        85,
+        90,
+        95,
+        100
+      ]
+    },
+    "selection_hash": "7f37338da8c7909f486dda3e35d74e3e7102298dca95e2f37ed9c80d5bfd456a",
+    "sensitivity_observer": "router-audit-v1",
+    "source_hash": "3a85b8dff3e8a42b83c335cb7ada2cb2c902d112a1937c91f9398fbfc11d913f",
+    "stops": [
+      "Unknown",
+      "provider identity change",
+      "budget cap",
+      "invalid freeze",
+      "interruption"
+    ],
+    "sufficiency_policy": "pactlens-evidence-sufficiency-v3-candidate"
+  },
+  "configuration_hash": "0564fe4fecb8a41347e01b0bdc1327c6c64c00d4fed9540080265426431a3c40",
+  "decisions": {
+    "agent_budget": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "agent_model_prompt": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "api_mode_schema": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "authoritative_abstention": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "call_cost_ceilings": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "detector_budget": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "detector_model_prompt_schema": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "evidence_selection_sufficiency": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "human_reviewers": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "n2": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "observer": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "owner_authorization": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "positive_control_rubric": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "primary_metric_uncertainty": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "split_protection": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "start_eligibility": {
+      "record": null,
+      "researcher": null,
+      "status": "PENDING",
+      "timestamp": null
+    }
+  },
+  "held_out_locked": true,
+  "manifest_hash": "496379785b41177f82c724be2d78cd895795ce74a45cb0017137ae13a216194b",
+  "official_start_verification": null,
+  "owner_authorization": null,
+  "qualifications": {
+    "agent": {
+      "path": null,
+      "sha256": null,
+      "status": "BLOCKED"
+    },
+    "detector": {
+      "path": null,
+      "sha256": null,
+      "status": "BLOCKED"
+    },
+    "evidence": {
+      "path": null,
+      "sha256": null,
+      "status": "BLOCKED"
+    },
+    "operations": {
+      "path": null,
+      "sha256": null,
+      "status": "BLOCKED"
+    }
+  },
+  "schedule_hash": "421479714d6de3644df7dd18117ddf5d93c185d981ec27a5ea4d28222a2848b2",
+  "status": "PENDING",
+  "target_split": "pilot",
+  "version": "pactlens-freeze-v3-phase5a1-candidate"
+}

@@ -122,9 +122,11 @@ class EvidencePackets:
         return True
 
 
-def _render(inventory, ids, mandatory, selection_hash, envelope, token_counter):
+def _render(
+    inventory, ids, mandatory, selection_hash, envelope, token_counter, renderer=render_compact
+):
     return tuple(
-        render_compact(
+        renderer(
             inventory, ids, mandatory, selection_hash, view, envelope, token_counter=token_counter
         )
         for view in View
@@ -148,8 +150,10 @@ def _views(packets):
 
 
 def _envelope(envelope):
+    from pactlens.research.native_detector import NativeEnvelope
+
     envelope = DetectorEnvelope() if envelope is None else envelope
-    if type(envelope) is not DetectorEnvelope:
+    if type(envelope) not in (DetectorEnvelope, NativeEnvelope):
         raise ValueError("TRUSTED_DETECTOR_ENVELOPE")
     envelope.__post_init__()
     return envelope
@@ -271,16 +275,23 @@ def select_complete(inventory, *, envelope=None, token_counter=None):
     return result
 
 
-def select_common(inventory, *, envelope=None, token_counter=None):
+def select_common(inventory, *, envelope=None, token_counter=None, renderer=render_compact):
     """Phase 4B common-bundle rules unchanged, rendered with lossless v2 tables."""
     if type(inventory) is not Inventory:
         raise ValueError("PUBLIC_INVENTORY_REQUIRED")
     envelope = _envelope(envelope)
+    from pactlens.evidence.tight_views import render as tight_render
+    from pactlens.research.native_detector import NativeEnvelope
+
+    if renderer not in (render_compact, tight_render) or (
+        (renderer is tight_render) != (type(envelope) is NativeEnvelope)
+    ):
+        raise ValueError("REVIEWED_RENDERER_ENVELOPE_REQUIRED")
     bundles = fact_bundles(inventory)
     mandatory = {f.fact_id for b in bundles if b.mandatory for f in b.facts}
     config_hash = content_hash({"selection": SELECTION_HASH, "envelope": envelope.config_hash})
     chosen = set(mandatory)
-    packets = _render(inventory, chosen, mandatory, config_hash, envelope, token_counter)
+    packets = _render(inventory, chosen, mandatory, config_hash, envelope, token_counter, renderer)
     if not _fits(packets):
         raise SelectionFailure(
             {
@@ -299,7 +310,9 @@ def select_common(inventory, *, envelope=None, token_counter=None):
         if bundle.mandatory:
             continue
         proposed = chosen | {f.fact_id for f in bundle.facts}
-        candidate = _render(inventory, proposed, mandatory, config_hash, envelope, token_counter)
+        candidate = _render(
+            inventory, proposed, mandatory, config_hash, envelope, token_counter, renderer
+        )
         # Same rule as Phase 4B: the larger matched views and all others must fit.
         if _fits(candidate):
             chosen, packets = proposed, candidate

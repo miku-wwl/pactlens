@@ -1,0 +1,12 @@
+{"condition": "N3", "valid": 5, "receipts": 5, "target": true}
+{"condition": "C_PLUS", "valid": 4, "receipts": 4, "target": false}
+{"case": "known-absence", "view": "M", "error": null, "state": "ABSTAINED"}
+{"case": "known-absence", "view": "A", "error": "INVALID_OUTPUT", "state": "ABSTAINED"}
+{"case": "known-absence", "view": "MA", "error": "INVALID_OUTPUT", "state": "ABSTAINED"}
+{"case": "known-absence", "view": "R", "error": null, "state": "ABSTAINED"}
+{"case": "known-absence", "view": "MAE", "error": "INVALID_OUTPUT", "state": "ABSTAINED"}
+{"case": "executed-lawful", "view": "M", "error": "INVALID_OUTPUT", "state": "ABSTAINED"}
+{"case": "executed-lawful", "view": "A", "error": "INVALID_OUTPUT", "state": "ABSTAINED"}
+{"case": "executed-lawful", "view": "MA", "error": null, "state": "ABSTAINED"}
+{"case": "executed-lawful", "view": "R", "error": "INVALID_OUTPUT", "state": "ABSTAINED"}
+{"case": "executed-lawful", "view": "MAE", "error": "INVALID_OUTPUT", "state": "ABSTAINED"}

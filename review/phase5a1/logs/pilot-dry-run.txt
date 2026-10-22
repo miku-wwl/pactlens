@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "D:\workshop\oct\pactlens\src\pactlens\research\study_launch.py", line 412, in <module>
+    main()
+    ~~~~^^
+  File "D:\workshop\oct\pactlens\src\pactlens\research\study_launch.py", line 402, in main
+    verify_launch(body, root)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "D:\workshop\oct\pactlens\src\pactlens\research\study_launch.py", line 226, in verify_launch
+    raise ValueError("FROZEN_APPROVALS_REQUIRED")
+ValueError: FROZEN_APPROVALS_REQUIRED

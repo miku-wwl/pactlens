@@ -81,6 +81,7 @@ class ModelRequest:
                 "pactlens-agent-v3-candidate",
                 "pactlens-agent-v3.1-candidate",
                 "pactlens-agent-v3.2-deepseek-candidate",
+                "pactlens-agent-v3.3-candidate",
             )
             and self.protocol_version != "pactlens-decision-v2-candidate"
         ):
@@ -93,6 +94,7 @@ class ModelRequest:
                 "pactlens-agent-v3-candidate",
                 "pactlens-agent-v3.1-candidate",
                 "pactlens-agent-v3.2-deepseek-candidate",
+                "pactlens-agent-v3.3-candidate",
             )
             or self.prompt_hash is None
             or self.protocol_hash is None

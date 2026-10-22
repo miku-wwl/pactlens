@@ -1,0 +1,30 @@
+{
+  "detector_contract_valid": 3,
+  "detector_effective_scored": 0,
+  "detector_model_insufficient_valid": 2,
+  "detector_host_mandated": 4,
+  "formal_executions": 0,
+  "actual_generation_calls": 21,
+  "estimated_completed_usd": 0.011547,
+  "retained_reservations_usd": 0.025348,
+  "operational_projection": {
+    "base_generations": 1320,
+    "mean_usage_projected_usd": 0.7211503636363636,
+    "cap_reservation_usd": 1.57536,
+    "serial_model_only_minutes": 30.103750181818178,
+    "local_effect_and_render_time": "additional;unmeasured-as-study-throughput",
+    "human_review_hours": {
+      "two_reviews_each_10_to_20_minutes_120_cases": [
+        40,
+        80
+      ],
+      "additional_reconciliation_assumption": [
+        4,
+        12
+      ]
+    },
+    "provider_rate_limit": "NOT_QUALIFIED;no429observed;serial campaign only",
+    "sample_bias": "fixed easy engineering task;some invalid agent outputs;zero detector coverage;not a power or throughput guarantee",
+    "completion_forecast": "model-only estimate plus unknown local/provider queue time and 44-92 human hours;scientifically usable completion NOT QUALIFIED"
+  }
+}

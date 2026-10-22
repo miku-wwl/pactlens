@@ -1,0 +1,9 @@
+{
+  "status": "INTERRUPTED_NOT_PASS",
+  "source": "Observed execution-tool output during the initial isolated baseline command",
+  "observed_exception": "ResourceUnavailable: python.exe could not run; System.OutOfMemoryException was thrown",
+  "partial_log": "baseline-tests.txt reached 40 percent; no complete test verdict",
+  "cause": "NOT_DIAGNOSED; do not infer a repository defect or a specific process memory leak",
+  "resolution": "Fresh isolated rerun completed: 885 passed in 703.82 seconds",
+  "network_or_model_calls": 0
+}

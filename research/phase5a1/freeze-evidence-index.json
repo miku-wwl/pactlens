@@ -1,0 +1,134 @@
+{
+  "decisions": {
+    "agent_budget": {
+      "approval_record": null,
+      "evidence_path": "review/phase5a1/offline-agent-matrix.json",
+      "researcher": null,
+      "sha256": "6b915e55143f78195fa36f1011138ec84c1b783e0c84f8b19a6590fd236e2335",
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "agent_model_prompt": {
+      "approval_record": null,
+      "evidence_path": "docs/PHASE5A1_AGENT_BUDGET_AND_MODEL.md",
+      "researcher": null,
+      "sha256": "520873020e1ae0d3b91b24adf64cb04ceb1de63922d08e9a1535dc74f9701226",
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "api_mode_schema": {
+      "approval_record": null,
+      "evidence_path": "review/phase5a1/live/predeclared-plan.json",
+      "researcher": null,
+      "sha256": "26645da116739e440a97be0b1a66e001f1f1fc4eae15fab3490445291a1027ec",
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "authoritative_abstention": {
+      "approval_record": null,
+      "evidence_path": "review/phase5a1/measurements.json",
+      "researcher": null,
+      "sha256": "84ea7dfa427e7365d49de574399796227c9ebe8328ecbb927f4ce7e0df14041e",
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "call_cost_ceilings": {
+      "approval_record": null,
+      "evidence_path": "review/phase5a1/live/usage-final.json",
+      "researcher": null,
+      "sha256": "cc9296a428189479c3b01bcdb9c80d0977d09882b974a2b719a868383980648f",
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "detector_budget": {
+      "approval_record": null,
+      "evidence_path": "review/phase5a1/full-audit.json",
+      "researcher": null,
+      "sha256": "7ec9e1a50c7563cfe53a7c27d9fa3876d60a6cec95659dd1944eda472d11329f",
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "detector_model_prompt_schema": {
+      "approval_record": null,
+      "evidence_path": "docs/PHASE5A1_DETECTOR_QUALIFICATION.md",
+      "researcher": null,
+      "sha256": "c80e75b338c8daf7a098752ffc8f11f5ef69384d0a0b6efa65de0651811f6ea4",
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "evidence_selection_sufficiency": {
+      "approval_record": null,
+      "evidence_path": "docs/PHASE5A1_EVIDENCE_SUFFICIENCY_DECISION.md",
+      "researcher": null,
+      "sha256": "3470cab668d33200f609a859cf6d0e8051db69abc36b5b7f3aec8e1c08dae62c",
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "human_reviewers": {
+      "approval_record": null,
+      "evidence_path": "docs/PHASE5A1_REAL_ENGINEERING_RESULTS.md",
+      "researcher": null,
+      "sha256": "146d9ac31e0d8b6160be148efebcffe2e06c94ff1f232037e395b10f6b615801",
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "n2": {
+      "approval_record": null,
+      "evidence_path": "docs/PHASE5A1_AGENT_BUDGET_AND_MODEL.md",
+      "researcher": null,
+      "sha256": "520873020e1ae0d3b91b24adf64cb04ceb1de63922d08e9a1535dc74f9701226",
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "observer": {
+      "approval_record": null,
+      "evidence_path": "docs/PHASE5A1_EVIDENCE_SUFFICIENCY_DECISION.md",
+      "researcher": null,
+      "sha256": "3470cab668d33200f609a859cf6d0e8051db69abc36b5b7f3aec8e1c08dae62c",
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "owner_authorization": {
+      "approval_record": null,
+      "evidence_path": "docs/PHASE5A1_RESEARCH_FREEZE_READINESS.md",
+      "researcher": null,
+      "sha256": "5ac7e56d9f43f988a8b3bd62a22e6c2697f9983cf3c1a1c4576ee4a149039664",
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "positive_control_rubric": {
+      "approval_record": null,
+      "evidence_path": "review/phase5a1/positive-control-feasibility.json",
+      "researcher": null,
+      "sha256": "219f77af56e0b2bf1b21c64e2411b95fb293c943cabc5300a7660ed706fd7be9",
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "primary_metric_uncertainty": {
+      "approval_record": null,
+      "evidence_path": "docs/EXPERIMENT_PLAN.md",
+      "researcher": null,
+      "sha256": "4d46883860efeb896343103e26d0f24beec87a261fda2392100d08dd2f2f9e56",
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "split_protection": {
+      "approval_record": null,
+      "evidence_path": "docs/EXPERIMENT_PLAN.md",
+      "researcher": null,
+      "sha256": "4d46883860efeb896343103e26d0f24beec87a261fda2392100d08dd2f2f9e56",
+      "status": "PENDING",
+      "timestamp": null
+    },
+    "start_eligibility": {
+      "approval_record": null,
+      "evidence_path": "docs/PHASE5A1_RESEARCH_FREEZE_READINESS.md",
+      "researcher": null,
+      "sha256": "5ac7e56d9f43f988a8b3bd62a22e6c2697f9983cf3c1a1c4576ee4a149039664",
+      "status": "PENDING",
+      "timestamp": null
+    }
+  },
+  "freeze_manifest_hash": "496379785b41177f82c724be2d78cd895795ce74a45cb0017137ae13a216194b",
+  "status": "PENDING_NOT_APPROVAL"
+}

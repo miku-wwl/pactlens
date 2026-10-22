@@ -1,0 +1,29 @@
+base C+ [1606, 1623, 1534, 1712, 1729, 1640]
+base N1 [1501, 1517, 1534, 1606, 1623, 1640]
+base N2 [1606, 1623, 1534, 1712, 1712, 1606]
+base N3 [1502, 1519, 1536, 1608, 1625, 1642]
+Traceback (most recent call last):
+  File "D:\workshop\oct\pactlens\scripts\phase5a1_offline.py", line 174, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\weila\.workbuddy-ai\binaries\python\versions\3.13.12\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "D:\workshop\oct\pactlens\scripts\phase5a1_offline.py", line 145, in main
+    print(
+    ~~~~~^
+        label,
+        ^^^^^^
+    ...<2 lines>...
+        flush=True,
+        ^^^^^^^^^^^
+    )
+    ^
+UnicodeEncodeError: 'gbk' codec can't encode character '\u2212' in position 1: illegal multibyte sequence
+base 

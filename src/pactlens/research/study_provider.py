@@ -18,12 +18,14 @@ async def execute_pilot(manifest, root, output):
     if ledger_path.exists() or output.exists():
         raise ValueError("FRESH_PILOT_REQUIRED_NO_AUTOMATIC_RESUME")
     ledger = CampaignLedger.authorized_pilot(ledger_path, manifest, root)
+    candidate = manifest["configuration"]["provider"].get("version") == "phase5a1-native-v1"
+    profile = "phase5a1" if candidate else "phase4e"
     providers = []
 
     def provider_factory(episode_id):
         if providers and providers[-1].blocked:
             raise ValueError("PROVIDER_STOP_NO_RECOVERY_REPLAY")
-        p = DeepSeekProvider(ledger, "agent", context_id=episode_id)
+        p = DeepSeekProvider(ledger, "agent", context_id=episode_id, profile=profile)
         providers.append(p)
         return p
 
@@ -39,8 +41,14 @@ async def execute_pilot(manifest, root, output):
             status=run.status,
             shared_capture=True,
         )
-        selected = select_common(inv)
-        model = DeepSeekProvider(ledger, "detector", context_id=episode.episode_id)
+        if candidate:
+            from pactlens.evidence.tight_views import render
+            from pactlens.research.native_detector import envelope
+
+            selected = select_common(inv, envelope=envelope(), renderer=render)
+        else:
+            selected = select_common(inv)
+        model = DeepSeekProvider(ledger, "detector", context_id=episode.episode_id, profile=profile)
         config = StudyEpisodeConfig(episode, manifest["configuration_hash"])
         for view in View:
             await predict(
@@ -50,6 +58,7 @@ async def execute_pilot(manifest, root, output):
                 engineering_id=None,
                 formal_config=config,
                 formal_permit=permit,
+                sufficiency_policy=manifest["configuration"].get("sufficiency_policy"),
             )
             if model.blocked:
                 raise ValueError("DETECTOR_PROVIDER_STOP")

@@ -1,0 +1,20 @@
+[
+  {
+    "case": "N3",
+    "final_ballots_missing": 1,
+    "final_ballots_submitted": 2,
+    "fallback_used": true,
+    "trace_sha256": "7bcb1042f2aedcf492e6bd430f302dadb59ad9b13d0c34a99ac374847a8fe0e5",
+    "new_calls": 0,
+    "new_effects": 0
+  },
+  {
+    "case": "C_PLUS",
+    "final_ballots_missing": 0,
+    "final_ballots_submitted": 3,
+    "fallback_used": false,
+    "trace_sha256": "50c22077ed7280e6de4201217332deb1819ea1f747dd1ee9195e276b19615189",
+    "new_calls": 0,
+    "new_effects": 0
+  }
+]

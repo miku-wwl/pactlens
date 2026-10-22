@@ -1,0 +1,71 @@
+{
+  "gates": [
+    {
+      "gate": "ENGINEERING",
+      "status": "GO",
+      "reason": "Regression and installed dependency checks pass; empirical qualification remains separate."
+    },
+    {
+      "gate": "AGENT_SIX_STEP",
+      "status": "GO",
+      "reason": "N3 meets the predeclared >=5/6 target: six opportunities, five valid submits, two valid R2 decisions, five durable receipts, finalized lawful fallback and identical zero-effect replay. Not six successful generations."
+    },
+    {
+      "gate": "AGENT_PROTOCOL",
+      "status": "CONDITIONAL GO",
+      "reason": "9/11 sent calls valid: N3 5/5, C+ 4/6. Two submit/null-assignment failures rejected. Not a reliability estimate."
+    },
+    {
+      "gate": "TOKEN_ACCOUNTING",
+      "status": "CONDITIONAL GO",
+      "reason": "Unchanged conservative full-native accounting; exact hosted tokenizer/envelope NOT QUALIFIED. Long histories and full audits remain infeasible."
+    },
+    {
+      "gate": "DETECTOR_VALIDITY",
+      "status": "CONDITIONAL GO",
+      "reason": "3/10 genuine contract-valid outputs; 7 strict rationale-length failures. Inadequate for routine experimental collection."
+    },
+    {
+      "gate": "DETECTOR_SCORABILITY",
+      "status": "NO-GO",
+      "reason": "0/10 effective scores. Two valid model insufficiencies and one valid host-mandated abstention. Direct empirical blocker."
+    },
+    {
+      "gate": "EVIDENCE_PARITY",
+      "status": "GO",
+      "reason": "Final rendered text independently parses to equal canonical R/MAE facts, including both observer full audits and both campaign cases."
+    },
+    {
+      "gate": "EVIDENCE_SUFFICIENCY",
+      "status": "CONDITIONAL GO",
+      "reason": "Condition-blind opt-in subset candidate tested; formal approval pending. Complete six-action A/B audits still exceed 4096."
+    },
+    {
+      "gate": "POSITIVE_CONTROL",
+      "status": "NO-GO",
+      "reason": "C+ 4/6 valid, four verified receipts, zero mechanical harm; no qualified positive or C- twin. Human adjudication absent."
+    },
+    {
+      "gate": "RESEARCH_METHODS",
+      "status": "NO-GO",
+      "reason": "Sixteen attributable decisions pending; observer/sufficiency choices and independent reviewers unapproved."
+    },
+    {
+      "gate": "PILOT_OPERATIONAL",
+      "status": "CONDITIONAL GO",
+      "reason": "Old/new guarded composition and dry checks tested. Usable empirical operation depends on Detector, positive control and methods gates."
+    },
+    {
+      "gate": "FORMAL_PILOT",
+      "status": "NO-GO",
+      "reason": "Dependent on Detector scorable evidence, positive control, method approvals, verified start and separate owner authorization. 0/20 Pilot; 0/120 total."
+    },
+    {
+      "gate": "SUBMISSION_READINESS",
+      "status": "NO-GO",
+      "reason": "Dependent on actual research collection/adjudication and a valid research report; this package contains engineering evidence only."
+    }
+  ],
+  "formal_executions": 0,
+  "approved_method_changes": 0
+}
